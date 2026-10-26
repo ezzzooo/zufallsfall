@@ -7,205 +7,192 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#12151d">
+<meta name="theme-color" content="#0a0a0c">
 <meta name="robots" content="noindex">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="apple-mobile-web-app-title" content="Zufallsfall">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&family=Special+Elite&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,400..900&family=Special+Elite&display=swap">
 <style>
-/* Layout: eine Spalte wie eine Fallakte auf dem Schreibtisch – Kategorien oben, die gezogene Akte in der Mitte, Verlauf darunter */
+/* Layout: eine schmale Spalte wie ein Hörspiel-Cover – Kopfzeile, eingeklappte Kategorie, großes Cover zum Wischen, zwei Buttons, kleine Cover-Reihe */
 :root {
-  --bg: #e9e6df;        /* Schreibtischpapier */
-  --surface: #fbfaf6;   /* Akte */
-  --ink: #1d2230;       /* Tinte */
-  --muted: #5d6272;
-  --line: #d3cfc4;
-  --stamp: #b3261e;     /* Stempelrot */
-  --accent: #23407a;    /* Kugelschreiberblau */
-  --on-accent: #ffffff;
-  --on-stamp: #ffffff;
-  --spotify: #1db954;
-  --on-spotify: #06210f;
-  --chip: #f4f2ec;
+  --bg: #0a0a0c;        /* Kassettenschwarz */
+  --surface: #16161b;
+  --line: #2b2b33;
+  --ink: #f4f2ee;
+  --muted: #9b99a4;
+  --rot: #e3262f;       /* zweites Fragezeichen */
+  --blau: #3274e6;      /* drittes Fragezeichen */
+  --apple: #fa2d48;
+  --spotify: #1ed760;
+  --on-spotify: #04170b;
   --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --font-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --font-type: "Special Elite", "Courier New", Courier, monospace;
+  color-scheme: dark;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #12151d; --surface: #1c2130; --ink: #ecebe6; --muted: #a2a6b4; --line: #2e3446;
-    --stamp: #ff6b5e; --accent: #8fb0ff; --on-accent: #0f1320; --on-stamp: #1a0d0c; --spotify: #1ed760; --on-spotify: #04170b; --chip: #232a3b; color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #12151d; --surface: #1c2130; --ink: #ecebe6; --muted: #a2a6b4; --line: #2e3446;
-  --stamp: #ff6b5e; --accent: #8fb0ff; --on-accent: #0f1320; --on-stamp: #1a0d0c; --spotify: #1ed760; --on-spotify: #04170b; --chip: #232a3b; color-scheme: dark;
-}
+* { box-sizing: border-box; }
 [hidden] { display: none !important; }
+html, body { min-height: 100%; }
 :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
-body { margin: 0; }
-img { max-width: 100%; }
-html, body { height: 100%; }
 body {
-  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.5;
-  -webkit-tap-highlight-color: transparent;
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font-display); font-size: 16px; line-height: 1.45; -webkit-tap-highlight-color: transparent;
 }
+img { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; }
 .wrap {
-  max-width: 560px; margin: 0 auto; display: grid; gap: 22px;
-  padding-block: 20px 40px;
+  max-width: 460px; margin: 0 auto; display: grid; gap: 16px;
+  padding-block: 12px 32px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: start; }
-.titelzeile { display: grid; gap: 2px; min-width: 0; }
-.zahnrad {
-  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--chip); color: var(--ink);
-  display: grid; place-items: center; cursor: pointer; padding: 0;
+:focus-visible { outline: 3px solid var(--blau); outline-offset: 2px; }
+
+/* Kopfzeile */
+header { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; }
+.marke { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.fragezeichen { font-weight: 900; font-stretch: 75%; font-size: 40px; line-height: 1; letter-spacing: -.02em; display: flex; }
+.fragezeichen span:nth-child(1) { color: var(--ink); }
+.fragezeichen span:nth-child(2) { color: var(--rot); }
+.fragezeichen span:nth-child(3) { color: var(--blau); }
+.marke-text { display: grid; line-height: 1.05; min-width: 0; }
+.marke-text b { font-weight: 850; font-stretch: 80%; font-size: 21px; letter-spacing: .01em; text-transform: uppercase; }
+.marke-text small { font-family: var(--font-type); color: var(--muted); font-size: 12px; letter-spacing: .04em; }
+.rund {
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface);
+  display: grid; place-items: center; cursor: pointer; padding: 0; flex: none;
 }
-.zahnrad svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.zahnrad[aria-expanded="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.zahnrad:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-.einstellungen {
-  display: grid; gap: 16px; padding: 16px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line);
-}
+.rund svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.rund[aria-expanded="true"] { background: var(--ink); color: var(--bg); }
+
+/* Einstellungen */
+.einstellungen { display: grid; gap: 16px; padding: 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
 .einstellung { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; min-width: 0; }
-.einstellung legend { font-family: var(--font-type); font-size: 13px; letter-spacing: .06em; color: var(--muted); padding: 0; margin-bottom: 8px; }
-.segmente { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 10px; background: var(--chip); border: 1px solid var(--line); }
+.einstellung legend, .klein-titel { font-family: var(--font-type); font-size: 12.5px; letter-spacing: .06em; color: var(--muted); padding: 0; margin-bottom: 6px; }
+.segmente { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 11px; background: var(--bg); border: 1px solid var(--line); }
 .segmente input, .schalter input { position: absolute; opacity: 0; pointer-events: none; }
-.segmente span { display: grid; place-items: center; min-height: 40px; border-radius: 7px; font-weight: 700; font-size: 15px; color: var(--muted); cursor: pointer; }
-.segmente input:checked + span { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.15); }
-.segmente input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 1px; }
-.einstellung-info { margin: 0; color: var(--muted); font-size: 13.5px; }
+.segmente span { display: grid; place-items: center; min-height: 40px; border-radius: 8px; font-weight: 700; font-size: 15px; color: var(--muted); cursor: pointer; }
+.segmente input:checked + span { background: var(--surface); color: var(--ink); box-shadow: 0 0 0 1px var(--line); }
+.segmente input:focus-visible + span { outline: 3px solid var(--blau); outline-offset: 1px; }
+.info { margin: 0; color: var(--muted); font-size: 13.5px; }
 .schalter { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; cursor: pointer; position: relative; }
 .schalter span { display: grid; gap: 2px; font-size: 15px; }
 .schalter small { color: var(--muted); font-size: 13.5px; }
 .schalter::after {
-  content: ""; width: 50px; height: 30px; border-radius: 15px; background: var(--line);
-  box-shadow: inset 0 0 0 1px var(--line); transition: background .2s;
-  background-image: radial-gradient(circle at 15px 15px, var(--surface) 11px, transparent 12px);
+  content: ""; width: 50px; height: 30px; border-radius: 15px; background-color: var(--line); transition: background-color .2s;
+  background-image: radial-gradient(circle at 15px 15px, var(--ink) 11px, transparent 12px);
 }
-.schalter:has(input:checked)::after { background-color: var(--accent); background-image: radial-gradient(circle at 35px 15px, var(--surface) 11px, transparent 12px); }
-.schalter:has(input:focus-visible)::after { outline: 3px solid var(--accent); outline-offset: 2px; }
-.fertig { justify-self: end; min-height: 44px; }
-.eyebrow { font-family: var(--font-type); color: var(--stamp); font-size: 14px; letter-spacing: .06em; }
-h1 { font-family: var(--font-display); font-stretch: 80%; font-weight: 800; font-size: 34px; line-height: 1.05; margin: 0; text-wrap: balance; }
+.schalter:has(input:checked)::after { background-color: var(--blau); background-image: radial-gradient(circle at 35px 15px, var(--ink) 11px, transparent 12px); }
+.schalter:has(input:focus-visible)::after { outline: 3px solid var(--blau); outline-offset: 2px; }
+.impressum { border-top: 1px solid var(--line); padding-top: 12px; color: var(--muted); font-size: 12.5px; display: grid; gap: 4px; }
+.impressum a { color: inherit; }
+.fertig { justify-self: end; min-height: 42px; padding: 0 18px; border-radius: 21px; border: 1px solid var(--line); background: var(--bg); cursor: pointer; font-weight: 700; }
 
-.gruppen { display: grid; gap: 14px; margin: 0; padding: 0; border: 0; min-width: 0; }
+/* Tabs */
+.tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.tabs button { min-height: 38px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); cursor: pointer; font-weight: 750; font-size: 15px; font-stretch: 90%; }
+.tabs button[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+.bereich { display: grid; gap: 16px; }
+
+/* Kategorie-Leiste */
+.katleiste {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 48px; padding: 0 14px;
+  border-radius: 12px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; text-align: left;
+}
+.katleiste .label { font-family: var(--font-type); font-size: 12.5px; letter-spacing: .06em; color: var(--muted); }
+.katleiste b { font-weight: 750; font-size: 16px; }
+.katleiste small { color: var(--muted); font-variant-numeric: tabular-nums; margin-left: 6px; }
+.katleiste svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; transition: transform .2s; flex: none; }
+.katleiste[aria-expanded="true"] svg { transform: rotate(180deg); }
+.katleiste > span { min-width: 0; display: flex; align-items: baseline; gap: 10px; }
+.gruppen { display: grid; gap: 12px; margin: 0; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); min-width: 0; }
 .gruppen legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .gruppe { display: grid; gap: 7px; }
-.gruppe-name { font-family: var(--font-type); font-size: 13px; letter-spacing: .06em; color: var(--muted); }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.mischen {
-  display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px; border-radius: 12px; cursor: pointer;
-  background: var(--stamp); color: var(--on-stamp); border: 0; font: inherit; text-align: left;
-}
-.mischen svg { width: 26px; height: 26px; flex: none; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.mischen span { display: grid; font-weight: 800; font-size: 19px; font-stretch: 85%; line-height: 1.2; }
-.mischen small { font-weight: 500; font-size: 13.5px; font-stretch: 100%; opacity: .85; }
-.mischen:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-.mischen:active { transform: scale(.99); }
+.gruppe-name { font-family: var(--font-type); font-size: 12.5px; letter-spacing: .06em; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 7px; }
 .chip input { position: absolute; opacity: 0; pointer-events: none; }
 .chip span {
-  display: inline-flex; align-items: baseline; gap: 6px; padding: 8px 13px; border-radius: 999px;
-  background: var(--chip); border: 1px solid var(--line); color: var(--ink); font-size: 15px; font-weight: 600; cursor: pointer;
-  font-stretch: 90%;
+  display: inline-flex; align-items: baseline; gap: 6px; padding: 7px 12px; border-radius: 999px; cursor: pointer;
+  background: var(--bg); border: 1px solid var(--line); font-size: 14.5px; font-weight: 650; font-stretch: 90%;
 }
 .chip small { color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
 .chip input:checked + span { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-.chip input:checked + span small { color: inherit; opacity: .7; }
-.chip input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+.chip input:checked + span small { color: inherit; opacity: .65; }
+.chip input:focus-visible + span { outline: 3px solid var(--blau); outline-offset: 2px; }
 
-.akte {
-  position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
-  padding: 18px; display: grid; gap: 14px; box-shadow: 0 1px 0 var(--line), 0 10px 30px -18px rgba(0,0,0,.35);
+/* Fall-Karte */
+.fall-karte { display: grid; gap: 12px; }
+.buehne { position: relative; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.buehne img {
+  width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; background: var(--surface);
+  box-shadow: 0 18px 40px -18px rgba(0,0,0,.9), 0 0 0 1px var(--line); -webkit-user-drag: none; pointer-events: none;
 }
-.akte::before { /* Reiter der Akte */
-  content: ""; position: absolute; top: -9px; left: 22px; width: 92px; height: 10px;
-  background: var(--surface); border: 1px solid var(--line); border-bottom: 0; border-radius: 6px 6px 0 0;
+.buehne .karte { will-change: transform; }
+.buehne .karte.zurueck { transition: transform .25s ease-out; }
+.buehne .karte.weg { transition: transform .22s ease-in, opacity .22s ease-in; opacity: 0; }
+.wisch-tipp {
+  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); white-space: nowrap;
+  font-size: 12.5px; padding: 5px 10px; border-radius: 999px; background: rgba(10,10,12,.78); color: var(--ink); pointer-events: none;
 }
-.kopf { display: grid; grid-template-columns: 112px 1fr; gap: 14px; align-items: start; }
-.cover { width: 112px; aspect-ratio: 1; max-width: 100%; border-radius: 4px; background: var(--chip); border: 1px solid var(--line); object-fit: cover; display: block; }
-.meta { min-width: 0; display: grid; gap: 6px; }
-.fallnr { font-family: var(--font-type); color: var(--stamp); font-size: 15px; letter-spacing: .04em; }
-.fallnr b { display: inline-block; border: 2px solid currentColor; border-radius: 3px; padding: 0 6px; transform: rotate(-2deg); font-weight: 400; }
-h2 { font-family: var(--font-display); font-stretch: 85%; font-weight: 750; font-size: 23px; line-height: 1.15; margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
-.jahr { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
-.text { margin: 0; color: var(--ink); font-size: 15px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.meta { display: grid; gap: 4px; min-width: 0; }
+.fallnr { font-family: var(--font-type); color: var(--rot); font-size: 14px; letter-spacing: .05em; }
+.fallnr span { color: var(--muted); }
+h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; margin: 0; text-wrap: balance; overflow-wrap: anywhere; }
+.text { margin: 0; color: #cfcdd6; font-size: 15px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .text.offen { -webkit-line-clamp: unset; display: block; }
-.mehr { justify-self: start; background: none; border: 0; padding: 0; color: var(--accent); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.mehr { justify-self: start; background: none; border: 0; padding: 0; color: var(--blau); font-size: 14px; font-weight: 650; cursor: pointer; }
+.knoepfe { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.knopf {
+  display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 54px; border-radius: 12px; border: 0;
+  font-weight: 800; font-size: 16.5px; font-stretch: 88%; text-decoration: none; cursor: pointer; text-align: center; padding: 0 10px;
+}
+.knopf svg { width: 19px; height: 19px; flex: none; }
+.knopf.neu { background: var(--ink); color: var(--bg); }
+.knopf.neu svg { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.knopf.play { background: var(--apple); color: #fff; }
+.knopf.play svg { fill: currentColor; }
+.knopf.play.spotify { background: var(--spotify); color: var(--on-spotify); }
+.knopf.play.dr3i { background: var(--blau); color: #fff; }
+.knopf:active { transform: scale(.98); }
+.hinweis { margin: 0; color: var(--muted); font-size: 12.5px; text-align: center; }
 
-.aktionen { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
-.play {
-  display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 54px; border-radius: 10px;
-  background: var(--accent); color: var(--on-accent); text-decoration: none; font-weight: 750; font-size: 17px; font-stretch: 90%;
-}
-.play svg { width: 18px; height: 18px; fill: currentColor; }
-.play.spotify { background: var(--spotify); color: var(--on-spotify); }
-.neu {
-  min-height: 54px; padding: 0 16px; border-radius: 10px; background: transparent; color: var(--ink);
-  border: 1.5px solid var(--line); font: inherit; font-weight: 650; font-size: 15px; cursor: pointer;
-}
-.play:focus-visible, .neu:focus-visible, .mehr:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-.hinweis { margin: 0; color: var(--muted); font-size: 13px; }
+/* Cover-Reihen */
+.reihe { display: grid; gap: 8px; }
+.reihe-covers { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.reihe-covers::-webkit-scrollbar { display: none; }
+.reihe-covers a, .reihe-covers button { flex: none; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 6px; }
+.reihe-covers img { width: 56px; height: 56px; border-radius: 6px; object-fit: cover; background: var(--surface); box-shadow: 0 0 0 1px var(--line); }
+.reihe-covers.gross img { width: 72px; height: 72px; }
+.reihe-covers [aria-current="true"] img { box-shadow: 0 0 0 2px var(--rot); }
+.leer { color: var(--muted); font-size: 13px; margin: 0; }
 
-section.verlauf { display: grid; gap: 8px; }
-h3 { font-family: var(--font-type); font-weight: 400; font-size: 14px; letter-spacing: .06em; color: var(--muted); margin: 0; }
-ol.liste { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
-ol.liste li { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); min-width: 0; }
-ol.liste img { width: 40px; height: 40px; border-radius: 3px; background: var(--chip); object-fit: cover; }
-ol.liste a { color: var(--ink); text-decoration: none; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
-ol.liste a span { font-family: var(--font-type); color: var(--muted); margin-right: 6px; }
-.leer { color: var(--muted); font-size: 14px; margin: 0; }
-footer { color: var(--muted); font-size: 12.5px; display: grid; gap: 4px; }
-footer a { color: inherit; }
-.tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 12px; background: var(--chip); border: 1px solid var(--line); }
-.tabs button {
-  min-height: 42px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); cursor: pointer;
-  font: inherit; font-weight: 700; font-size: 15.5px; font-stretch: 90%;
-}
-.tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.15); }
-.tabs button:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
-.bereich { display: grid; gap: 22px; }
-.dr3i-kopf { display: grid; gap: 12px; }
-.dr3i-intro { margin: 0; color: var(--muted); font-size: 15px; }
-.fakten { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; font-size: 14.5px; }
-.fakten dt { color: var(--muted); font-family: var(--font-type); font-size: 13px; letter-spacing: .04em; padding-top: 2px; }
-.fakten dd { margin: 0; min-width: 0; font-variant-numeric: tabular-nums; }
-.mehrinfo { border-top: 1px solid var(--line); padding-top: 10px; font-size: 14.5px; }
-.mehrinfo summary { cursor: pointer; font-weight: 650; color: var(--accent); }
-.mehrinfo summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-.rollen, .kapitel { margin: 10px 0 0; padding-left: 0; display: grid; gap: 3px; }
-.rollen { list-style: none; }
+/* DR3i-Details */
+.details { border-top: 1px solid var(--line); padding-top: 10px; font-size: 14.5px; }
+.details summary { cursor: pointer; font-weight: 650; color: var(--blau); }
+.details[open] summary { margin-bottom: 10px; }
+.fakten { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0 0 12px; }
+.fakten dt { color: var(--muted); font-family: var(--font-type); font-size: 12.5px; letter-spacing: .04em; padding-top: 2px; }
+.fakten dd { margin: 0; min-width: 0; }
+.rollen, .kapitel { margin: 6px 0 12px; display: grid; gap: 3px; }
+.rollen { list-style: none; padding: 0; }
 .rollen li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
 .rollen li span:last-child { color: var(--muted); }
-.kapitel { padding-left: 26px; font-variant-numeric: tabular-nums; }
-.play.aus { background: var(--chip); color: var(--muted); border: 1.5px dashed var(--line); font-weight: 600; font-size: 15px; cursor: default; }
-.raster { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.fall {
-  display: grid; gap: 6px; padding: 0; border: 0; background: none; color: var(--ink); text-align: left; cursor: pointer; font: inherit; min-width: 0;
-}
-.fall img { width: 100%; aspect-ratio: 1; max-width: 100%; object-fit: cover; border-radius: 4px; border: 1px solid var(--line); background: var(--chip); }
-.fall span { font-size: 13.5px; font-weight: 650; line-height: 1.25; overflow-wrap: anywhere; }
-.fall small { display: block; font-family: var(--font-type); color: var(--muted); font-weight: 400; font-size: 12px; }
-.fall[aria-current="true"] img { outline: 3px solid var(--stamp); outline-offset: 2px; }
-.fall:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.kapitel { padding-left: 24px; font-variant-numeric: tabular-nums; }
+
 @media (prefers-reduced-motion: no-preference) {
-  .akte.zieht { animation: ziehen .32s ease-out; }
-  @keyframes ziehen { from { transform: translateY(6px) rotate(-.6deg); opacity: .55; } to { transform: none; opacity: 1; } }
+  .fall-karte.zieht .meta { animation: rein .3s ease-out; }
+  @keyframes rein { from { opacity: .3; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 }
-@media (max-width: 380px) { .kopf { grid-template-columns: 88px 1fr; } .cover { width: 88px; } h1 { font-size: 30px; } }
+@media (max-width: 360px) { h1 { font-size: 26px; } .knopf { font-size: 15px; } }
 </style>
 </head>
 <body>
-
 <div class="wrap">
   <header>
-    <div class="titelzeile">
-      <div class="eyebrow">Wir übernehmen jeden Fall</div>
-      <h1>Welcher Fall heute?</h1>
+    <div class="marke">
+      <div class="fragezeichen" aria-hidden="true"><span>?</span><span>?</span><span>?</span></div>
+      <div class="marke-text"><b>Zufallsfall</b><small>Wir übernehmen jeden Fall</small></div>
     </div>
-    <button class="zahnrad" id="zahnrad" type="button" aria-expanded="false" aria-controls="einstellungen" aria-label="Einstellungen">
+    <button class="rund" id="zahnrad" type="button" aria-expanded="false" aria-controls="einstellungen" aria-label="Einstellungen">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9c.26.6.85 1 1.51 1.03H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg>
     </button>
   </header>
@@ -217,7 +204,7 @@ footer a { color: inherit; }
         <label><input type="radio" name="dienst" id="dienst-apple" value="apple"><span>Apple Music</span></label>
         <label><input type="radio" name="dienst" id="dienst-spotify" value="spotify"><span>Spotify</span></label>
       </div>
-      <p class="einstellung-info" id="dienst-info"></p>
+      <p class="info" id="dienst-info"></p>
     </fieldset>
     <label class="schalter">
       <span><b>Fußball-Folgen ausblenden</b><small id="fussball-info"></small></span>
@@ -227,7 +214,12 @@ footer a { color: inherit; }
       <span><b>DiE DR3i anzeigen</b><small>Eigener Bereich, spielt über den Kurzbefehl „DR3i“ aus deiner Apple-Music-Mediathek.</small></span>
       <input type="checkbox" id="dr3i-an" role="switch">
     </label>
-    <button class="neu fertig" id="fertig" type="button">Fertig</button>
+    <div class="impressum">
+      <div>Folgendaten: <a href="https://dreimetadaten.de/" target="_blank" rel="noopener">dreimetadaten.de</a> · Stand __STAND__ · __ANZAHL__ Alben</div>
+      <div>Cover: Apple Music, DiE DR3i: dreimetadaten.de. Inoffizielles Fan-Projekt.</div>
+      <div>Als App ablegen: in Safari Teilen → „Zum Home-Bildschirm“.</div>
+    </div>
+    <button class="fertig" id="fertig" type="button">Fertig</button>
   </section>
 
   <nav class="tabs" id="tabs" role="tablist" aria-label="Serie" hidden>
@@ -236,82 +228,82 @@ footer a { color: inherit; }
   </nav>
 
   <div class="bereich" id="bereich-ddf" role="tabpanel" aria-labelledby="tab-ddf">
-  <button class="mischen" id="mischen" type="button">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
-    <span>Mischen<small>Zufällige Kategorie, zufälliger Fall</small></span>
-  </button>
+    <button class="katleiste" id="katleiste" type="button" aria-expanded="false" aria-controls="kategorien">
+      <span><span class="label">Kategorie</span><b id="kat-name"></b><small id="kat-anzahl"></small></span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <fieldset class="gruppen" id="kategorien" hidden>
+      <legend>Kategorie</legend>
+    </fieldset>
 
-  <fieldset class="gruppen" id="kategorien">
-    <legend>Kategorie</legend>
-  </fieldset>
-
-  <article class="akte" id="akte" aria-live="polite">
-    <div class="kopf">
-      <img class="cover" id="cover" alt="">
+    <article class="fall-karte" id="akte" aria-live="polite">
+      <div class="buehne" id="buehne">
+        <div class="karte" id="karte"><img id="cover" alt=""></div>
+        <div class="wisch-tipp" id="wisch-tipp" hidden>← Wischen für einen anderen Fall →</div>
+      </div>
       <div class="meta">
         <div class="fallnr" id="fallnr"></div>
-        <h2 id="titel"></h2>
-        <div class="jahr" id="jahr"></div>
+        <h1 id="titel"></h1>
       </div>
-    </div>
-    <p class="text" id="text"></p>
-    <button class="mehr" id="mehr" type="button" hidden>Ganze Beschreibung</button>
-    <div class="aktionen">
-      <a class="play" id="play" href="#" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z"/></svg>
-        <span id="play-text">In Apple Music öffnen</span>
-      </a>
-      <button class="neu" id="neu" type="button">Anderer Fall</button>
-    </div>
-    <p class="hinweis" id="hinweis"></p>
-  </article>
-
-  <section class="verlauf">
-    <h3>Zuletzt gehört · wird übersprungen</h3>
-    <ol class="liste" id="liste"></ol>
-    <p class="leer" id="leer">Noch nichts gehört. Sobald du eine Folge öffnest, steht sie hier und kommt bei den nächsten 5 Ziehungen nicht dran.</p>
-  </section>
-  </div>
-
-  <div class="bereich" id="bereich-dr3i" role="tabpanel" aria-labelledby="tab-dr3i" hidden>
-    <div class="dr3i-kopf">
-      <p class="dr3i-intro">2006 bis 2007, als Justus, Peter und Bob kurz Jupiter, Peter und Bob hießen: 8 Folgen und ein Special. Nicht im Apple-Music-Katalog, sie spielen aus deiner eigenen Mediathek.</p>
-      <button class="mischen" id="dr3i-zufall" type="button">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
-        <span>Zufällige DR3i-Folge<small>Zieht einen der 9 Fälle</small></span>
-      </button>
-    </div>
-
-    <article class="akte" id="dr3i-akte" aria-live="polite">
-      <div class="kopf">
-        <img class="cover" id="dr3i-cover" alt="">
-        <div class="meta">
-          <div class="fallnr" id="dr3i-nr"></div>
-          <h2 id="dr3i-titel"></h2>
-          <div class="jahr" id="dr3i-jahr"></div>
-        </div>
+      <p class="text" id="text"></p>
+      <button class="mehr" id="mehr" type="button" hidden>Mehr lesen</button>
+      <div class="knoepfe">
+        <button class="knopf neu" id="neu" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+          Anderer Fall
+        </button>
+        <a class="knopf play" id="play" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z"/></svg>
+          <span id="play-text">Öffnen</span>
+        </a>
       </div>
-      <p class="text offen" id="dr3i-text"></p>
-      <dl class="fakten" id="dr3i-fakten"></dl>
-      <details class="mehrinfo" id="dr3i-rollen-box"><summary>Sprecherinnen und Sprecher</summary><ul class="rollen" id="dr3i-rollen"></ul></details>
-      <details class="mehrinfo" id="dr3i-kap-box"><summary>Kapitel</summary><ol class="kapitel" id="dr3i-kap"></ol></details>
-      <a class="play" id="dr3i-play" href="#">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z"/></svg>
-        Aus der Mediathek abspielen
-      </a>
-      <p class="hinweis">Startet den Kurzbefehl „DR3i“. Falls nichts passiert, in der Musik-App nach „<span id="dr3i-suche"></span>“ suchen.</p>
+      <p class="hinweis" id="hinweis"></p>
     </article>
 
-    <section class="verlauf">
-      <h3>Alle Fälle</h3>
-      <div class="raster" id="dr3i-liste"></div>
+    <section class="reihe" aria-labelledby="zuletzt-titel">
+      <div class="klein-titel" id="zuletzt-titel">Zuletzt gehört · wird übersprungen</div>
+      <div class="reihe-covers" id="liste"></div>
+      <p class="leer" id="leer">Noch nichts gehört.</p>
     </section>
   </div>
 
-  <footer>
-    <div>Folgendaten: <a href="https://dreimetadaten.de/" target="_blank" rel="noopener">dreimetadaten.de</a> · Stand __STAND__ · __ANZAHL__ Alben</div>
-    <div>Tipp: In Safari über Teilen → „Zum Home-Bildschirm“ als App-Icon ablegen. Cover der drei ???: Apple Music, DiE DR3i: dreimetadaten.de.</div>
-  </footer>
+  <div class="bereich" id="bereich-dr3i" role="tabpanel" aria-labelledby="tab-dr3i" hidden>
+    <article class="fall-karte" id="dr3i-akte" aria-live="polite">
+      <div class="buehne" id="dr3i-buehne">
+        <div class="karte" id="dr3i-karte"><img id="dr3i-cover" alt=""></div>
+      </div>
+      <div class="meta">
+        <div class="fallnr" id="dr3i-nr"></div>
+        <h1 id="dr3i-titel"></h1>
+      </div>
+      <p class="text" id="dr3i-text"></p>
+      <button class="mehr" id="dr3i-mehr" type="button">Mehr lesen</button>
+      <div class="knoepfe">
+        <button class="knopf neu" id="dr3i-zufall" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+          Anderer Fall
+        </button>
+        <a class="knopf play dr3i" id="dr3i-play" href="#">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z"/></svg>
+          Abspielen
+        </a>
+      </div>
+      <details class="details">
+        <summary>Details, Sprecher und Kapitel</summary>
+        <dl class="fakten" id="dr3i-fakten"></dl>
+        <div class="klein-titel">Sprecherinnen und Sprecher</div>
+        <ul class="rollen" id="dr3i-rollen"></ul>
+        <div class="klein-titel" id="dr3i-kap-titel">Kapitel</div>
+        <ol class="kapitel" id="dr3i-kap"></ol>
+        <p class="info">Spielt über den Kurzbefehl „DR3i“ aus deiner Mediathek. Falls nichts passiert, in der Musik-App nach „<span id="dr3i-suche"></span>“ suchen.</p>
+      </details>
+    </article>
+
+    <section class="reihe" aria-labelledby="dr3i-alle-titel">
+      <div class="klein-titel" id="dr3i-alle-titel">Alle 9 Fälle · 2006–2007</div>
+      <div class="reihe-covers gross" id="dr3i-liste"></div>
+    </section>
+  </div>
 </div>
 
 <script>
@@ -367,8 +359,10 @@ const dienst = () => DIENSTE[dienstId];
 const verfuegbar = () => FOLGEN.filter(f => dienst().hat(f) && !(ohneFussball && f.k.includes("fussball")));
 const link = f => (dienst().hat(f) ? dienst() : DIENSTE.apple).link(f);
 const nummer = f => f.n !== null ? "Fall Nr. " + String(f.n).padStart(3, "0") : (f.k.includes("weitere") ? "Sonderakte" : "Special");
-const platzhalter = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" fill="#888" opacity=".15"/></svg>');
+const platzhalter = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" fill="#16161b"/></svg>');
+const bewegungAus = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+// Kategorien
 function kategorienZeichnen() {
   const box = $("kategorien");
   box.querySelectorAll(".gruppe").forEach(g => g.remove());
@@ -387,28 +381,33 @@ function kategorienZeichnen() {
       label.innerHTML = `<input type="radio" name="kat" id="kat-${k.id}" value="${k.id}"><span>${k.name}<small>${anzahl(k)}</small></span>`;
       const input = label.querySelector("input");
       input.checked = k.id === katId;
-      input.addEventListener("change", () => waehlen(k.id));
+      input.addEventListener("change", () => { waehlen(k.id); kategorienAuf(false); });
       chips.appendChild(label);
     }
     box.appendChild(gruppe);
   }
+  leisteZeichnen();
 }
+function leisteZeichnen() {
+  const kat = KATEGORIEN.find(k => k.id === katId);
+  $("kat-name").textContent = kat.name;
+  $("kat-anzahl").textContent = verfuegbar().filter(kat.test).length;
+}
+function kategorienAuf(offen) {
+  $("kategorien").hidden = !offen;
+  $("katleiste").setAttribute("aria-expanded", String(offen));
+}
+$("katleiste").addEventListener("click", () => kategorienAuf($("kategorien").hidden));
 
 function waehlen(id) {
   katId = id;
   schreibe("ddf.kategorie", katId);
   $("kat-" + id).checked = true;
+  leisteZeichnen();
   ziehen();
 }
 
-function mischen() {
-  const pool = verfuegbar();
-  const andere = KATEGORIEN.filter(k => k.id !== katId && k.id !== "alle" && pool.some(k.test));
-  const k = andere[Math.floor(Math.random() * andere.length)];
-  waehlen(k.id);
-  $("akte").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" });
-}
-
+// Ziehen und Anzeigen
 function ziehen() {
   const kat = KATEGORIEN.find(k => k.id === katId);
   const alle = verfuegbar().filter(kat.test);
@@ -416,24 +415,27 @@ function ziehen() {
   if (!pool.length) pool = alle.filter(f => f !== aktuell);
   if (!pool.length) pool = alle;
   aktuell = pool[Math.floor(Math.random() * pool.length)];
-  anzeigen(alle.length - alle.filter(f => verlauf.includes(f.id)).length);
+  anzeigen();
 }
 
-function anzeigen(frei) {
+function anzeigen() {
   const f = aktuell;
-  $("fallnr").innerHTML = `<b>${nummer(f)}</b>`;
+  const kat = KATEGORIEN.find(k => k.id === katId);
+  const alle = verfuegbar().filter(kat.test);
+  const frei = alle.filter(x => !verlauf.includes(x.id)).length;
+  $("fallnr").innerHTML = "";
+  $("fallnr").append(nummer(f));
+  if (f.j) { const s = document.createElement("span"); s.textContent = " · " + f.j; $("fallnr").append(s); }
   $("titel").textContent = f.t;
-  $("jahr").textContent = f.j ? "Erschienen " + f.j : "";
   $("text").textContent = f.b || "Keine Beschreibung vorhanden.";
   $("text").classList.remove("offen");
-  $("mehr").hidden = !f.b || f.b.length < 220;
+  $("mehr").hidden = !f.b || f.b.length < 110;
   $("cover").src = covers[f.id] || platzhalter;
   $("cover").alt = "Cover: " + f.t;
   $("play").href = link(f);
   $("play").classList.toggle("spotify", dienstId === "spotify");
-  $("play-text").textContent = "In " + dienst().name + " öffnen";
-  const kat = KATEGORIEN.find(k => k.id === katId);
-  $("hinweis").textContent = `Aus „${kat.name}“ · ${frei} Folgen zur Auswahl. In ${dienst().name} einmal auf ▶︎ tippen.`;
+  $("play-text").textContent = dienst().name;
+  $("hinweis").textContent = `${frei} von ${alle.length} Fällen zur Auswahl · in ${dienst().name} ▶︎ tippen`;
   const akte = $("akte");
   akte.classList.remove("zieht"); void akte.offsetWidth; akte.classList.add("zieht");
 }
@@ -445,15 +447,14 @@ function verlaufZeichnen() {
   for (const id of verlauf) {
     const f = FOLGEN.find(x => x.id === id);
     if (!f) continue;
-    const li = document.createElement("li");
-    const img = document.createElement("img");
-    img.src = covers[f.id] || platzhalter; img.alt = "";
     const a = document.createElement("a");
     a.href = link(f); a.target = "_blank"; a.rel = "noopener";
-    a.innerHTML = `<span>${f.n !== null ? String(f.n).padStart(3, "0") : "Sp."}</span>`;
-    a.append(f.t);
-    li.append(img, a);
-    liste.appendChild(li);
+    a.title = f.t;
+    a.setAttribute("aria-label", (f.n !== null ? "Folge " + f.n + ": " : "") + f.t);
+    const img = document.createElement("img");
+    img.src = covers[f.id] || platzhalter; img.alt = "";
+    a.append(img);
+    liste.appendChild(a);
   }
 }
 
@@ -461,10 +462,59 @@ $("play").addEventListener("click", () => {
   verlauf = [aktuell.id, ...verlauf.filter(id => id !== aktuell.id)].slice(0, MERKEN);
   schreibe("ddf.verlauf", verlauf);
   verlaufZeichnen();
+  anzeigen();
 });
-$("neu").addEventListener("click", ziehen);
-$("mischen").addEventListener("click", mischen);
+$("neu").addEventListener("click", () => wegschieben($("karte"), 1, ziehen));
 $("mehr").addEventListener("click", () => { $("text").classList.add("offen"); $("mehr").hidden = true; });
+
+// Cover zur Seite wischen = anderer Fall
+function wegschieben(karte, richtung, danach) {
+  if (bewegungAus) { danach(); return; }
+  karte.classList.remove("zurueck");
+  karte.classList.add("weg");
+  karte.style.transform = `translateX(${richtung * 120}%) rotate(${richtung * 12}deg)`;
+  setTimeout(() => {
+    danach();
+    karte.classList.remove("weg");
+    karte.style.transition = "none";
+    karte.style.transform = `translateX(${-richtung * 30}%)`;
+    karte.style.opacity = "0";
+    void karte.offsetWidth;
+    karte.style.transition = "transform .25s ease-out, opacity .25s ease-out";
+    karte.style.transform = "";
+    karte.style.opacity = "";
+    setTimeout(() => { karte.style.transition = ""; }, 260);
+  }, 200);
+}
+function wischbar(buehne, karte, danach) {
+  let start = null, dx = 0;
+  buehne.addEventListener("pointerdown", e => {
+    start = { x: e.clientX, y: e.clientY }; dx = 0; karte.classList.remove("zurueck");
+    try { buehne.setPointerCapture(e.pointerId); } catch {}
+  });
+  buehne.addEventListener("pointermove", e => {
+    if (!start) return;
+    dx = e.clientX - start.x;
+    if (Math.abs(dx) < 6 && Math.abs(e.clientY - start.y) > 10) { start = null; return; }
+    karte.style.transform = `translateX(${dx}px) rotate(${dx / 25}deg)`;
+  });
+  const ende = () => {
+    if (!start) return;
+    start = null;
+    if (Math.abs(dx) > 80) {
+      wischTippWeg();
+      wegschieben(karte, Math.sign(dx), danach);
+    } else {
+      karte.classList.add("zurueck");
+      karte.style.transform = "";
+    }
+  };
+  buehne.addEventListener("pointerup", ende);
+  buehne.addEventListener("pointercancel", ende);
+}
+function wischTippWeg() { $("wisch-tipp").hidden = true; schreibe("ddf.gewischt", true); }
+$("wisch-tipp").hidden = lese("ddf.gewischt", false) === true;
+wischbar($("buehne"), $("karte"), ziehen);
 
 // DiE DR3i
 const DR3I = __DR3I__;
@@ -476,14 +526,18 @@ function dr3iZeigen(f, animieren = true) {
   dr3iAktuell = f;
   $("dr3i-cover").src = f.img;
   $("dr3i-cover").alt = "Cover: " + f.t;
-  $("dr3i-nr").innerHTML = `<b>${dr3iNr(f)}</b>`;
+  $("dr3i-nr").innerHTML = "";
+  $("dr3i-nr").append(dr3iNr(f));
+  const s = document.createElement("span"); s.textContent = " · " + f.d.slice(0, 4); $("dr3i-nr").append(s);
   $("dr3i-titel").textContent = f.t;
-  $("dr3i-jahr").textContent = "Erschienen am " + datum(f.d);
   $("dr3i-text").textContent = f.b;
+  $("dr3i-text").classList.remove("offen");
+  $("dr3i-mehr").hidden = f.b.length < 110;
   $("dr3i-play").href = "shortcuts://run-shortcut?name=DR3i&input=text&text=" + encodeURIComponent(f.s);
   $("dr3i-suche").textContent = f.s;
   const fakten = [
     ["Laufzeit", `${f.min} Min.${f.cd > 1 ? ` · ${f.cd} CDs` : ""}`],
+    ["Erschienen", datum(f.d)],
     ["Buch", f.autor],
     ["Skript", f.skript],
   ].filter(([, v]) => v);
@@ -501,29 +555,31 @@ function dr3iZeigen(f, animieren = true) {
     li.append(a, b);
     $("dr3i-rollen").appendChild(li);
   }
-  $("dr3i-rollen-box").hidden = !f.rollen.length;
   $("dr3i-kap").innerHTML = "";
   for (const k of f.kap) { const li = document.createElement("li"); li.textContent = k; $("dr3i-kap").appendChild(li); }
-  $("dr3i-kap-box").hidden = !f.kap.length;
-  for (const btn of document.querySelectorAll(".fall")) btn.setAttribute("aria-current", btn.dataset.i == DR3I.indexOf(f) ? "true" : "false");
+  $("dr3i-kap-titel").hidden = !f.kap.length;
+  for (const btn of $("dr3i-liste").children) btn.setAttribute("aria-current", btn.dataset.i == DR3I.indexOf(f) ? "true" : "false");
   if (animieren) { const a = $("dr3i-akte"); a.classList.remove("zieht"); void a.offsetWidth; a.classList.add("zieht"); }
 }
 
 function dr3iListe() {
   DR3I.forEach((f, i) => {
     const btn = document.createElement("button");
-    btn.type = "button"; btn.className = "fall"; btn.dataset.i = i;
-    btn.innerHTML = `<img alt="" src="${f.img}"><span><small>${f.n !== null ? "Nr. " + f.n : "Special"} · ${f.d.slice(0, 4)}</small></span>`;
-    btn.querySelector("span").append(f.t);
-    btn.addEventListener("click", () => { dr3iZeigen(f); $("dr3i-akte").scrollIntoView({ behavior: "smooth", block: "start" }); });
+    btn.type = "button"; btn.dataset.i = i;
+    btn.setAttribute("aria-label", (f.n !== null ? "Fall " + f.n + ": " : "Special: ") + f.t);
+    const img = document.createElement("img"); img.src = f.img; img.alt = "";
+    btn.append(img);
+    btn.addEventListener("click", () => { dr3iZeigen(f); window.scrollTo({ top: 0, behavior: bewegungAus ? "auto" : "smooth" }); });
     $("dr3i-liste").appendChild(btn);
   });
 }
-
-$("dr3i-zufall").addEventListener("click", () => {
+function dr3iZiehen() {
   const pool = DR3I.filter(f => f !== dr3iAktuell);
   dr3iZeigen(pool[Math.floor(Math.random() * pool.length)]);
-});
+}
+$("dr3i-zufall").addEventListener("click", () => wegschieben($("dr3i-karte"), 1, dr3iZiehen));
+$("dr3i-mehr").addEventListener("click", () => { $("dr3i-text").classList.add("offen"); $("dr3i-mehr").hidden = true; });
+wischbar($("dr3i-buehne"), $("dr3i-karte"), dr3iZiehen);
 
 // Bereiche umschalten
 function bereich(name) {
@@ -557,14 +613,13 @@ function dienstInfo() {
     ? `${fehlen} Film-, Live- und Kopfhörer-Alben gibt es nur bei Apple Music, sie werden ausgeblendet.`
     : "Alle Folgen öffnen direkt in Apple Music.";
   const fussball = FOLGEN.filter(f => f.k.includes("fussball"));
-  $("fussball-info").textContent = `${fussball.length} Folgen, z. B. „${fussball[0]?.t ?? ""}“. Gilt für alle Kategorien und fürs Mischen.`;
+  $("fussball-info").textContent = `${fussball.length} Folgen, z. B. „${fussball[0]?.t ?? ""}“. Gilt für alle Kategorien.`;
 }
 function neuFiltern() {
   dienstInfo();
   kategorienZeichnen();
-  if (aktuell && !verfuegbar().includes(aktuell)) aktuell = null;
-  if (aktuell) anzeigen(verfuegbar().filter(KATEGORIEN.find(k => k.id === katId).test).filter(f => !verlauf.includes(f.id)).length);
-  else ziehen();
+  if (aktuell && !verfuegbar().filter(KATEGORIEN.find(k => k.id === katId).test).includes(aktuell)) aktuell = null;
+  if (aktuell) anzeigen(); else ziehen();
   verlaufZeichnen();
 }
 function dr3iSichtbar() {
@@ -573,24 +628,12 @@ function dr3iSichtbar() {
 }
 $("dienst-" + dienstId).checked = true;
 $("dr3i-an").checked = dr3iAn;
-for (const id of Object.keys(DIENSTE)) {
-  $("dienst-" + id).addEventListener("change", () => {
-    dienstId = id;
-    schreibe("ddf.dienst", id);
-    neuFiltern();
-  });
-}
 $("ohne-fussball").checked = ohneFussball;
-$("ohne-fussball").addEventListener("change", e => {
-  ohneFussball = e.target.checked;
-  schreibe("ddf.ohneFussball", ohneFussball);
-  neuFiltern();
-});
-$("dr3i-an").addEventListener("change", e => {
-  dr3iAn = e.target.checked;
-  schreibe("ddf.dr3i", dr3iAn);
-  dr3iSichtbar();
-});
+for (const id of Object.keys(DIENSTE)) {
+  $("dienst-" + id).addEventListener("change", () => { dienstId = id; schreibe("ddf.dienst", id); neuFiltern(); });
+}
+$("ohne-fussball").addEventListener("change", e => { ohneFussball = e.target.checked; schreibe("ddf.ohneFussball", ohneFussball); neuFiltern(); });
+$("dr3i-an").addEventListener("change", e => { dr3iAn = e.target.checked; schreibe("ddf.dr3i", dr3iAn); dr3iSichtbar(); });
 function einstellungen(offen) {
   $("einstellungen").hidden = !offen;
   $("zahnrad").setAttribute("aria-expanded", String(offen));
@@ -606,8 +649,6 @@ dr3iZeigen(DR3I[Math.floor(Math.random() * DR3I.length)], false);
 dienstInfo();
 bereich(dr3iAn && location.hash === "#dr3i" ? "dr3i" : location.hash === "#ddf" ? "ddf" : lese("ddf.bereich", "ddf"));
 dr3iSichtbar();
-
-
 </script>
 </body>
 </html>
