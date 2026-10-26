@@ -38,3 +38,19 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # GitHub schaltet zeitgesteuerte Abläufe nach 60 Tagen ohne Änderung im Repository ab.
+  # Der wöchentliche Lauf hinterlässt deshalb eine kleine Änderung, auch wenn das Bauen scheitert.
+  wachhalten:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          date -u +"%Y-%m-%d %H:%M UTC" > .github/letzter-lauf.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/letzter-lauf.txt
+          git commit -m "Wöchentlicher Lauf" && git push
