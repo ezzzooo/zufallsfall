@@ -25,6 +25,8 @@
   --accent: #23407a;    /* Kugelschreiberblau */
   --on-accent: #ffffff;
   --on-stamp: #ffffff;
+  --spotify: #1db954;
+  --on-spotify: #06210f;
   --chip: #f4f2ec;
   --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --font-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -33,12 +35,12 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #12151d; --surface: #1c2130; --ink: #ecebe6; --muted: #a2a6b4; --line: #2e3446;
-    --stamp: #ff6b5e; --accent: #8fb0ff; --on-accent: #0f1320; --on-stamp: #1a0d0c; --chip: #232a3b; color-scheme: dark;
+    --stamp: #ff6b5e; --accent: #8fb0ff; --on-accent: #0f1320; --on-stamp: #1a0d0c; --spotify: #1ed760; --on-spotify: #04170b; --chip: #232a3b; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #12151d; --surface: #1c2130; --ink: #ecebe6; --muted: #a2a6b4; --line: #2e3446;
-  --stamp: #ff6b5e; --accent: #8fb0ff; --on-accent: #0f1320; --on-stamp: #1a0d0c; --chip: #232a3b; color-scheme: dark;
+  --stamp: #ff6b5e; --accent: #8fb0ff; --on-accent: #0f1320; --on-stamp: #1a0d0c; --spotify: #1ed760; --on-spotify: #04170b; --chip: #232a3b; color-scheme: dark;
 }
 [hidden] { display: none !important; }
 :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
@@ -55,7 +57,37 @@ body {
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-header { display: grid; gap: 2px; }
+header { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: start; }
+.titelzeile { display: grid; gap: 2px; min-width: 0; }
+.zahnrad {
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--chip); color: var(--ink);
+  display: grid; place-items: center; cursor: pointer; padding: 0;
+}
+.zahnrad svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.zahnrad[aria-expanded="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.zahnrad:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.einstellungen {
+  display: grid; gap: 16px; padding: 16px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line);
+}
+.einstellung { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; min-width: 0; }
+.einstellung legend { font-family: var(--font-type); font-size: 13px; letter-spacing: .06em; color: var(--muted); padding: 0; margin-bottom: 8px; }
+.segmente { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 10px; background: var(--chip); border: 1px solid var(--line); }
+.segmente input, .schalter input { position: absolute; opacity: 0; pointer-events: none; }
+.segmente span { display: grid; place-items: center; min-height: 40px; border-radius: 7px; font-weight: 700; font-size: 15px; color: var(--muted); cursor: pointer; }
+.segmente input:checked + span { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+.segmente input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 1px; }
+.einstellung-info { margin: 0; color: var(--muted); font-size: 13.5px; }
+.schalter { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; cursor: pointer; position: relative; }
+.schalter span { display: grid; gap: 2px; font-size: 15px; }
+.schalter small { color: var(--muted); font-size: 13.5px; }
+.schalter::after {
+  content: ""; width: 50px; height: 30px; border-radius: 15px; background: var(--line);
+  box-shadow: inset 0 0 0 1px var(--line); transition: background .2s;
+  background-image: radial-gradient(circle at 15px 15px, var(--surface) 11px, transparent 12px);
+}
+.schalter:has(input:checked)::after { background-color: var(--accent); background-image: radial-gradient(circle at 35px 15px, var(--surface) 11px, transparent 12px); }
+.schalter:has(input:focus-visible)::after { outline: 3px solid var(--accent); outline-offset: 2px; }
+.fertig { justify-self: end; min-height: 44px; }
 .eyebrow { font-family: var(--font-type); color: var(--stamp); font-size: 14px; letter-spacing: .06em; }
 h1 { font-family: var(--font-display); font-stretch: 80%; font-weight: 800; font-size: 34px; line-height: 1.05; margin: 0; text-wrap: balance; }
 
@@ -109,6 +141,7 @@ h2 { font-family: var(--font-display); font-stretch: 85%; font-weight: 750; font
   background: var(--accent); color: var(--on-accent); text-decoration: none; font-weight: 750; font-size: 17px; font-stretch: 90%;
 }
 .play svg { width: 18px; height: 18px; fill: currentColor; }
+.play.spotify { background: var(--spotify); color: var(--on-spotify); }
 .neu {
   min-height: 54px; padding: 0 16px; border-radius: 10px; background: transparent; color: var(--ink);
   border: 1.5px solid var(--line); font: inherit; font-weight: 650; font-size: 15px; cursor: pointer;
@@ -168,11 +201,32 @@ footer a { color: inherit; }
 
 <div class="wrap">
   <header>
-    <div class="eyebrow">Wir übernehmen jeden Fall</div>
-    <h1>Welcher Fall heute?</h1>
+    <div class="titelzeile">
+      <div class="eyebrow">Wir übernehmen jeden Fall</div>
+      <h1>Welcher Fall heute?</h1>
+    </div>
+    <button class="zahnrad" id="zahnrad" type="button" aria-expanded="false" aria-controls="einstellungen" aria-label="Einstellungen">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9c.26.6.85 1 1.51 1.03H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg>
+    </button>
   </header>
 
-  <nav class="tabs" role="tablist" aria-label="Serie">
+  <section class="einstellungen" id="einstellungen" hidden aria-label="Einstellungen">
+    <fieldset class="einstellung">
+      <legend>Abspielen mit</legend>
+      <div class="segmente">
+        <label><input type="radio" name="dienst" id="dienst-apple" value="apple"><span>Apple Music</span></label>
+        <label><input type="radio" name="dienst" id="dienst-spotify" value="spotify"><span>Spotify</span></label>
+      </div>
+      <p class="einstellung-info" id="dienst-info"></p>
+    </fieldset>
+    <label class="schalter">
+      <span><b>DiE DR3i anzeigen</b><small>Eigener Bereich, spielt über den Kurzbefehl „DR3i“ aus deiner Apple-Music-Mediathek.</small></span>
+      <input type="checkbox" id="dr3i-an" role="switch">
+    </label>
+    <button class="neu fertig" id="fertig" type="button">Fertig</button>
+  </section>
+
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Serie" hidden>
     <button role="tab" id="tab-ddf" aria-controls="bereich-ddf" aria-selected="true" type="button">Die drei ???</button>
     <button role="tab" id="tab-dr3i" aria-controls="bereich-dr3i" aria-selected="false" type="button">DiE DR3i</button>
   </nav>
@@ -201,7 +255,7 @@ footer a { color: inherit; }
     <div class="aktionen">
       <a class="play" id="play" href="#" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z"/></svg>
-        In Apple Music öffnen
+        <span id="play-text">In Apple Music öffnen</span>
       </a>
       <button class="neu" id="neu" type="button">Anderer Fall</button>
     </div>
@@ -297,22 +351,35 @@ let verlauf = lese("ddf.verlauf", []);
 let katId = lese("ddf.kategorie", "alle");
 if (!KATEGORIEN.some(k => k.id === katId)) katId = "alle";
 
-const link = f => "https://music.apple.com/de/album/" + f.id;
+const DIENSTE = {
+  apple: { name: "Apple Music", link: f => "https://music.apple.com/de/album/" + f.id, hat: () => true },
+  spotify: { name: "Spotify", link: f => "https://open.spotify.com/album/" + f.sp, hat: f => Boolean(f.sp) },
+};
+let dienstId = lese("ddf.dienst", "apple");
+if (!DIENSTE[dienstId]) dienstId = "apple";
+let dr3iAn = lese("ddf.dr3i", false) === true;
+const dienst = () => DIENSTE[dienstId];
+const verfuegbar = () => FOLGEN.filter(dienst().hat);
+const link = f => (dienst().hat(f) ? dienst() : DIENSTE.apple).link(f);
 const nummer = f => f.n !== null ? "Fall Nr. " + String(f.n).padStart(3, "0") : (f.k.includes("weitere") ? "Sonderakte" : "Special");
 const platzhalter = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" fill="#888" opacity=".15"/></svg>');
 
 function kategorienZeichnen() {
   const box = $("kategorien");
+  box.querySelectorAll(".gruppe").forEach(g => g.remove());
+  const pool = verfuegbar();
+  const anzahl = k => pool.filter(k.test).length;
+  if (!anzahl(KATEGORIEN.find(k => k.id === katId))) katId = "alle";
   for (const g of GRUPPEN) {
     const gruppe = document.createElement("div");
     gruppe.className = "gruppe";
     gruppe.innerHTML = `<div class="gruppe-name">${g.name}</div><div class="chips"></div>`;
     const chips = gruppe.querySelector(".chips");
     for (const k of g.kategorien) {
-      const anzahl = FOLGEN.filter(k.test).length;
       const label = document.createElement("label");
       label.className = "chip";
-      label.innerHTML = `<input type="radio" name="kat" id="kat-${k.id}" value="${k.id}"><span>${k.name}<small>${anzahl}</small></span>`;
+      label.hidden = !anzahl(k);
+      label.innerHTML = `<input type="radio" name="kat" id="kat-${k.id}" value="${k.id}"><span>${k.name}<small>${anzahl(k)}</small></span>`;
       const input = label.querySelector("input");
       input.checked = k.id === katId;
       input.addEventListener("change", () => waehlen(k.id));
@@ -330,7 +397,8 @@ function waehlen(id) {
 }
 
 function mischen() {
-  const andere = KATEGORIEN.filter(k => k.id !== katId && k.id !== "alle");
+  const pool = verfuegbar();
+  const andere = KATEGORIEN.filter(k => k.id !== katId && k.id !== "alle" && pool.some(k.test));
   const k = andere[Math.floor(Math.random() * andere.length)];
   waehlen(k.id);
   $("akte").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "nearest" });
@@ -338,7 +406,7 @@ function mischen() {
 
 function ziehen() {
   const kat = KATEGORIEN.find(k => k.id === katId);
-  const alle = FOLGEN.filter(kat.test);
+  const alle = verfuegbar().filter(kat.test);
   let pool = alle.filter(f => !verlauf.includes(f.id) && f !== aktuell);
   if (!pool.length) pool = alle.filter(f => f !== aktuell);
   if (!pool.length) pool = alle;
@@ -357,8 +425,10 @@ function anzeigen(frei) {
   $("cover").src = covers[f.id] || platzhalter;
   $("cover").alt = "Cover: " + f.t;
   $("play").href = link(f);
+  $("play").classList.toggle("spotify", dienstId === "spotify");
+  $("play-text").textContent = "In " + dienst().name + " öffnen";
   const kat = KATEGORIEN.find(k => k.id === katId);
-  $("hinweis").textContent = `Aus „${kat.name}“ · ${frei} Folgen zur Auswahl. In Apple Music einmal auf ▶︎ tippen.`;
+  $("hinweis").textContent = `Aus „${kat.name}“ · ${frei} Folgen zur Auswahl. In ${dienst().name} einmal auf ▶︎ tippen.`;
   const akte = $("akte");
   akte.classList.remove("zieht"); void akte.offsetWidth; akte.classList.add("zieht");
 }
@@ -462,12 +532,51 @@ function bereich(name) {
 $("tab-ddf").addEventListener("click", () => bereich("ddf"));
 $("tab-dr3i").addEventListener("click", () => bereich("dr3i"));
 
+// Einstellungen
+function dienstInfo() {
+  const fehlen = FOLGEN.length - verfuegbar().length;
+  $("dienst-info").textContent = fehlen
+    ? `${fehlen} Film-, Live- und Kopfhörer-Alben gibt es nur bei Apple Music, sie werden ausgeblendet.`
+    : "Alle Folgen öffnen direkt in Apple Music.";
+}
+function dr3iSichtbar() {
+  $("tabs").hidden = !dr3iAn;
+  if (!dr3iAn) bereich("ddf");
+}
+$("dienst-" + dienstId).checked = true;
+$("dr3i-an").checked = dr3iAn;
+for (const id of Object.keys(DIENSTE)) {
+  $("dienst-" + id).addEventListener("change", () => {
+    dienstId = id;
+    schreibe("ddf.dienst", id);
+    dienstInfo();
+    kategorienZeichnen();
+    if (!dienst().hat(aktuell)) aktuell = null;
+    if (aktuell) anzeigen(verfuegbar().filter(KATEGORIEN.find(k => k.id === katId).test).filter(f => !verlauf.includes(f.id)).length);
+    else ziehen();
+    verlaufZeichnen();
+  });
+}
+$("dr3i-an").addEventListener("change", e => {
+  dr3iAn = e.target.checked;
+  schreibe("ddf.dr3i", dr3iAn);
+  dr3iSichtbar();
+});
+function einstellungen(offen) {
+  $("einstellungen").hidden = !offen;
+  $("zahnrad").setAttribute("aria-expanded", String(offen));
+}
+$("zahnrad").addEventListener("click", () => einstellungen($("einstellungen").hidden));
+$("fertig").addEventListener("click", () => { einstellungen(false); $("zahnrad").focus(); });
+
 kategorienZeichnen();
 ziehen();
 verlaufZeichnen();
 dr3iListe();
 dr3iZeigen(DR3I[Math.floor(Math.random() * DR3I.length)], false);
-bereich(location.hash === "#dr3i" ? "dr3i" : location.hash === "#ddf" ? "ddf" : lese("ddf.bereich", "ddf"));
+dienstInfo();
+bereich(dr3iAn && location.hash === "#dr3i" ? "dr3i" : location.hash === "#ddf" ? "ddf" : lese("ddf.bereich", "ddf"));
+dr3iSichtbar();
 
 
 </script>

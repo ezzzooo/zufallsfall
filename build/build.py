@@ -55,7 +55,10 @@ def folge(e, n, titel, tags):
         k.append("kurz")
     if jahr:
         k.append(dekade(jahr))
-    return {"n": n, "t": titel, "id": str(e["ids"]["appleMusic"]), "j": jahr, "b": e.get("beschreibung") or "", "k": k}
+    eintrag = {"n": n, "t": titel, "id": str(e["ids"]["appleMusic"]), "j": jahr, "b": e.get("beschreibung") or "", "k": k}
+    if e["ids"].get("spotify"):
+        eintrag["sp"] = e["ids"]["spotify"]
+    return eintrag
 
 
 def main():
