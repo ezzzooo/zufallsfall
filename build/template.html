@@ -324,7 +324,7 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
         <button class="zurueck-knopf" id="zurueck" type="button" hidden aria-label="Vorheriger Fall">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>
         </button>
-        <div class="wisch-tipp" id="wisch-tipp" hidden>← Wischen für einen anderen Fall →</div>
+        <div class="wisch-tipp" id="wisch-tipp" hidden>← neuer Fall · zurück →</div>
       </div>
       <div class="meta">
         <div class="fallnr" id="fallnr"></div>
@@ -616,11 +616,8 @@ function verlaufZeichnen() {
 }
 
 $("play").addEventListener("click", () => { gehoert(aktuell); anzeigen(); });
-$("neu").addEventListener("click", () => wegschieben($("karte"), 1, ziehen));
-$("zurueck").addEventListener("click", () => {
-  const f = frueher.pop();
-  if (f) wegschieben($("karte"), -1, () => zeigeFall(f, false));
-});
+$("neu").addEventListener("click", () => wegschieben($("karte"), -1, ziehen));
+$("zurueck").addEventListener("click", () => { if (zurueckDdf.kann()) wegschieben($("karte"), 1, zurueckDdf.los); });
 $("mehr").addEventListener("click", () => { $("text").classList.add("offen"); $("mehr").hidden = true; });
 
 // Verlauf zurücksetzen: erster Tipp fragt nach, zweiter löscht
@@ -664,7 +661,8 @@ function wegschieben(karte, richtung, danach) {
     setTimeout(() => { karte.style.transition = ""; }, 260);
   }, 200);
 }
-function wischbar(buehne, karte, danach) {
+// Wie ein Kartenstapel: nach links wischen = neuer Fall, nach rechts = vorheriger Fall
+function wischbar(buehne, karte, neu, zurueck) {
   let start = null, dx = 0;
   buehne.addEventListener("pointerdown", e => {
     if (e.target.closest("button")) return;
@@ -675,14 +673,19 @@ function wischbar(buehne, karte, danach) {
     if (!start) return;
     dx = e.clientX - start.x;
     if (Math.abs(dx) < 6 && Math.abs(e.clientY - start.y) > 10) { start = null; return; }
-    karte.style.transform = `translateX(${dx}px) rotate(${dx / 25}deg)`;
+    // Nach rechts ohne vorherigen Fall: nur leicht nachgeben
+    const weg = dx > 0 && !zurueck.kann() ? dx / 4 : dx;
+    karte.style.transform = `translateX(${weg}px) rotate(${weg / 25}deg)`;
   });
   const ende = () => {
     if (!start) return;
     start = null;
-    if (Math.abs(dx) > 80) {
+    if (dx < -80) {
       wischTippWeg();
-      wegschieben(karte, Math.sign(dx), danach);
+      wegschieben(karte, -1, neu);
+    } else if (dx > 80 && zurueck.kann()) {
+      wischTippWeg();
+      wegschieben(karte, 1, zurueck.los);
     } else {
       karte.classList.add("zurueck");
       karte.style.transform = "";
@@ -691,9 +694,10 @@ function wischbar(buehne, karte, danach) {
   buehne.addEventListener("pointerup", ende);
   buehne.addEventListener("pointercancel", ende);
 }
-function wischTippWeg() { $("wisch-tipp").hidden = true; schreibe("ddf.gewischt", true); }
-$("wisch-tipp").hidden = lese("ddf.gewischt", false) === true;
-wischbar($("buehne"), $("karte"), ziehen);
+function wischTippWeg() { $("wisch-tipp").hidden = true; schreibe("ddf.gewischt2", true); }
+$("wisch-tipp").hidden = lese("ddf.gewischt2", false) === true;
+const zurueckDdf = { kann: () => frueher.length > 0, los: () => zeigeFall(frueher.pop(), false) };
+wischbar($("buehne"), $("karte"), ziehen, zurueckDdf);
 
 // Suche nach Nummer oder Titel
 function suchen(text) {
@@ -800,13 +804,11 @@ function dr3iZiehen() {
   const pool = DR3I.filter(f => f !== dr3iAktuell);
   dr3iZeigen(pool[Math.floor(Math.random() * pool.length)]);
 }
-$("dr3i-zufall").addEventListener("click", () => wegschieben($("dr3i-karte"), 1, dr3iZiehen));
-$("dr3i-zurueck").addEventListener("click", () => {
-  const f = dr3iFrueher.pop();
-  if (f) wegschieben($("dr3i-karte"), -1, () => dr3iZeigen(f, true, false));
-});
+const zurueckDr3i = { kann: () => dr3iFrueher.length > 0, los: () => dr3iZeigen(dr3iFrueher.pop(), true, false) };
+$("dr3i-zufall").addEventListener("click", () => wegschieben($("dr3i-karte"), -1, dr3iZiehen));
+$("dr3i-zurueck").addEventListener("click", () => { if (zurueckDr3i.kann()) wegschieben($("dr3i-karte"), 1, zurueckDr3i.los); });
 $("dr3i-mehr").addEventListener("click", () => { $("dr3i-text").classList.add("offen"); $("dr3i-mehr").hidden = true; });
-wischbar($("dr3i-buehne"), $("dr3i-karte"), dr3iZiehen);
+wischbar($("dr3i-buehne"), $("dr3i-karte"), dr3iZiehen, zurueckDr3i);
 
 // Bereiche umschalten
 function bereich(name) {
