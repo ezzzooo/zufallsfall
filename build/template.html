@@ -125,7 +125,11 @@ header { display: flex; align-items: center; justify-content: space-between; gap
 .katleiste svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; transition: transform .2s; flex: none; }
 .katleiste[aria-expanded="true"] svg { transform: rotate(180deg); }
 .katleiste > span { min-width: 0; display: flex; align-items: baseline; gap: 10px; }
-.katleiste > span:first-child { flex-wrap: wrap; row-gap: 0; }
+.katleiste > span:first-child { flex-wrap: nowrap; overflow: hidden; }
+#kat-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.katleiste .label { flex: none; }
+#kat-anzahl { flex: none; }
+@media (max-width: 400px) { .katleiste .label { display: none; } }
 .kat-rechts { display: flex !important; align-items: center !important; gap: 6px !important; flex: none; }
 .kat-rechts small { font-size: 12.5px; }
 .chip input:disabled + span { opacity: .35; cursor: default; }
@@ -166,6 +170,19 @@ header { display: flex; align-items: center; justify-content: space-between; gap
   background: rgba(10,10,12,.72); color: var(--ink); display: grid; place-items: center; padding: 0;
 }
 .zurueck-knopf svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.note-zeile:empty { display: none; }
+.note {
+  display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; font-size: 13.5px; font-weight: 700;
+  text-decoration: none; border: 1px solid currentColor; font-variant-numeric: tabular-nums;
+}
+.note.gut { color: #4cd07d; }
+.note.mittel { color: #f2c94c; }
+.note.schwach { color: var(--muted); }
+a.note::after { content: "↗"; font-weight: 400; opacity: .8; }
+.treffer em { font-style: normal; color: var(--muted); font-size: 13px; }
+.links { display: grid; gap: 6px; font-size: 14px; }
+.links a { color: var(--ink); text-decoration: none; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.links a::after { content: " ↗"; color: var(--muted); }
 .neu-badge { display: inline-block; margin-left: 8px; padding: 0 6px; border-radius: 4px; background: var(--rot); color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 11px; letter-spacing: .06em; vertical-align: 2px; }
 .buehne .karte.zurueck { transition: transform .25s ease-out; }
 .buehne .karte.weg { transition: transform .22s ease-in, opacity .22s ease-in; opacity: 0; }
@@ -271,9 +288,16 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
       <span><b>DiE DR3i anzeigen</b><small>Eigener Bereich, spielt über den Kurzbefehl „DR3i“ aus deiner Apple-Music-Mediathek.</small></span>
       <input type="checkbox" id="dr3i-an" role="switch">
     </label>
+    <div class="links">
+      <div class="klein-titel">Mehr zu den drei ???</div>
+      <a href="https://www.rocky-beach.com/hoerspiel/hoerueber.html" target="_blank" rel="noopener">rocky-beach.com – alle Hörspiele mit Inhalt und Kommentaren</a>
+      <a href="https://www.rocky-beach.com/php/project/f_ausgabe.html" target="_blank" rel="noopener">rocky-beach.com – Folgenbewertungen (Liste „Hörspiele“ wählen)</a>
+      <a href="https://www.dreifragezeichen.de/produktwelt/hoerspiele" target="_blank" rel="noopener">dreifragezeichen.de – neue Folgen</a>
+      <a href="https://die-zentrale.podigee.io/" target="_blank" rel="noopener">Podcast „Die Zentrale“</a>
+    </div>
     <div class="impressum">
       <div>Folgendaten: <a href="https://dreimetadaten.de/" target="_blank" rel="noopener">dreimetadaten.de</a> · Stand __STAND__ · __ANZAHL__ Alben</div>
-      <div>Cover: Apple Music, DiE DR3i: dreimetadaten.de. Inoffizielles Fan-Projekt.</div>
+      <div>Cover: Apple Music, DiE DR3i: dreimetadaten.de. Bewertungen: Community von rocky-beach.com (1 = wunderbar, 6 = vergessen wir's). Inoffizielles Fan-Projekt.</div>
       <div>Als App ablegen: in Safari Teilen → „Zum Home-Bildschirm“.</div>
     </div>
     <button class="fertig" id="fertig" type="button">Fertig</button>
@@ -305,6 +329,7 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
       <div class="meta">
         <div class="fallnr" id="fallnr"></div>
         <h1 id="titel"></h1>
+        <div class="note-zeile" id="note"></div>
       </div>
       <p class="text" id="text"></p>
       <button class="mehr" id="mehr" type="button" hidden>Mehr lesen</button>
@@ -342,6 +367,7 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
       <div class="meta">
         <div class="fallnr" id="dr3i-nr"></div>
         <h1 id="dr3i-titel"></h1>
+        <div class="note-zeile" id="dr3i-note"></div>
       </div>
       <p class="text" id="dr3i-text"></p>
       <button class="mehr" id="dr3i-mehr" type="button">Mehr lesen</button>
@@ -385,6 +411,8 @@ const GRUPPEN = [
     { id: "weitere", name: "Film, Live & Kopfhörer", test: tag("weitere") },
   ]},
   { id: "thema", name: "Thema", kategorien: [
+    { id: "schlaf", name: "Zum Einschlafen", test: tag("schlaf") },
+    { id: "top", name: "Top bewertet", test: tag("top") },
     { id: "grusel", name: "Grusel", test: tag("grusel") },
     { id: "schatz", name: "Schatz & Rätsel", test: tag("schatz") },
     { id: "meer", name: "Meer & Piraten", test: tag("meer") },
@@ -439,6 +467,18 @@ const link = f => (dienst().hat(f) ? dienst() : DIENSTE.apple).link(f);
 const nummer = f => f.n !== null ? "Fall Nr. " + String(f.n).padStart(3, "0") : (f.k.includes("weitere") ? "Sonderakte" : "Special");
 const kurzNr = f => f.n !== null ? String(f.n).padStart(3, "0") : "???";
 const istNeu = f => f.d && (Date.now() - new Date(f.d + "T00:00:00").getTime()) / 864e5 <= NEU_TAGE && new Date(f.d) <= new Date();
+// Bewertung von rocky-beach.com: Note 1 (wunderbar) bis 6, als Link zur Folgenseite
+function noteLink(r, href, titel) {
+  const a = document.createElement(href ? "a" : "span");
+  a.className = "note " + (r[0] <= 2 ? "gut" : r[0] <= 2.8 ? "mittel" : "schwach");
+  a.textContent = `★ ${r[0].toFixed(1).replace(".", ",")} · Platz ${r[1]}`;
+  if (href) {
+    a.href = href; a.target = "_blank"; a.rel = "noopener";
+    a.setAttribute("aria-label", `Note ${r[0].toFixed(2).replace(".", ",")} von ${r[2]} Stimmen auf rocky-beach.com: ${titel}`);
+  }
+  a.title = `Note ${r[0].toFixed(2).replace(".", ",")} (1 = wunderbar, 6 = vergessen wir's) · ${r[2]} Stimmen auf rocky-beach.com`;
+  return a;
+}
 const bewegungAus = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Testet eine Folge gegen eine Auswahl
@@ -489,7 +529,8 @@ function leisteZeichnen() {
   $("kat-name").textContent = namen.map(id => katVon(id).name).join(" · ");
   $("kat-anzahl").textContent = imPool().length;
   const sichtbar = KATEGORIEN.filter(k => verfuegbar().some(k.test)).length;
-  $("kat-zahl").textContent = $("kategorien").hidden ? sichtbar + " Kategorien" : "";
+  const standard = auswahl.art === "alle" && !auswahl.thema && !auswahl.zeit;
+  $("kat-zahl").textContent = $("kategorien").hidden && standard ? sichtbar + " Kategorien" : "";
 }
 function kategorienAuf(offen) {
   $("kategorien").hidden = !offen;
@@ -530,6 +571,7 @@ function anzeigen() {
   const extra = [f.j, f.m ? f.m + " Min." : ""].filter(Boolean).join(" · ");
   if (extra) { const s = document.createElement("span"); s.textContent = " · " + extra; nr.append(s); }
   if (istNeu(f)) { const b = document.createElement("span"); b.className = "neu-badge"; b.textContent = "NEU"; nr.append(b); }
+  $("note").replaceChildren(...(f.r ? [noteLink(f.r, f.rb, f.t)] : []));
   $("titel").textContent = f.t;
   $("text").textContent = f.b || "Keine Beschreibung vorhanden.";
   $("text").classList.remove("offen");
@@ -672,6 +714,7 @@ function suchen(text) {
     const span = document.createElement("span");
     const nr = document.createElement("small"); nr.textContent = f.n !== null ? kurzNr(f) : "Sp.";
     span.append(nr, f.t);
+    if (f.r) { const n = document.createElement("em"); n.textContent = " ★ " + f.r[0].toFixed(1).replace(".", ","); span.append(n); }
     btn.append(img, span);
     btn.addEventListener("click", () => {
       sucheAuf(false);
@@ -708,6 +751,7 @@ function dr3iZeigen(f, animieren = true, merken = true) {
   $("dr3i-nr").append(dr3iNr(f));
   const s = document.createElement("span"); s.textContent = ` · ${f.d.slice(0, 4)} · ${f.min} Min.`; $("dr3i-nr").append(s);
   $("dr3i-titel").textContent = f.t;
+  $("dr3i-note").replaceChildren(...(f.r ? [noteLink(f.r, "https://www.rocky-beach.com/php/project/f_ausgabe.html", f.t)] : []));
   $("dr3i-text").textContent = f.b;
   $("dr3i-text").classList.remove("offen");
   $("dr3i-mehr").hidden = f.b.length < 110;
