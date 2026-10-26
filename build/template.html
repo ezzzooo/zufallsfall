@@ -10,6 +10,7 @@
 <meta name="theme-color" content="#0a0a0c">
 <meta name="robots" content="noindex">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,400..900&family=Special+Elite&display=swap">
 <style>
@@ -56,13 +57,33 @@ header { display: flex; align-items: center; justify-content: space-between; gap
 .fragezeichen span:nth-child(3) { color: var(--blau); }
 .marke-text { display: grid; line-height: 1.05; min-width: 0; }
 .marke-text b { font-weight: 850; font-stretch: 80%; font-size: 21px; letter-spacing: .01em; text-transform: uppercase; }
-.marke-text small { font-family: var(--font-type); color: var(--muted); font-size: 12px; letter-spacing: .04em; }
+.marke-text small { font-family: var(--font-type); color: var(--muted); font-size: 12px; letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 400px) { .marke-text small { display: none; } .fragezeichen { font-size: 34px; } }
 .rund {
   width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface);
   display: grid; place-items: center; cursor: pointer; padding: 0; flex: none;
 }
 .rund svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .rund[aria-expanded="true"] { background: var(--ink); color: var(--bg); }
+
+.kopf-knoepfe { display: flex; gap: 8px; flex: none; }
+.rund[aria-expanded="true"] svg { stroke: currentColor; }
+
+/* Suche */
+.suche { display: grid; gap: 8px; }
+.suche input {
+  width: 100%; min-height: 46px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); font: inherit; font-size: 16px;
+}
+.treffer { list-style: none; margin: 0; padding: 0; display: grid; max-height: 50vh; overflow-y: auto; border-radius: 12px; }
+.treffer button {
+  width: 100%; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: center; text-align: left;
+  padding: 6px 4px; border: 0; border-bottom: 1px solid var(--line); background: none; cursor: pointer;
+}
+.treffer img { width: 44px; height: 44px; border-radius: 5px; object-fit: cover; background: var(--surface); }
+.treffer span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
+.treffer small { font-family: var(--font-type); color: var(--rot); margin-right: 6px; }
+.treffer .leer { padding: 8px 4px; }
 
 /* Einstellungen */
 .einstellungen { display: grid; gap: 16px; padding: 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
@@ -104,6 +125,10 @@ header { display: flex; align-items: center; justify-content: space-between; gap
 .katleiste svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; transition: transform .2s; flex: none; }
 .katleiste[aria-expanded="true"] svg { transform: rotate(180deg); }
 .katleiste > span { min-width: 0; display: flex; align-items: baseline; gap: 10px; }
+.katleiste > span:first-child { flex-wrap: wrap; row-gap: 0; }
+.kat-rechts { display: flex !important; align-items: center !important; gap: 6px !important; flex: none; }
+.kat-rechts small { font-size: 12.5px; }
+.chip input:disabled + span { opacity: .35; cursor: default; }
 .gruppen { display: grid; gap: 12px; margin: 0; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); min-width: 0; }
 .gruppen legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 .gruppe { display: grid; gap: 7px; }
@@ -126,7 +151,22 @@ header { display: flex; align-items: center; justify-content: space-between; gap
   width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; background: var(--surface);
   box-shadow: 0 18px 40px -18px rgba(0,0,0,.9), 0 0 0 1px var(--line); -webkit-user-drag: none; pointer-events: none;
 }
-.buehne .karte { will-change: transform; }
+.buehne .karte {
+  will-change: transform; position: relative; aspect-ratio: 1; border-radius: 10px; background: var(--surface);
+  box-shadow: 0 18px 40px -18px rgba(0,0,0,.9), 0 0 0 1px var(--line); overflow: hidden;
+}
+.buehne .karte::before {
+  content: attr(data-nr); position: absolute; inset: 0; display: grid; place-items: center;
+  font-weight: 900; font-stretch: 70%; font-size: 96px; color: var(--line); letter-spacing: -.02em;
+}
+.buehne .karte img { position: absolute; inset: 0; height: 100%; box-shadow: none; border-radius: 0; transition: opacity .2s; }
+.buehne .karte img:not(.geladen) { opacity: 0; }
+.zurueck-knopf {
+  position: absolute; top: 10px; left: 10px; width: 40px; height: 40px; border-radius: 50%; border: 0; cursor: pointer;
+  background: rgba(10,10,12,.72); color: var(--ink); display: grid; place-items: center; padding: 0;
+}
+.zurueck-knopf svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.neu-badge { display: inline-block; margin-left: 8px; padding: 0 6px; border-radius: 4px; background: var(--rot); color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 11px; letter-spacing: .06em; vertical-align: 2px; }
 .buehne .karte.zurueck { transition: transform .25s ease-out; }
 .buehne .karte.weg { transition: transform .22s ease-in, opacity .22s ease-in; opacity: 0; }
 .wisch-tipp {
@@ -199,10 +239,20 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
       <div class="fragezeichen" aria-hidden="true"><span>?</span><span>?</span><span>?</span></div>
       <div class="marke-text"><b>Zufallsfall</b><small>Wir übernehmen jeden Fall</small></div>
     </div>
+    <div class="kopf-knoepfe">
+    <button class="rund" id="lupe" type="button" aria-expanded="false" aria-controls="suche" aria-label="Folge suchen">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+    </button>
     <button class="rund" id="zahnrad" type="button" aria-expanded="false" aria-controls="einstellungen" aria-label="Einstellungen">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9c.26.6.85 1 1.51 1.03H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"/></svg>
     </button>
+    </div>
   </header>
+
+  <section class="suche" id="suche" hidden aria-label="Folge suchen">
+    <input type="search" id="suchfeld" placeholder="Nummer oder Titel, z. B. 42 oder Werwolf" autocomplete="off" enterkeyhint="search">
+    <ul class="treffer" id="treffer"></ul>
+  </section>
 
   <section class="einstellungen" id="einstellungen" hidden aria-label="Einstellungen">
     <fieldset class="einstellung">
@@ -237,15 +287,19 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
   <div class="bereich" id="bereich-ddf" role="tabpanel" aria-labelledby="tab-ddf">
     <button class="katleiste" id="katleiste" type="button" aria-expanded="false" aria-controls="kategorien">
       <span><span class="label">Kategorie</span><b id="kat-name"></b><small id="kat-anzahl"></small></span>
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      <span class="kat-rechts"><small id="kat-zahl"></small><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span>
     </button>
     <fieldset class="gruppen" id="kategorien" hidden>
       <legend>Kategorie</legend>
+      <p class="info">Eine Art wählen, dazu optional ein Thema und eine Zeit. Nochmal tippen hebt die Auswahl auf.</p>
     </fieldset>
 
     <article class="fall-karte" id="akte" aria-live="polite">
       <div class="buehne" id="buehne">
         <div class="karte" id="karte"><img id="cover" alt=""></div>
+        <button class="zurueck-knopf" id="zurueck" type="button" hidden aria-label="Vorheriger Fall">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>
+        </button>
         <div class="wisch-tipp" id="wisch-tipp" hidden>← Wischen für einen anderen Fall →</div>
       </div>
       <div class="meta">
@@ -281,6 +335,9 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
     <article class="fall-karte" id="dr3i-akte" aria-live="polite">
       <div class="buehne" id="dr3i-buehne">
         <div class="karte" id="dr3i-karte"><img id="dr3i-cover" alt=""></div>
+        <button class="zurueck-knopf" id="dr3i-zurueck" type="button" hidden aria-label="Vorheriger Fall">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>
+        </button>
       </div>
       <div class="meta">
         <div class="fallnr" id="dr3i-nr"></div>
@@ -320,14 +377,14 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
 const FOLGEN = __DATEN__;
 const tag = t => f => f.k.includes(t);
 const GRUPPEN = [
-  { name: "Art", kategorien: [
+  { id: "art", name: "Art", pflicht: true, kategorien: [
     { id: "alle", name: "Alle", test: () => true },
     { id: "haupt", name: "Hauptfolgen", test: f => f.n !== null },
     { id: "special", name: "Specials", test: tag("special") },
     { id: "advent", name: "Adventskalender", test: tag("advent") },
     { id: "weitere", name: "Film, Live & Kopfhörer", test: tag("weitere") },
   ]},
-  { name: "Thema", kategorien: [
+  { id: "thema", name: "Thema", kategorien: [
     { id: "grusel", name: "Grusel", test: tag("grusel") },
     { id: "schatz", name: "Schatz & Rätsel", test: tag("schatz") },
     { id: "meer", name: "Meer & Piraten", test: tag("meer") },
@@ -335,7 +392,7 @@ const GRUPPEN = [
     { id: "hugenay", name: "Mit Hugenay", test: tag("hugenay") },
     { id: "kurz", name: "Kurz, unter 50 Min.", test: tag("kurz") },
   ]},
-  { name: "Zeit", kategorien: [
+  { id: "zeit", name: "Zeit", kategorien: [
     { id: "hitchcock", name: "Hitchcock-Ära", test: tag("hitchcock") },
     { id: "dek70", name: "70er & 80er", test: tag("dek70") },
     { id: "dek90", name: "90er", test: tag("dek90") },
@@ -345,17 +402,28 @@ const GRUPPEN = [
   ]},
 ];
 const KATEGORIEN = GRUPPEN.flatMap(g => g.kategorien);
+const katVon = id => KATEGORIEN.find(k => k.id === id);
 const MERKEN = 5;
+const NEU_TAGE = 30;
 const $ = id => document.getElementById(id);
 let covers = __ART__;
 let aktuell = null;
+let frueher = [];
 
 const lese = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } };
 const schreibe = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
 
 let verlauf = lese("ddf.verlauf", []);
-let katId = lese("ddf.kategorie", "alle");
-if (!KATEGORIEN.some(k => k.id === katId)) katId = "alle";
+
+// Auswahl: eine Art, optional ein Thema und eine Zeit (alte Einzelkategorie übernehmen)
+let auswahl = lese("ddf.auswahl", null);
+if (!auswahl) {
+  auswahl = { art: "alle", thema: null, zeit: null };
+  const alt = lese("ddf.kategorie", "alle");
+  const gruppe = GRUPPEN.find(g => g.kategorien.some(k => k.id === alt));
+  if (gruppe) auswahl[gruppe.id] = alt;
+}
+for (const g of GRUPPEN) if (auswahl[g.id] && !g.kategorien.some(k => k.id === auswahl[g.id])) auswahl[g.id] = g.pflicht ? "alle" : null;
 
 const DIENSTE = {
   apple: { name: "Apple Music", link: f => "https://music.apple.com/de/album/" + f.id, hat: () => true },
@@ -369,29 +437,47 @@ const dienst = () => DIENSTE[dienstId];
 const verfuegbar = () => FOLGEN.filter(f => dienst().hat(f) && !(ohneFussball && f.k.includes("fussball")));
 const link = f => (dienst().hat(f) ? dienst() : DIENSTE.apple).link(f);
 const nummer = f => f.n !== null ? "Fall Nr. " + String(f.n).padStart(3, "0") : (f.k.includes("weitere") ? "Sonderakte" : "Special");
-const platzhalter = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" fill="#16161b"/></svg>');
+const kurzNr = f => f.n !== null ? String(f.n).padStart(3, "0") : "???";
+const istNeu = f => f.d && (Date.now() - new Date(f.d + "T00:00:00").getTime()) / 864e5 <= NEU_TAGE && new Date(f.d) <= new Date();
 const bewegungAus = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Testet eine Folge gegen eine Auswahl
+const passt = (f, a) => GRUPPEN.every(g => !a[g.id] || katVon(a[g.id]).test(f));
+const imPool = () => verfuegbar().filter(f => passt(f, auswahl));
+
+// Cover mit Platzhalter (große Fallnummer), bis das Bild geladen ist
+function coverSetzen(img, karte, src, nr, alt) {
+  karte.dataset.nr = nr;
+  img.classList.remove("geladen");
+  img.alt = alt;
+  img.onload = () => img.classList.add("geladen");
+  img.onerror = () => img.removeAttribute("src");
+  if (src) img.src = src; else img.removeAttribute("src");
+  if (img.complete && img.naturalWidth) img.classList.add("geladen");
+}
 
 // Kategorien
 function kategorienZeichnen() {
   const box = $("kategorien");
   box.querySelectorAll(".gruppe").forEach(g => g.remove());
   const pool = verfuegbar();
-  const anzahl = k => pool.filter(k.test).length;
-  if (!anzahl(KATEGORIEN.find(k => k.id === katId))) katId = "alle";
+  if (!pool.some(f => passt(f, auswahl))) auswahl = { art: "alle", thema: null, zeit: null };
   for (const g of GRUPPEN) {
     const gruppe = document.createElement("div");
     gruppe.className = "gruppe";
     gruppe.innerHTML = `<div class="gruppe-name">${g.name}</div><div class="chips"></div>`;
     const chips = gruppe.querySelector(".chips");
     for (const k of g.kategorien) {
+      const probe = { ...auswahl, [g.id]: k.id };
+      const anzahl = pool.filter(f => passt(f, probe)).length;
       const label = document.createElement("label");
       label.className = "chip";
-      label.hidden = !anzahl(k);
-      label.innerHTML = `<input type="radio" name="kat" id="kat-${k.id}" value="${k.id}"><span>${k.name}<small>${anzahl(k)}</small></span>`;
+      label.hidden = !pool.some(k.test);
+      label.innerHTML = `<input type="checkbox" id="kat-${k.id}" value="${k.id}"><span>${k.name}<small>${anzahl}</small></span>`;
       const input = label.querySelector("input");
-      input.checked = k.id === katId;
-      input.addEventListener("change", () => { waehlen(k.id); kategorienAuf(false); });
+      input.checked = auswahl[g.id] === k.id;
+      input.disabled = !anzahl && !input.checked;
+      input.addEventListener("change", () => waehlen(g, k.id));
       chips.appendChild(label);
     }
     box.appendChild(gruppe);
@@ -399,55 +485,71 @@ function kategorienZeichnen() {
   leisteZeichnen();
 }
 function leisteZeichnen() {
-  const kat = KATEGORIEN.find(k => k.id === katId);
-  $("kat-name").textContent = kat.name;
-  $("kat-anzahl").textContent = verfuegbar().filter(kat.test).length;
+  const namen = GRUPPEN.map(g => auswahl[g.id]).filter(Boolean).filter((id, i) => i > 0 || id !== "alle" || !auswahl.thema && !auswahl.zeit);
+  $("kat-name").textContent = namen.map(id => katVon(id).name).join(" · ");
+  $("kat-anzahl").textContent = imPool().length;
+  const sichtbar = KATEGORIEN.filter(k => verfuegbar().some(k.test)).length;
+  $("kat-zahl").textContent = $("kategorien").hidden ? sichtbar + " Kategorien" : "";
 }
 function kategorienAuf(offen) {
   $("kategorien").hidden = !offen;
   $("katleiste").setAttribute("aria-expanded", String(offen));
+  leisteZeichnen();
 }
 $("katleiste").addEventListener("click", () => kategorienAuf($("kategorien").hidden));
 
-function waehlen(id) {
-  katId = id;
-  schreibe("ddf.kategorie", katId);
-  $("kat-" + id).checked = true;
-  leisteZeichnen();
+function waehlen(gruppe, id) {
+  if (gruppe.pflicht) auswahl[gruppe.id] = id;
+  else auswahl[gruppe.id] = auswahl[gruppe.id] === id ? null : id;
+  schreibe("ddf.auswahl", auswahl);
+  kategorienZeichnen();
   ziehen();
 }
 
 // Ziehen und Anzeigen
 function ziehen() {
-  const kat = KATEGORIEN.find(k => k.id === katId);
-  const alle = verfuegbar().filter(kat.test);
+  const alle = imPool();
   let pool = alle.filter(f => !verlauf.includes(f.id) && f !== aktuell);
   if (!pool.length) pool = alle.filter(f => f !== aktuell);
   if (!pool.length) pool = alle;
-  aktuell = pool[Math.floor(Math.random() * pool.length)];
+  zeigeFall(pool[Math.floor(Math.random() * pool.length)]);
+}
+function zeigeFall(f, merken = true) {
+  if (merken && aktuell && aktuell !== f) frueher = [...frueher, aktuell].slice(-20);
+  aktuell = f;
   anzeigen();
 }
 
 function anzeigen() {
   const f = aktuell;
-  const kat = KATEGORIEN.find(k => k.id === katId);
-  const alle = verfuegbar().filter(kat.test);
+  const alle = imPool();
   const frei = alle.filter(x => !verlauf.includes(x.id)).length;
-  $("fallnr").innerHTML = "";
-  $("fallnr").append(nummer(f));
-  if (f.j) { const s = document.createElement("span"); s.textContent = " · " + f.j; $("fallnr").append(s); }
+  const nr = $("fallnr");
+  nr.innerHTML = "";
+  nr.append(nummer(f));
+  const extra = [f.j, f.m ? f.m + " Min." : ""].filter(Boolean).join(" · ");
+  if (extra) { const s = document.createElement("span"); s.textContent = " · " + extra; nr.append(s); }
+  if (istNeu(f)) { const b = document.createElement("span"); b.className = "neu-badge"; b.textContent = "NEU"; nr.append(b); }
   $("titel").textContent = f.t;
   $("text").textContent = f.b || "Keine Beschreibung vorhanden.";
   $("text").classList.remove("offen");
   $("mehr").hidden = !f.b || f.b.length < 110;
-  $("cover").src = covers[f.id] || platzhalter;
-  $("cover").alt = "Cover: " + f.t;
+  coverSetzen($("cover"), $("karte"), covers[f.id], kurzNr(f), "Cover: " + f.t);
   $("play").href = link(f);
   $("play").classList.toggle("spotify", dienstId === "spotify");
   $("play-text").textContent = dienst().name;
-  $("hinweis").textContent = `${frei} von ${alle.length} Fällen zur Auswahl · in ${dienst().name} ▶︎ tippen`;
+  $("hinweis").textContent = alle.includes(f)
+    ? `${frei} von ${alle.length} Fällen zur Auswahl · in ${dienst().name} ▶︎ tippen`
+    : `Aus der Suche · in ${dienst().name} ▶︎ tippen`;
+  $("zurueck").hidden = !frueher.length;
   const akte = $("akte");
   akte.classList.remove("zieht"); void akte.offsetWidth; akte.classList.add("zieht");
+}
+
+function gehoert(f) {
+  verlauf = [f.id, ...verlauf.filter(id => id !== f.id)].slice(0, MERKEN);
+  schreibe("ddf.verlauf", verlauf);
+  verlaufZeichnen();
 }
 
 function verlaufZeichnen() {
@@ -463,19 +565,21 @@ function verlaufZeichnen() {
     a.title = f.t;
     a.setAttribute("aria-label", (f.n !== null ? "Folge " + f.n + ": " : "") + f.t);
     const img = document.createElement("img");
-    img.src = covers[f.id] || platzhalter; img.alt = "";
+    if (covers[f.id]) img.src = covers[f.id];
+    img.alt = "";
     a.append(img);
+    a.addEventListener("click", () => setTimeout(() => gehoert(f), 0));
     liste.appendChild(a);
   }
 }
 
-$("play").addEventListener("click", () => {
-  verlauf = [aktuell.id, ...verlauf.filter(id => id !== aktuell.id)].slice(0, MERKEN);
-  schreibe("ddf.verlauf", verlauf);
-  verlaufZeichnen();
-  anzeigen();
-});
+$("play").addEventListener("click", () => { gehoert(aktuell); anzeigen(); });
 $("neu").addEventListener("click", () => wegschieben($("karte"), 1, ziehen));
+$("zurueck").addEventListener("click", () => {
+  const f = frueher.pop();
+  if (f) wegschieben($("karte"), -1, () => zeigeFall(f, false));
+});
+$("mehr").addEventListener("click", () => { $("text").classList.add("offen"); $("mehr").hidden = true; });
 
 // Verlauf zurücksetzen: erster Tipp fragt nach, zweiter löscht
 let sicherTimer = null;
@@ -498,7 +602,6 @@ $("zuruecksetzen").addEventListener("click", () => {
   verlaufZeichnen();
   anzeigen();
 });
-$("mehr").addEventListener("click", () => { $("text").classList.add("offen"); $("mehr").hidden = true; });
 
 // Cover zur Seite wischen = anderer Fall
 function wegschieben(karte, richtung, danach) {
@@ -522,6 +625,7 @@ function wegschieben(karte, richtung, danach) {
 function wischbar(buehne, karte, danach) {
   let start = null, dx = 0;
   buehne.addEventListener("pointerdown", e => {
+    if (e.target.closest("button")) return;
     start = { x: e.clientX, y: e.clientY }; dx = 0; karte.classList.remove("zurueck");
     try { buehne.setPointerCapture(e.pointerId); } catch {}
   });
@@ -549,25 +653,67 @@ function wischTippWeg() { $("wisch-tipp").hidden = true; schreibe("ddf.gewischt"
 $("wisch-tipp").hidden = lese("ddf.gewischt", false) === true;
 wischbar($("buehne"), $("karte"), ziehen);
 
+// Suche nach Nummer oder Titel
+function suchen(text) {
+  const q = text.trim().toLowerCase();
+  const liste = $("treffer");
+  liste.innerHTML = "";
+  if (!q) return;
+  const zahl = /^\d+$/.test(q) ? Number(q) : null;
+  const treffer = FOLGEN.filter(f => zahl !== null ? f.n === zahl || String(f.n ?? "").startsWith(q) : f.t.toLowerCase().includes(q))
+    .sort((a, b) => (b.n === zahl) - (a.n === zahl) || (a.n ?? 9999) - (b.n ?? 9999))
+    .slice(0, 20);
+  if (!treffer.length) { liste.innerHTML = '<li class="leer">Keine Folge gefunden.</li>'; return; }
+  for (const f of treffer) {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    const img = document.createElement("img"); img.alt = ""; if (covers[f.id]) img.src = covers[f.id];
+    const span = document.createElement("span");
+    const nr = document.createElement("small"); nr.textContent = f.n !== null ? kurzNr(f) : "Sp.";
+    span.append(nr, f.t);
+    btn.append(img, span);
+    btn.addEventListener("click", () => {
+      sucheAuf(false);
+      bereich("ddf");
+      zeigeFall(f);
+      window.scrollTo({ top: 0, behavior: bewegungAus ? "auto" : "smooth" });
+    });
+    li.append(btn);
+    liste.append(li);
+  }
+}
+function sucheAuf(offen) {
+  $("suche").hidden = !offen;
+  $("lupe").setAttribute("aria-expanded", String(offen));
+  if (offen) { einstellungen(false); $("suchfeld").focus(); }
+  else { $("suchfeld").value = ""; $("treffer").innerHTML = ""; }
+}
+$("lupe").addEventListener("click", () => sucheAuf($("suche").hidden));
+$("suchfeld").addEventListener("input", e => suchen(e.target.value));
+$("suchfeld").addEventListener("keydown", e => { if (e.key === "Escape") sucheAuf(false); });
+
 // DiE DR3i
 const DR3I = __DR3I__;
 let dr3iAktuell = null;
+let dr3iFrueher = [];
 const datum = d => d ? new Date(d + "T12:00:00").toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" }) : "";
 const dr3iNr = f => f.n !== null ? "Fall Nr. " + String(f.n).padStart(2, "0") : "Special";
 
-function dr3iZeigen(f, animieren = true) {
+function dr3iZeigen(f, animieren = true, merken = true) {
+  if (merken && dr3iAktuell && dr3iAktuell !== f) dr3iFrueher = [...dr3iFrueher, dr3iAktuell].slice(-20);
   dr3iAktuell = f;
-  $("dr3i-cover").src = f.img;
-  $("dr3i-cover").alt = "Cover: " + f.t;
+  coverSetzen($("dr3i-cover"), $("dr3i-karte"), f.img, f.n !== null ? String(f.n) : "SP", "Cover: " + f.t);
   $("dr3i-nr").innerHTML = "";
   $("dr3i-nr").append(dr3iNr(f));
-  const s = document.createElement("span"); s.textContent = " · " + f.d.slice(0, 4); $("dr3i-nr").append(s);
+  const s = document.createElement("span"); s.textContent = ` · ${f.d.slice(0, 4)} · ${f.min} Min.`; $("dr3i-nr").append(s);
   $("dr3i-titel").textContent = f.t;
   $("dr3i-text").textContent = f.b;
   $("dr3i-text").classList.remove("offen");
   $("dr3i-mehr").hidden = f.b.length < 110;
   $("dr3i-play").href = "shortcuts://run-shortcut?name=DR3i&input=text&text=" + encodeURIComponent(f.s);
   $("dr3i-suche").textContent = f.s;
+  $("dr3i-zurueck").hidden = !dr3iFrueher.length;
   const fakten = [
     ["Laufzeit", `${f.min} Min.${f.cd > 1 ? ` · ${f.cd} CDs` : ""}`],
     ["Erschienen", datum(f.d)],
@@ -611,17 +757,21 @@ function dr3iZiehen() {
   dr3iZeigen(pool[Math.floor(Math.random() * pool.length)]);
 }
 $("dr3i-zufall").addEventListener("click", () => wegschieben($("dr3i-karte"), 1, dr3iZiehen));
+$("dr3i-zurueck").addEventListener("click", () => {
+  const f = dr3iFrueher.pop();
+  if (f) wegschieben($("dr3i-karte"), -1, () => dr3iZeigen(f, true, false));
+});
 $("dr3i-mehr").addEventListener("click", () => { $("dr3i-text").classList.add("offen"); $("dr3i-mehr").hidden = true; });
 wischbar($("dr3i-buehne"), $("dr3i-karte"), dr3iZiehen);
 
 // Bereiche umschalten
 function bereich(name) {
-  const dr3i = name === "dr3i";
+  const dr3i = name === "dr3i" && dr3iAn;
   $("bereich-ddf").hidden = dr3i;
   $("bereich-dr3i").hidden = !dr3i;
   $("tab-ddf").setAttribute("aria-selected", String(!dr3i));
   $("tab-dr3i").setAttribute("aria-selected", String(dr3i));
-  schreibe("ddf.bereich", name);
+  schreibe("ddf.bereich", dr3i ? "dr3i" : "ddf");
 }
 $("tab-ddf").addEventListener("click", () => bereich("ddf"));
 $("tab-dr3i").addEventListener("click", () => bereich("dr3i"));
@@ -639,6 +789,11 @@ async function aufUpdatePruefen() {
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") aufUpdatePruefen(); });
 aufUpdatePruefen();
 
+// Offline: Service Worker speichert Seite und Cover zwischen
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+
 // Einstellungen
 function dienstInfo() {
   const fehlen = FOLGEN.filter(f => !dienst().hat(f)).length;
@@ -651,7 +806,7 @@ function dienstInfo() {
 function neuFiltern() {
   dienstInfo();
   kategorienZeichnen();
-  if (aktuell && !verfuegbar().filter(KATEGORIEN.find(k => k.id === katId).test).includes(aktuell)) aktuell = null;
+  if (aktuell && !imPool().includes(aktuell)) { aktuell = null; frueher = []; }
   if (aktuell) anzeigen(); else ziehen();
   verlaufZeichnen();
 }
@@ -670,6 +825,7 @@ $("dr3i-an").addEventListener("change", e => { dr3iAn = e.target.checked; schrei
 function einstellungen(offen) {
   $("einstellungen").hidden = !offen;
   $("zahnrad").setAttribute("aria-expanded", String(offen));
+  if (offen && !$("suche").hidden) sucheAuf(false);
 }
 $("zahnrad").addEventListener("click", () => einstellungen($("einstellungen").hidden));
 $("fertig").addEventListener("click", () => { einstellungen(false); $("zahnrad").focus(); });
@@ -680,7 +836,7 @@ verlaufZeichnen();
 dr3iListe();
 dr3iZeigen(DR3I[Math.floor(Math.random() * DR3I.length)], false);
 dienstInfo();
-bereich(dr3iAn && location.hash === "#dr3i" ? "dr3i" : location.hash === "#ddf" ? "ddf" : lese("ddf.bereich", "ddf"));
+bereich(location.hash === "#dr3i" ? "dr3i" : location.hash === "#ddf" ? "ddf" : lese("ddf.bereich", "ddf"));
 dr3iSichtbar();
 </script>
 </body>

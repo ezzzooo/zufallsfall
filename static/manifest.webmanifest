@@ -1,0 +1,12 @@
+{
+  "name": "Zufallsfall",
+  "short_name": "Zufallsfall",
+  "description": "Zufällige Die-drei-???-Folge ziehen",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0a0c",
+  "theme_color": "#0a0a0c",
+  "lang": "de",
+  "icons": [{ "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }]
+}

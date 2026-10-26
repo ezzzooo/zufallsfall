@@ -58,6 +58,11 @@ def folge(e, n, titel, tags):
     if jahr:
         k.append(dekade(jahr))
     eintrag = {"n": n, "t": titel, "id": str(e["ids"]["appleMusic"]), "j": jahr, "b": e.get("beschreibung") or "", "k": k}
+    if dauer:
+        eintrag["m"] = round(dauer / 60000)
+    datum = (e.get("veröffentlichungsdatum") or "")[:10]
+    if len(datum) == 10:
+        eintrag["d"] = datum
     if e["ids"].get("spotify"):
         eintrag["sp"] = e["ids"]["spotify"]
     return eintrag
