@@ -1,0 +1,777 @@
+[
+ {
+  "n": 1,
+  "t": "Das Seeungeheuer",
+  "d": "2006-10-13",
+  "min": 133,
+  "autor": "Hendrik Buchna",
+  "skript": "André Minninger",
+  "b": "Ein Anwalt mit düsterer Vergangenheit, ein einsames Küstenhaus mit einem furchtbaren Geheimnis und ein rätselhaftes Testament … Die Belastbarkeit von Jupiter, Peter und Bob wird diesmal wahrlich auf eine harte Probe gestellt. Doch damit nicht genug. Während ihrer Nachforschungen wird das Trio mit der Aufklärung eines mysteriösen Schiffsunglücks beauftragt. Unheilvolle Vermutungen werden bald zur schrecklichen Gewissheit: Aus den finsteren Tiefen des Ozeans ist ein riesenhaftes Monstrum aufgetaucht!\nWerden Die Dr3i die tödliche Gefahr von Kaliforniens Küste abwenden können?",
+  "rollen": [
+   [
+    "Erzähler",
+    "Thomas Fritsch"
+   ],
+   [
+    "Jupiter Jones",
+    "Oliver Rohrbeck"
+   ],
+   [
+    "Peter Crenshaw",
+    "Jens Wawrczeck"
+   ],
+   [
+    "Bob Andrews",
+    "Andreas Fröhlich"
+   ],
+   [
+    "Inspektor Milton",
+    "Holger Mahlich"
+   ],
+   [
+    "Mrs. Ashby",
+    "Sabine Hahn"
+   ],
+   [
+    "Charles Prendergast",
+    "Rolf Nagel"
+   ],
+   [
+    "Richard Crandall",
+    "Konstantin Graudus"
+   ],
+   [
+    "Kirk Prendergast",
+    "Wolf Frass"
+   ],
+   [
+    "Blacky",
+    "Heikedine Körting"
+   ],
+   [
+    "Jonathan Godfrey",
+    "Erik Schäffler"
+   ],
+   [
+    "Carlos",
+    "Eduardo Garcia"
+   ],
+   [
+    "Garrett",
+    "Dietrich Adam"
+   ],
+   [
+    "Riteman",
+    "Till Demtrøder"
+   ],
+   [
+    "Stanley",
+    "Lutz Schnell"
+   ]
+  ],
+  "kap": [
+   "Der Phantom-Anwalt",
+   "Der Untergang der Liberty Bell",
+   "Erfolgreiche Recherche",
+   "Folgenschwerer Anruf",
+   "Mysteriöses Testament",
+   "Held ohne Ehre",
+   "Beschattet",
+   "O'Malley's Rock",
+   "Der zweite Fall",
+   "Leviathan",
+   "Das Geisterhaus am Meer",
+   "Ein schreckliches Geheimnis",
+   "Jagd auf den Unbekannten",
+   "Feindbesuch",
+   "Die Geliebte des Globetrotters",
+   "Apelles post tabulam",
+   "Monsterbesuche",
+   "Einbruch in der Zentrale!",
+   "Der Mikrochip",
+   "Die Zeit läuft ab",
+   "Das Seeungeheuer",
+   "Versteck in den Felsen",
+   "Die Falle schnappt zu",
+   "Tödliche Fluten",
+   "Alle vereint",
+   "Das Rätsel aller Rätsel"
+  ],
+  "cd": 2,
+  "img": "covers/dr3i-1.jpg",
+  "s": "Das Seeungeheuer"
+ },
+ {
+  "n": 2,
+  "t": "Die Pforte zum Jenseits",
+  "d": "2006-10-13",
+  "min": 77,
+  "autor": "André Minninger",
+  "skript": "André Minninger",
+  "b": "Handelt es sich bei dem alten Greis Sylvester Meyzel nur um ein erwachsenes Kind, dem die Fantasie einen Streich spielt, oder wird er tatsächlich von einem unsichtbaren Gast heimgesucht? Als Meyzels nächtliche Albträume tagsüber zur Realität werden, wendet er sich Hilfe suchend an Die Dr3i. Jupiter, Peter und Bob kommen ziemlich schnell zu der Erkenntnis, dass Meyzels Schilderungen jeder Logik entbehren. Als aber auch Peters Angstträume Wirklichkeit werden, beginnt das Trio zu ermitteln. Vor ihren Augen öffnet sich die Pforte zum Jenseits …",
+  "rollen": [
+   [
+    "Erzähler",
+    "Thomas Fritsch"
+   ],
+   [
+    "Jupiter Jones",
+    "Oliver Rohrbeck"
+   ],
+   [
+    "Peter Crenshaw",
+    "Jens Wawrczeck"
+   ],
+   [
+    "Bob Andrews",
+    "Andreas Fröhlich"
+   ],
+   [
+    "Sylvester Meyzel",
+    "Wolfgang Völz"
+   ],
+   [
+    "Dorothy Winter",
+    "Doris Kunstmann"
+   ],
+   [
+    "Mr. Hendrik",
+    "Utz Richter"
+   ],
+   [
+    "Kassiererin",
+    "Enie van de Meiklokjes"
+   ],
+   [
+    "Inspektor Milton",
+    "Holger Mahlich"
+   ],
+   [
+    "Inspektor Tomlin",
+    "Klaus Dittmann"
+   ],
+   [
+    "Mr. X",
+    "Dirk Eichhorn"
+   ],
+   [
+    "Tao",
+    "Tilman Madaus"
+   ],
+   [
+    "Supermarkt-Durchsage",
+    "André Minninger"
+   ]
+  ],
+  "kap": [
+   "Aus den Träumen gerissen",
+   "Vom Blitz getroffen!",
+   "Tödliche Bowle",
+   "Unsichtbarer Mitbewohner",
+   "Spielverderber",
+   "Abgelehnt",
+   "Albtraum",
+   "Schlachtplan",
+   "Film ab!",
+   "Überreagiert",
+   "Erstens kommt es anders …",
+   "… und zweitens, als man denkt"
+  ],
+  "cd": 1,
+  "img": "covers/dr3i-2.jpg",
+  "s": "Die Pforte zum Jenseits"
+ },
+ {
+  "n": 3,
+  "t": "Verschollen in der Zeit",
+  "d": "2006-10-13",
+  "min": 69,
+  "autor": "Hendrik Buchna",
+  "skript": "Hendrik Buchna",
+  "b": "Zwei Wochen Urlaub auf einer Karibikinsel! Jupiter, Peter und Bob können ihr Glück kaum fassen. Doch was als vielversprechender Ferienstart beginnt, entwickelt sich urplötzlich zum unvorstellbaren Albtraum. Hoch über dem Atlantik gerät das Flugzeug, in dem Die Dr3i sitzen, in ein rätselhaftes Unwetter und muss mitten im berüchtigten Bermuda-Dreieck auf einer fremdartigen Insel notlanden. Was dann geschieht, führt selbst Jupiter an die Grenzen seines Verstandes. Die unfassbaren Ereignisse lassen jedoch keinen Zweifel: Die Passagiere von Flug 715 sind verschollen in der Zeit …",
+  "rollen": [
+   [
+    "Erzähler",
+    "Thomas Fritsch"
+   ],
+   [
+    "Jupiter Jones",
+    "Oliver Rohrbeck"
+   ],
+   [
+    "Peter Crenshaw",
+    "Jens Wawrczeck"
+   ],
+   [
+    "Bob Andrews",
+    "Andreas Fröhlich"
+   ],
+   [
+    "James Taylor",
+    "Wanja Mues"
+   ],
+   [
+    "Ray Wells",
+    "Dietrich Adam"
+   ],
+   [
+    "Frank Caspian",
+    "Christian Redl"
+   ],
+   [
+    "Jonathan Grant",
+    "Bernd Stephan"
+   ],
+   [
+    "Christy Grant",
+    "Anja Topf"
+   ],
+   [
+    "George Drummond",
+    "Eberhard Haar"
+   ],
+   [
+    "Tom Drummond",
+    "Patrick Bach"
+   ]
+  ],
+  "kap": [
+   "Start in den Traumurlaub",
+   "Unsanftes Erwachen",
+   "Notlandung im Nirgendwo",
+   "Das Bermuda-Dreieck",
+   "Ein unheimliches Haus",
+   "Schockierende Erkenntnis",
+   "Verschollen in der Zeit",
+   "Flucht in den Dschungel",
+   "Die rätselhafte Uniform",
+   "Triumph der Logik",
+   "Der Hinterhalt",
+   "Die Maske fällt",
+   "Zurück in der Gegenwart"
+  ],
+  "cd": 1,
+  "img": "covers/dr3i-3.jpg",
+  "s": "Verschollen in der Zeit"
+ },
+ {
+  "n": null,
+  "t": "Hotel Luxury End",
+  "d": "2006-11-24",
+  "min": 152,
+  "autor": "Ivar Leon Menger",
+  "skript": "Ivar Leon Menger",
+  "b": "Eine Nacht in einem Luxushotel, direkt an der malerischen Steilküste Nordkaliforniens? Normalerweise ein Grund zur Freude. Doch nicht für Jupiter, Peter und Bob! Denn Die Dr3i müssen um ihr Leben fürchten! Und das, obwohl das unheimliche Hotel vollkommen menschenleer ist …",
+  "rollen": [
+   [
+    "Erzähler",
+    "Thomas Fritsch"
+   ],
+   [
+    "Jupiter Jones",
+    "Oliver Rohrbeck"
+   ],
+   [
+    "Peter Crenshaw",
+    "Jens Wawrczeck"
+   ],
+   [
+    "Bob Andrews",
+    "Andreas Fröhlich"
+   ],
+   [
+    "Tante Mathilda Jones",
+    "Karin Lieneweg"
+   ],
+   [
+    "Mr. Overlook",
+    "Joachim Kerzel"
+   ],
+   [
+    "Portier Stanley",
+    "Lutz Mackensy"
+   ],
+   [
+    "Liftboy Jack",
+    "Jan-David Rönfeldt"
+   ],
+   [
+    "Barkeeper Lloyd",
+    "Roman Kretschmer"
+   ],
+   [
+    "Mr. Torrance",
+    "Holger Löwenberg"
+   ],
+   [
+    "Mrs. Torrance",
+    "Katja Brügger"
+   ],
+   [
+    "Shelley Torrance",
+    "Saskia Weckler"
+   ],
+   [
+    "Stuart",
+    "Nicolas König"
+   ],
+   [
+    "Danny",
+    "Patrick Bach"
+   ],
+   [
+    "Police Officer",
+    "Jürgen Thormann"
+   ],
+   [
+    "Nachrichtensprecher",
+    "Bernd Klose"
+   ]
+  ],
+  "kap": [
+   "Intro",
+   "Ankunft Hotel",
+   "Entscheidung: Zimmer oder Restaurant",
+   "Zimmer",
+   "Entscheidung: Tür offen oder Klimaanlage",
+   "Tür offen",
+   "Entscheidung: Tür schließen oder Flur",
+   "Tür schließen",
+   "Entscheidung: Mr. Stanley oder Auto holen",
+   "Mr. Stanley",
+   "Auto holen",
+   "Flur",
+   "Entscheidung: Flucht oder Ausrede",
+   "Flucht",
+   "Ausrede",
+   "Klimaanlage",
+   "Entscheidung: Annehmen oder Ablehnen",
+   "Annehmen",
+   "Entscheidung: Essen oder Auflegen",
+   "Essen",
+   "Auflegen",
+   "Ablehnen",
+   "Entscheidung: Befreien oder Fragen stellen",
+   "Befreien",
+   "Fragen stellen",
+   "Intro",
+   "Ankunft Hotel",
+   "Entscheidung: Zimmer oder Restaurant",
+   "Restaurant",
+   "Entscheidung: Gästebuch oder Sachen holen",
+   "Gästebuch",
+   "Entscheidung: Zimmer 113 oder Flucht",
+   "Zimmer 113",
+   "Entscheidung: Verstecken oder Polizei",
+   "Verstecken",
+   "Polizei",
+   "Flucht",
+   "Entscheidung: Laufen oder Ausleihen",
+   "Laufen",
+   "Ausleihen",
+   "Sachen holen",
+   "Entscheidung: 7. Stock oder Zimmer",
+   "7. Stock",
+   "Entscheidung: Hilferuf oder Autoschlüssel",
+   "Hilferuf",
+   "Autoschlüssel",
+   "Zimmer",
+   "Entscheidung: Wecken oder KO schlagen",
+   "Wecken",
+   "KO schlagen"
+  ],
+  "cd": 2,
+  "img": "covers/dr3i-4.jpg",
+  "s": "Hotel Luxury End"
+ },
+ {
+  "n": 4,
+  "t": "Zug um Zug",
+  "d": "2006-11-24",
+  "min": 79,
+  "autor": "Tim Wenderoth",
+  "skript": "Moritz von Fulmenstöcker, Tim Wenderoth, Yona Franke",
+  "b": "Ein alter Zeitungsartikel weckt die Neugier des ersten Detektivs. Wo sind die $500.000 aus dem Überfall auf den Postzug geblieben? Was geschah wirklich vor 12 Jahren am alten Bahnhof von Rocky Beach? Was wusste die verstorbene Ellie Sparrow und inwieweit war die ehemalige Postangestellte in den Raubüberfall verwickelt? Ein leeres Blatt Papier und eine wirre Buchstabenkombination sind nur zwei der zahlreichen kleinen Puzzleteile, die zusammengefügt werden müssen. Als sich auch noch andere Gestalten für das verschollene Geld zu interessieren scheinen, wird es erst recht Zeit für Die Dr3i sich mit dem Fall zu beschäftigen.\nZug um Zug suchen sie nach den Antworten auf die vielen Fragen, die sich ihnen stellen …",
+  "rollen": [
+   [
+    "Erzähler",
+    "Thomas Fritsch"
+   ],
+   [
+    "Jupiter Jones",
+    "Oliver Rohrbeck"
+   ],
+   [
+    "Peter Crenshaw",
+    "Jens Wawrczeck"
+   ],
+   [
+    "Bob Andrews",
+    "Andreas Fröhlich"
+   ],
+   [
+    "Onkel Titus Jones",
+    "Andreas E. Beurmann"
+   ],
+   [
+    "Tante Mathilda Jones",
+    "Karin Lieneweg"
+   ],
+   [
+    "Inspektor Milton",
+    "Holger Mahlich"
+   ],
+   [
+    "Kommissar Reynolds",
+    "Wolfgang Draeger"
+   ],
+   [
+    "Mr. Walker",
+    "Gustav-Adolph Artz"
+   ],
+   [
+    "Donald Forthland",
+    "Günter Lüdke"
+   ],
+   [
+    "Shane Montana",
+    "Jürgen Thormann"
+   ],
+   [
+    "Jim",
+    "Wolfgang Berger"
+   ],
+   [
+    "Doc Brown",
+    "Tim Wenderoth"
+   ],
+   [
+    "Finnegan",
+    "Fabian Harloff"
+   ]
+  ],
+  "kap": [
+   "Der gelöste Kriminalfall",
+   "Neue Spuren?",
+   "Besuch bei Mr. Walker",
+   "Ein leeres Blatt Papier",
+   "Der alte Bahnhofsvorsteher",
+   "Unter den Gleisen",
+   "Der unbekannte Sohn",
+   "CC-DC-DC-OA 14, AAH-CI-CA-EC 23",
+   "Doc Brown",
+   "Lebenslänglich für drei Detektive",
+   "Jeden Tag eine gute Tat"
+  ],
+  "cd": 1,
+  "img": "covers/dr3i-5.jpg",
+  "s": "Zug um Zug"
+ },
+ {
+  "n": 5,
+  "t": "Das Haus der 1.000 Rätsel",
+  "d": "2007-02-09",
+  "min": 73,
+  "autor": "Hendrik Buchna",
+  "skript": "Hendrik Buchna",
+  "b": "Als Jupiter, Peter und Bob den Auftrag erhalten, einem alternden Filmstar bei der Klärung eines mysteriösen Vorfalls zu helfen, ahnen sie noch nicht, welch absurde Ereignisse sie erwarten. In einem abgelegenen Luxushotel stoßen sie auf die Spur eines geheimnisvollen Unbekannten, der sie mit einer Reihe tückischer Rätsel an den Rand der Verzweiflung treibt. Nichts ist so, wie es zu sein scheint. Als sich Die Dr3i im unheimlichen Kellergewölbe des Hotels schließlich am Ziel wähnen, erweist sich das Royal Mountain Residence endgültig als \"Haus der 1.000 Rätsel\" …",
+  "rollen": [
+   [
+    "Erzähler",
+    "Thomas Fritsch"
+   ],
+   [
+    "Jupiter Jones",
+    "Oliver Rohrbeck"
+   ],
+   [
+    "Peter Crenshaw",
+    "Jens Wawrczeck"
+   ],
+   [
+    "Bob Andrews",
+    "Andreas Fröhlich"
+   ],
+   [
+    "Jack Doolan",
+    "Eckart Dux"
+   ],
+   [
+    "Harold",
+    "Gernot Endemann"
+   ],
+   [
+    "Miss Lana",
+    "Sabine Schmidt-Kirchner"
+   ],
+   [
+    "Mademoiselle Nadine",
+    "Jennie Appel"
+   ],
+   [
+    "Toby Grissom",
+    "Lothar Grützner"
+   ],
+   [
+    "Frank Mortimer",
+    "Karl-Friedrich Gerster"
+   ]
+  ],
+  "kap": [
+   "Ein Star braucht Hilfe",
+   "Gürtel, Karte, Taste",
+   "Die Fährte nach Marokko",
+   "Eine legendäre Bar",
+   "Der rätselhafte Drink",
+   "Salon Moskva",
+   "Mademoiselle Nadine",
+   "Bobs Frisuren-Trauma",
+   "Smith & Wesson weisen den Weg",
+   "Showdown in der Finsternis",
+   "Lektion für den Meisterdetektiv"
+  ],
+  "cd": 1,
+  "img": "covers/dr3i-6.jpg",
+  "s": "Das Haus der 1000 Rätsel"
+ },
+ {
+  "n": 6,
+  "t": "Tödliche Regie",
+  "d": "2007-03-23",
+  "min": 65,
+  "autor": "André Minninger",
+  "skript": "André Minninger",
+  "b": "Terror im Studio! Feige Anschläge machen der Synchronsprecherin Ellen Maxell das Leben zur Hölle. Wer steckt hinter der unheimlichen Gummi-Maske der Zeichentrickfigur \"Panic-Porky\"? Nur knapp entgeht die talentierte Schauspielerin mehreren hinterhältigen Mordversuchen. Hat es jemand auf ihre Rolle abgesehen? Die drei Detektive Jupiter, Peter und Bob nehmen sich des mysteriösen Falles an und geraten in die Schusslinie der zum Leben erwachten Cartoonfigur.",
+  "rollen": [
+   [
+    "Erzähler",
+    "Thomas Fritsch"
+   ],
+   [
+    "Jupiter Jones",
+    "Oliver Rohrbeck"
+   ],
+   [
+    "Peter Crenshaw",
+    "Jens Wawrczeck"
+   ],
+   [
+    "Bob Andrews",
+    "Andreas Fröhlich"
+   ],
+   [
+    "Ellen Maxell",
+    "Traudel Sperber"
+   ],
+   [
+    "Audrey Moonshadow",
+    "Judy Winter"
+   ],
+   [
+    "Sandy Stryker",
+    "Martina Regenhardt"
+   ],
+   [
+    "Mandy Honeyball",
+    "Celine Fontanges"
+   ],
+   [
+    "Mars Chaplin",
+    "Rainer Schmitt"
+   ],
+   [
+    "Inspektor Milton",
+    "Holger Mahlich"
+   ],
+   [
+    "Assistent",
+    "Dirk Bach"
+   ]
+  ],
+  "kap": [
+   "Gewonnen!",
+   "Attentat",
+   "Kreidebleich",
+   "Spiegel der Seele",
+   "Attacke",
+   "Vollgas",
+   "Gage",
+   "Überwacht",
+   "Verhaftet",
+   "Endspiel"
+  ],
+  "cd": 1,
+  "img": "covers/dr3i-7.jpg",
+  "s": "Tödliche Regie"
+ },
+ {
+  "n": 7,
+  "t": "und der kopflose Reiter",
+  "d": "2007-11-30",
+  "min": 65,
+  "autor": "Tim Wenderoth",
+  "skript": "Tim Wenderoth",
+  "b": "Ein unheimlicher Reiter ohne Kopf versetzt die Bewohner von Rocky Beach in Angst und Schrecken. In nebligen Herbstnächten taucht er um Mitternacht auf und reitet durch die Stadt. Ist es der Geist des alten Indianers Ashoona Apeh, der mehr als 100 Jahre nach seinem Tod Rache nehmen will an jenen, die ihn seinerzeit köpften? Hat der Urenkel des Indianers etwas zu verbergen? Bevor Die Dr3i sich versehen, stehen sie dem gefährlichen Gegner und seinem Schwert machtlos gegenüber …",
+  "rollen": [
+   [
+    "Erzähler",
+    "Thomas Fritsch"
+   ],
+   [
+    "Jupiter Jones",
+    "Oliver Rohrbeck"
+   ],
+   [
+    "Peter Crenshaw",
+    "Jens Wawrczeck"
+   ],
+   [
+    "Bob Andrews",
+    "Andreas Fröhlich"
+   ],
+   [
+    "Tante Mathilda Jones",
+    "Karin Lieneweg"
+   ],
+   [
+    "Onkel Titus Jones",
+    "Andreas E. Beurmann"
+   ],
+   [
+    "Marty Stevens",
+    "Lutz Harder"
+   ],
+   [
+    "Joshua Apeh",
+    "Achim Schülke"
+   ],
+   [
+    "Claudia Salazar",
+    "Marion Elskis"
+   ],
+   [
+    "Ralf Dempsey",
+    "Robin Brosch"
+   ],
+   [
+    "Marvin Cox",
+    "Jörg Gillner"
+   ],
+   [
+    "Anna",
+    "Micaëla Kreißler"
+   ],
+   [
+    "George",
+    "Erik Schäffler"
+   ],
+   [
+    "Hapa",
+    "Michael Weckler"
+   ],
+   [
+    "Lastwagenfahrer",
+    "Tim Wenderoth"
+   ]
+  ],
+  "kap": [
+   "Nebel",
+   "Ashoona",
+   "Geisterstunde",
+   "Erdbeben",
+   "Treffen im Wald",
+   "Fehlende Seiten",
+   "Im Filmstudio",
+   "Der Plan",
+   "Explosion",
+   "Ashoonas Schatz"
+  ],
+  "cd": 1,
+  "img": "covers/dr3i-8.jpg",
+  "s": "Kopflose Reiter"
+ },
+ {
+  "n": 8,
+  "t": "Der Jahrhundertstein",
+  "d": "2007-11-30",
+  "min": 77,
+  "autor": "Markus Winter",
+  "skript": "Markus Winter",
+  "b": "Durch Zufall gelangen die drei Juniordetektive aus Rocky Beach in den Besitz eines Fragmentes des sogenannten Jahrhundertsteins, einer spätmittelalterlichen Steintafel. Noch bevor sie weiterführende Ermittlungen anstellen können wird der Stein gestohlen. Für Jupiter, Peter und Bob ist das aber noch lange kein Grund aufzugeben. Doch sie sind nicht die Einzigen, die hinter ihm her sind. Wer ist der geheimnisvolle Unbekannte, der im Hintergrund die Fäden zieht und Die Dr3i wie Schachfiguren dahin schiebt, wo sie ihm am meisten nützen? Wer steckt hinter der Maske des einarmigen Bogenschützen, der ihnen stets einen Schritt voraus ist? Urplötzlich spitzt sich die Situation zu und sie befinden sich in Lebensgefahr.",
+  "rollen": [
+   [
+    "Erzähler",
+    "Thomas Fritsch"
+   ],
+   [
+    "Jupiter Jones",
+    "Oliver Rohrbeck"
+   ],
+   [
+    "Peter Crenshaw",
+    "Jens Wawrczeck"
+   ],
+   [
+    "Bob Andrews",
+    "Andreas Fröhlich"
+   ],
+   [
+    "Taro Togati",
+    "Stefan Brönneke"
+   ],
+   [
+    "Officer Hunter",
+    "Jürgen Kluckert"
+   ],
+   [
+    "Türsteher",
+    "Arndt Schmöle"
+   ],
+   [
+    "Motelangestellter",
+    "Jelko von Tiele-Winckler"
+   ],
+   [
+    "Museumsdirektor",
+    "Rainer Schmitt"
+   ],
+   [
+    "Tante Mathilda Jones",
+    "Karin Lieneweg"
+   ],
+   [
+    "Harvey Denton",
+    "Klaus Herm"
+   ],
+   [
+    "Mrs. Fox",
+    "Nana Spier"
+   ],
+   [
+    "Inspektor Milton",
+    "Holger Mahlich"
+   ],
+   [
+    "Arthur Heatherly",
+    "Rainer Brandt"
+   ],
+   [
+    "Melissa Heatherly",
+    "Stephanie Damare"
+   ]
+  ],
+  "kap": [
+   "Nächtliche Begegnung",
+   "Ein Geist in der Zentrale",
+   "Gut versichert!",
+   "Les Centuries",
+   "Dunkle Vorahnungen",
+   "Ausgetrickst",
+   "Erklärungen",
+   "Blick in die Zukunft"
+  ],
+  "cd": 1,
+  "img": "covers/dr3i-9.jpg",
+  "s": "Jahrhundertstein"
+ }
+]
