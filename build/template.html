@@ -220,6 +220,10 @@ footer a { color: inherit; }
       <p class="einstellung-info" id="dienst-info"></p>
     </fieldset>
     <label class="schalter">
+      <span><b>Fußball-Folgen ausblenden</b><small id="fussball-info"></small></span>
+      <input type="checkbox" id="ohne-fussball" role="switch">
+    </label>
+    <label class="schalter">
       <span><b>DiE DR3i anzeigen</b><small>Eigener Bereich, spielt über den Kurzbefehl „DR3i“ aus deiner Apple-Music-Mediathek.</small></span>
       <input type="checkbox" id="dr3i-an" role="switch">
     </label>
@@ -358,8 +362,9 @@ const DIENSTE = {
 let dienstId = lese("ddf.dienst", "apple");
 if (!DIENSTE[dienstId]) dienstId = "apple";
 let dr3iAn = lese("ddf.dr3i", false) === true;
+let ohneFussball = lese("ddf.ohneFussball", false) === true;
 const dienst = () => DIENSTE[dienstId];
-const verfuegbar = () => FOLGEN.filter(dienst().hat);
+const verfuegbar = () => FOLGEN.filter(f => dienst().hat(f) && !(ohneFussball && f.k.includes("fussball")));
 const link = f => (dienst().hat(f) ? dienst() : DIENSTE.apple).link(f);
 const nummer = f => f.n !== null ? "Fall Nr. " + String(f.n).padStart(3, "0") : (f.k.includes("weitere") ? "Sonderakte" : "Special");
 const platzhalter = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" fill="#888" opacity=".15"/></svg>');
@@ -534,10 +539,20 @@ $("tab-dr3i").addEventListener("click", () => bereich("dr3i"));
 
 // Einstellungen
 function dienstInfo() {
-  const fehlen = FOLGEN.length - verfuegbar().length;
+  const fehlen = FOLGEN.filter(f => !dienst().hat(f)).length;
   $("dienst-info").textContent = fehlen
     ? `${fehlen} Film-, Live- und Kopfhörer-Alben gibt es nur bei Apple Music, sie werden ausgeblendet.`
     : "Alle Folgen öffnen direkt in Apple Music.";
+  const fussball = FOLGEN.filter(f => f.k.includes("fussball"));
+  $("fussball-info").textContent = `${fussball.length} Folgen, z. B. „${fussball[0]?.t ?? ""}“. Gilt für alle Kategorien und fürs Mischen.`;
+}
+function neuFiltern() {
+  dienstInfo();
+  kategorienZeichnen();
+  if (aktuell && !verfuegbar().includes(aktuell)) aktuell = null;
+  if (aktuell) anzeigen(verfuegbar().filter(KATEGORIEN.find(k => k.id === katId).test).filter(f => !verlauf.includes(f.id)).length);
+  else ziehen();
+  verlaufZeichnen();
 }
 function dr3iSichtbar() {
   $("tabs").hidden = !dr3iAn;
@@ -549,14 +564,15 @@ for (const id of Object.keys(DIENSTE)) {
   $("dienst-" + id).addEventListener("change", () => {
     dienstId = id;
     schreibe("ddf.dienst", id);
-    dienstInfo();
-    kategorienZeichnen();
-    if (!dienst().hat(aktuell)) aktuell = null;
-    if (aktuell) anzeigen(verfuegbar().filter(KATEGORIEN.find(k => k.id === katId).test).filter(f => !verlauf.includes(f.id)).length);
-    else ziehen();
-    verlaufZeichnen();
+    neuFiltern();
   });
 }
+$("ohne-fussball").checked = ohneFussball;
+$("ohne-fussball").addEventListener("change", e => {
+  ohneFussball = e.target.checked;
+  schreibe("ddf.ohneFussball", ohneFussball);
+  neuFiltern();
+});
 $("dr3i-an").addEventListener("change", e => {
   dr3iAn = e.target.checked;
   schreibe("ddf.dr3i", dr3iAn);

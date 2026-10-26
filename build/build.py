@@ -20,6 +20,7 @@ DMD = "https://dreimetadaten.de/data/"
 THEMEN = {
     "grusel": r"\b(geist\w*|gespenst\w*|spuk\w*|vampir\w*|fluch\w*|monster\w*|dämon\w*|hexe\w*|mumie\w*|totenkopf|untot\w*|werwolf|teufel\w*|grusel\w*|zombie\w*|phantom\w*|jenseits|unheimlich\w*|übernatürlich\w*|horror\w*|geisterhaft\w*|poltergeist)\b",
     "schatz": r"\b(schatz\w*|schätze|rätsel\w*|geheimschrift|verschlüssel\w*|geheimcode|schatzkarte|code\w*)\b",
+    "fussball": r"fußball|fussball|bundesliga|elfmeter|torwart",
     "meer": r"\b(meer\w*|ozean\w*|schiff\w*|insel\w*|riff\w*|tauch\w*|pirat\w*|bucht|küste\w*|segel\w*|segler\w*|hafen|wrack\w*|kapitän\w*)\b",
 }
 ADVENT = r"Advent|Nacht, düstere|finstere|Bescherung|Glocken|Weihnacht"
@@ -84,10 +85,13 @@ def main():
 
     korr = json.loads((BUILD / "korrekturen.json").read_text())
     for e in eps:
-        if e["n"] is not None and e["t"] in korr["grusel_plus"] and "grusel" not in e["k"]:
-            e["k"].append("grusel")
-        if e["n"] is not None and e["t"] in korr["grusel_minus"] and "grusel" in e["k"]:
-            e["k"].remove("grusel")
+        if e["n"] is None:
+            continue
+        for thema in ("grusel", "fussball"):
+            if e["t"] in korr.get(thema + "_plus", []) and thema not in e["k"]:
+                e["k"].append(thema)
+            if e["t"] in korr.get(thema + "_minus", []) and thema in e["k"]:
+                e["k"].remove(thema)
 
     haupt = sum(1 for e in eps if e["n"] is not None)
     if haupt < 241:
