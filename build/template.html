@@ -537,6 +537,19 @@ function bereich(name) {
 $("tab-ddf").addEventListener("click", () => bereich("ddf"));
 $("tab-dr3i").addEventListener("click", () => bereich("dr3i"));
 
+// Neue Version holen, sobald die App wieder in den Vordergrund kommt
+const VERSION = "__VERSION__";
+async function aufUpdatePruefen() {
+  try {
+    const r = await fetch("version.json?" + Date.now(), { cache: "no-store" });
+    const { v } = await r.json();
+    const geladen = new URLSearchParams(location.search).get("v");
+    if (v && v !== VERSION && v !== geladen) location.replace(location.pathname + "?v=" + v + location.hash);
+  } catch {}
+}
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") aufUpdatePruefen(); });
+aufUpdatePruefen();
+
 // Einstellungen
 function dienstInfo() {
   const fehlen = FOLGEN.filter(f => !dienst().hat(f)).length;

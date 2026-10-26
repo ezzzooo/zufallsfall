@@ -3,6 +3,7 @@
 Aufruf: python3 build/build.py
 Nur Standardbibliothek, läuft lokal und in der GitHub Action.
 """
+import hashlib
 import json
 import re
 import shutil
@@ -118,10 +119,15 @@ def main():
         assert platzhalter in seite, platzhalter
         seite = seite.replace(platzhalter, wert)
 
+    # Versionskennung: die Seite prüft version.json und lädt neu, wenn sie sich ändert
+    version = hashlib.sha256(seite.encode()).hexdigest()[:12]
+    seite = seite.replace("__VERSION__", version)
+
     if OUT.exists():
         shutil.rmtree(OUT)
     shutil.copytree(ROOT / "static", OUT)
     (OUT / "index.html").write_text(seite)
+    (OUT / "version.json").write_text(json.dumps({"v": version}))
     print(f"{len(eps)} Alben ({haupt} Hauptfolgen), {len(art)} Cover, Stand {stand}")
 
 
