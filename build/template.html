@@ -164,6 +164,13 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
 .reihe-covers.gross img { width: 72px; height: 72px; }
 .reihe-covers [aria-current="true"] img { box-shadow: 0 0 0 2px var(--rot); }
 .leer { color: var(--muted); font-size: 13px; margin: 0; }
+.reihe-kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
+.reihe-kopf .klein-titel { margin: 0; }
+.zuruecksetzen {
+  flex: none; min-height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface);
+  color: var(--muted); font-size: 13px; font-weight: 650; cursor: pointer;
+}
+.zuruecksetzen.sicher { background: var(--rot); border-color: var(--rot); color: #fff; }
 
 /* DR3i-Details */
 .details { border-top: 1px solid var(--line); padding-top: 10px; font-size: 14.5px; }
@@ -261,7 +268,10 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
     </article>
 
     <section class="reihe" aria-labelledby="zuletzt-titel">
-      <div class="klein-titel" id="zuletzt-titel">Zuletzt gehört · wird übersprungen</div>
+      <div class="reihe-kopf">
+        <div class="klein-titel" id="zuletzt-titel">Zuletzt gehört · wird übersprungen</div>
+        <button class="zuruecksetzen" id="zuruecksetzen" type="button" hidden>Zurücksetzen</button>
+      </div>
       <div class="reihe-covers" id="liste"></div>
       <p class="leer" id="leer">Noch nichts gehört.</p>
     </section>
@@ -444,6 +454,7 @@ function verlaufZeichnen() {
   const liste = $("liste");
   liste.innerHTML = "";
   $("leer").hidden = verlauf.length > 0;
+  $("zuruecksetzen").hidden = verlauf.length === 0;
   for (const id of verlauf) {
     const f = FOLGEN.find(x => x.id === id);
     if (!f) continue;
@@ -465,6 +476,28 @@ $("play").addEventListener("click", () => {
   anzeigen();
 });
 $("neu").addEventListener("click", () => wegschieben($("karte"), 1, ziehen));
+
+// Verlauf zurücksetzen: erster Tipp fragt nach, zweiter löscht
+let sicherTimer = null;
+function zuruecksetzenKnopf(sicher) {
+  const knopf = $("zuruecksetzen");
+  knopf.classList.toggle("sicher", sicher);
+  knopf.textContent = sicher ? "Wirklich löschen?" : "Zurücksetzen";
+}
+$("zuruecksetzen").addEventListener("click", () => {
+  if (!$("zuruecksetzen").classList.contains("sicher")) {
+    zuruecksetzenKnopf(true);
+    clearTimeout(sicherTimer);
+    sicherTimer = setTimeout(() => zuruecksetzenKnopf(false), 4000);
+    return;
+  }
+  clearTimeout(sicherTimer);
+  zuruecksetzenKnopf(false);
+  verlauf = [];
+  schreibe("ddf.verlauf", verlauf);
+  verlaufZeichnen();
+  anzeigen();
+});
 $("mehr").addEventListener("click", () => { $("text").classList.add("offen"); $("mehr").hidden = true; });
 
 // Cover zur Seite wischen = anderer Fall
