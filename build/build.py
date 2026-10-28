@@ -136,8 +136,16 @@ def main():
             e["rb"] = RB + "/php/project/f_ausgabe.html"
         if e.pop("_ruhig", False) and 40 <= e.get("m", 0) <= 80 and e.get("r") and e["r"][0] <= 2.6:
             e["k"].append("schlaf")
-        if e.get("r") and e["r"][0] <= 2.0:
-            e["k"].append("top")
+    # Eigene Plätze: Hauptfolgen und Specials getrennt, Reihenfolge wie auf rocky-beach.com (dort ungerundet)
+    def plaetze(liste):
+        liste = sorted((e for e in liste if e.get("r")), key=lambda e: (e["r"][1], e["r"][0]))
+        for i, e in enumerate(liste, 1):
+            e["p"] = [i, len(liste)]
+    plaetze([e for e in eps if e["n"] is not None])
+    plaetze([e for e in eps if e["n"] is None])
+    for e in eps:
+        if e["n"] is not None and e.get("p") and e["p"][0] <= 50:
+            e["k"].append("top50")
     print(f"Bewertungen: {sum(1 for e in eps if e.get('r'))} Alben, {sum('schlaf' in e['k'] for e in eps)} zum Einschlafen")
 
     dr3i = json.loads((BUILD / "dr3i.json").read_text())
@@ -145,6 +153,7 @@ def main():
         treffer = noten_dr3i.get(f["n"] if f["n"] is not None else 999)
         if treffer:
             f["r"] = list(treffer[:3])
+    plaetze(dr3i)
 
     korr = json.loads((BUILD / "korrekturen.json").read_text())
     for e in eps:

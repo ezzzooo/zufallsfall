@@ -109,7 +109,7 @@ header { display: flex; align-items: center; justify-content: space-between; gap
 .fertig { justify-self: end; min-height: 42px; padding: 0 18px; border-radius: 21px; border: 1px solid var(--line); background: var(--bg); cursor: pointer; font-weight: 700; }
 
 /* Tabs */
-.tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.tabs { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; padding: 4px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
 .tabs button { min-height: 38px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); cursor: pointer; font-weight: 750; font-size: 15px; font-stretch: 90%; }
 .tabs button[aria-selected="true"] { background: var(--ink); color: var(--bg); }
 .bereich { display: grid; gap: 16px; }
@@ -219,6 +219,34 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
 .reihe-covers a, .reihe-covers button { flex: none; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 6px; }
 .reihe-covers img { width: 56px; height: 56px; border-radius: 6px; object-fit: cover; background: var(--surface); box-shadow: 0 0 0 1px var(--line); }
 .reihe-covers.gross img { width: 72px; height: 72px; }
+.reihe-covers button { display: grid; gap: 4px; justify-items: center; }
+.reihe-covers .platz { font-family: var(--font-type); font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+
+/* Rangliste */
+.rang-steuerung { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.sortieren {
+  min-height: 48px; padding: 0 14px; border-radius: 11px; border: 1px solid var(--line); background: var(--surface);
+  font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.sortieren svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
+.sortieren[aria-pressed="true"] svg { transform: rotate(180deg); }
+.rangliste { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--line); }
+.rang-zeile {
+  display: grid; grid-template-columns: 34px 48px minmax(0, 1fr) 62px; gap: 10px; align-items: center; width: 100%;
+  padding: 8px 0; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; cursor: pointer;
+}
+.rang-zeile .rang { font-weight: 850; font-stretch: 75%; font-size: 21px; text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+.rang-zeile:nth-child(-n+3) .rang { color: var(--ink); }
+.rangliste li:nth-child(1) .rang { color: #f2c94c; }
+.rang-zeile img { width: 48px; height: 48px; border-radius: 5px; object-fit: cover; background: var(--surface); box-shadow: 0 0 0 1px var(--line); }
+.rang-zeile .titel { min-width: 0; display: grid; }
+.rang-zeile .titel b { font-weight: 700; font-size: 15px; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rang-zeile .titel small { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.rang-zeile .wert { display: grid; gap: 4px; justify-items: end; }
+.rang-zeile .wert b { font-weight: 800; font-size: 16px; font-variant-numeric: tabular-nums; }
+.balken { width: 100%; height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.balken i { display: block; height: 100%; border-radius: 3px; background: currentColor; }
+.wert.gut { color: #4cd07d; } .wert.mittel { color: #f2c94c; } .wert.schwach { color: var(--muted); }
 .reihe-covers [aria-current="true"] img { box-shadow: 0 0 0 2px var(--rot); }
 .leer { color: var(--muted); font-size: 13px; margin: 0; }
 .reihe-kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
@@ -303,9 +331,10 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
     <button class="fertig" id="fertig" type="button">Fertig</button>
   </section>
 
-  <nav class="tabs" id="tabs" role="tablist" aria-label="Serie" hidden>
-    <button role="tab" id="tab-ddf" aria-controls="bereich-ddf" aria-selected="true" type="button">Die drei ???</button>
-    <button role="tab" id="tab-dr3i" aria-controls="bereich-dr3i" aria-selected="false" type="button">DiE DR3i</button>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Bereich">
+    <button role="tab" id="tab-ddf" aria-controls="bereich-ddf" aria-selected="true" type="button">Zufall</button>
+    <button role="tab" id="tab-rang" aria-controls="bereich-rang" aria-selected="false" type="button">Rangliste</button>
+    <button role="tab" id="tab-dr3i" aria-controls="bereich-dr3i" aria-selected="false" type="button" hidden>DiE DR3i</button>
   </nav>
 
   <div class="bereich" id="bereich-ddf" role="tabpanel" aria-labelledby="tab-ddf">
@@ -356,6 +385,21 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
     </section>
   </div>
 
+  <div class="bereich" id="bereich-rang" role="tabpanel" aria-labelledby="tab-rang" hidden>
+    <div class="rang-steuerung">
+      <div class="segmente" role="radiogroup" aria-label="Liste">
+        <label><input type="radio" name="rang-art" id="rang-haupt" value="haupt" checked><span>Hauptfolgen</span></label>
+        <label><input type="radio" name="rang-art" id="rang-special" value="special"><span>Specials</span></label>
+      </div>
+      <button class="sortieren" id="rang-sort" type="button" aria-pressed="false">
+        <span id="rang-sort-text">Beste zuerst</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+      </button>
+    </div>
+    <p class="info">Bewertungen der Community von <a href="https://www.rocky-beach.com/php/project/f_ausgabe.html" target="_blank" rel="noopener">rocky-beach.com</a> · 1 = wunderbar, 6 = vergessen wir's · Antippen zeigt die Folge.</p>
+    <ol class="rangliste" id="rangliste"></ol>
+  </div>
+
   <div class="bereich" id="bereich-dr3i" role="tabpanel" aria-labelledby="tab-dr3i" hidden>
     <article class="fall-karte" id="dr3i-akte" aria-live="polite">
       <div class="buehne" id="dr3i-buehne">
@@ -393,7 +437,7 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
     </article>
 
     <section class="reihe" aria-labelledby="dr3i-alle-titel">
-      <div class="klein-titel" id="dr3i-alle-titel">Alle 9 Fälle · 2006–2007</div>
+      <div class="klein-titel" id="dr3i-alle-titel">Alle 9 Fälle · nach Bewertung auf rocky-beach.com</div>
       <div class="reihe-covers gross" id="dr3i-liste"></div>
     </section>
   </div>
@@ -412,7 +456,7 @@ const GRUPPEN = [
   ]},
   { id: "thema", name: "Thema", kategorien: [
     { id: "schlaf", name: "Zum Einschlafen", test: tag("schlaf") },
-    { id: "top", name: "Top bewertet", test: tag("top") },
+    { id: "top50", name: "Top 50", test: tag("top50") },
     { id: "grusel", name: "Grusel", test: tag("grusel") },
     { id: "schatz", name: "Schatz & Rätsel", test: tag("schatz") },
     { id: "meer", name: "Meer & Piraten", test: tag("meer") },
@@ -468,10 +512,10 @@ const nummer = f => f.n !== null ? "Fall Nr. " + String(f.n).padStart(3, "0") : 
 const kurzNr = f => f.n !== null ? String(f.n).padStart(3, "0") : "???";
 const istNeu = f => f.d && (Date.now() - new Date(f.d + "T00:00:00").getTime()) / 864e5 <= NEU_TAGE && new Date(f.d) <= new Date();
 // Bewertung von rocky-beach.com: Note 1 (wunderbar) bis 6, als Link zur Folgenseite
-function noteLink(r, href, titel) {
+function noteLink(r, p, href, titel) {
   const a = document.createElement(href ? "a" : "span");
   a.className = "note " + (r[0] <= 2 ? "gut" : r[0] <= 2.8 ? "mittel" : "schwach");
-  a.textContent = `★ ${r[0].toFixed(1).replace(".", ",")} · Platz ${r[1]}`;
+  a.textContent = `★ ${komma(r[0], 1)}` + (p ? ` · Platz ${p[0]} von ${p[1]}` : "");
   if (href) {
     a.href = href; a.target = "_blank"; a.rel = "noopener";
     a.setAttribute("aria-label", `Note ${r[0].toFixed(2).replace(".", ",")} von ${r[2]} Stimmen auf rocky-beach.com: ${titel}`);
@@ -479,6 +523,8 @@ function noteLink(r, href, titel) {
   a.title = `Note ${r[0].toFixed(2).replace(".", ",")} (1 = wunderbar, 6 = vergessen wir's) · ${r[2]} Stimmen auf rocky-beach.com`;
   return a;
 }
+const komma = (x, stellen) => x.toFixed(stellen).replace(".", ",");
+const noteKlasse = note => note <= 2 ? "gut" : note <= 2.8 ? "mittel" : "schwach";
 const bewegungAus = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Testet eine Folge gegen eine Auswahl
@@ -571,7 +617,7 @@ function anzeigen() {
   const extra = [f.j, f.m ? f.m + " Min." : ""].filter(Boolean).join(" · ");
   if (extra) { const s = document.createElement("span"); s.textContent = " · " + extra; nr.append(s); }
   if (istNeu(f)) { const b = document.createElement("span"); b.className = "neu-badge"; b.textContent = "NEU"; nr.append(b); }
-  $("note").replaceChildren(...(f.r ? [noteLink(f.r, f.rb, f.t)] : []));
+  $("note").replaceChildren(...(f.r ? [noteLink(f.r, f.p, f.rb, f.t)] : []));
   $("titel").textContent = f.t;
   $("text").textContent = f.b || "Keine Beschreibung vorhanden.";
   $("text").classList.remove("offen");
@@ -582,7 +628,7 @@ function anzeigen() {
   $("play-text").textContent = dienst().name;
   $("hinweis").textContent = alle.includes(f)
     ? `${frei} von ${alle.length} Fällen zur Auswahl · in ${dienst().name} ▶︎ tippen`
-    : `Aus der Suche · in ${dienst().name} ▶︎ tippen`;
+    : `Einzeln ausgewählt · in ${dienst().name} ▶︎ tippen`;
   $("zurueck").hidden = !frueher.length;
   const akte = $("akte");
   akte.classList.remove("zieht"); void akte.offsetWidth; akte.classList.add("zieht");
@@ -755,7 +801,7 @@ function dr3iZeigen(f, animieren = true, merken = true) {
   $("dr3i-nr").append(dr3iNr(f));
   const s = document.createElement("span"); s.textContent = ` · ${f.d.slice(0, 4)} · ${f.min} Min.`; $("dr3i-nr").append(s);
   $("dr3i-titel").textContent = f.t;
-  $("dr3i-note").replaceChildren(...(f.r ? [noteLink(f.r, "https://www.rocky-beach.com/php/project/f_ausgabe.html", f.t)] : []));
+  $("dr3i-note").replaceChildren(...(f.r ? [noteLink(f.r, f.p, "https://www.rocky-beach.com/php/project/f_ausgabe.html", f.t)] : []));
   $("dr3i-text").textContent = f.b;
   $("dr3i-text").classList.remove("offen");
   $("dr3i-mehr").hidden = f.b.length < 110;
@@ -790,12 +836,14 @@ function dr3iZeigen(f, animieren = true, merken = true) {
 }
 
 function dr3iListe() {
-  DR3I.forEach((f, i) => {
+  const sortiert = [...DR3I].sort((a, b) => (a.p?.[0] ?? 99) - (b.p?.[0] ?? 99));
+  sortiert.forEach(f => {
     const btn = document.createElement("button");
-    btn.type = "button"; btn.dataset.i = i;
-    btn.setAttribute("aria-label", (f.n !== null ? "Fall " + f.n + ": " : "Special: ") + f.t);
+    btn.type = "button"; btn.dataset.i = DR3I.indexOf(f);
+    btn.setAttribute("aria-label", (f.p ? `Platz ${f.p[0]}, Note ${komma(f.r[0], 2)}: ` : "") + (f.n !== null ? "Fall " + f.n + ": " : "Special: ") + f.t);
     const img = document.createElement("img"); img.src = f.img; img.alt = "";
     btn.append(img);
+    if (f.p) { const s = document.createElement("span"); s.className = "platz"; s.textContent = `#${f.p[0]} ★${komma(f.r[0], 1)}`; btn.append(s); }
     btn.addEventListener("click", () => { dr3iZeigen(f); window.scrollTo({ top: 0, behavior: bewegungAus ? "auto" : "smooth" }); });
     $("dr3i-liste").appendChild(btn);
   });
@@ -811,16 +859,60 @@ $("dr3i-mehr").addEventListener("click", () => { $("dr3i-text").classList.add("o
 wischbar($("dr3i-buehne"), $("dr3i-karte"), dr3iZiehen, zurueckDr3i);
 
 // Bereiche umschalten
+const BEREICHE = ["ddf", "rang", "dr3i"];
 function bereich(name) {
-  const dr3i = name === "dr3i" && dr3iAn;
-  $("bereich-ddf").hidden = dr3i;
-  $("bereich-dr3i").hidden = !dr3i;
-  $("tab-ddf").setAttribute("aria-selected", String(!dr3i));
-  $("tab-dr3i").setAttribute("aria-selected", String(dr3i));
-  schreibe("ddf.bereich", dr3i ? "dr3i" : "ddf");
+  if (!BEREICHE.includes(name) || (name === "dr3i" && !dr3iAn)) name = "ddf";
+  for (const b of BEREICHE) {
+    $("bereich-" + b).hidden = b !== name;
+    $("tab-" + b).setAttribute("aria-selected", String(b === name));
+  }
+  schreibe("ddf.bereich", name);
 }
-$("tab-ddf").addEventListener("click", () => bereich("ddf"));
-$("tab-dr3i").addEventListener("click", () => bereich("dr3i"));
+for (const b of BEREICHE) $("tab-" + b).addEventListener("click", () => bereich(b));
+
+// Rangliste von rocky-beach.com
+let rangArt = "haupt", rangSchlechteste = false;
+function ranglisteZeichnen() {
+  const liste = $("rangliste");
+  const folgen = verfuegbar().filter(f => f.p && (rangArt === "haupt" ? f.n !== null : f.n === null))
+    .sort((a, b) => rangSchlechteste ? b.p[0] - a.p[0] : a.p[0] - b.p[0]);
+  liste.replaceChildren(...folgen.map((f, nr) => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "rang-zeile";
+    btn.setAttribute("aria-label", `Platz ${f.p[0]}: ${f.t}, Note ${komma(f.r[0], 2)}, ${f.r[2]} Stimmen`);
+    const rang = document.createElement("span"); rang.className = "rang"; rang.textContent = f.p[0];
+    const img = document.createElement("img"); img.alt = ""; if (nr > 15) img.loading = "lazy"; if (covers[f.id]) img.src = covers[f.id];
+    const titel = document.createElement("span"); titel.className = "titel";
+    const b = document.createElement("b"); b.textContent = f.t;
+    const s = document.createElement("small");
+    s.textContent = `${f.n !== null ? "Folge " + f.n : "Special"} · ${f.r[2].toLocaleString("de-DE")} Stimmen`;
+    titel.append(b, s);
+    const wert = document.createElement("span"); wert.className = "wert " + noteKlasse(f.r[0]);
+    const zahl = document.createElement("b"); zahl.textContent = komma(f.r[0], 2);
+    const balken = document.createElement("span"); balken.className = "balken";
+    const i = document.createElement("i"); i.style.width = Math.max(4, (6 - f.r[0]) / 5 * 100) + "%";
+    balken.append(i); wert.append(zahl, balken);
+    btn.append(rang, img, titel, wert);
+    btn.addEventListener("click", () => {
+      bereich("ddf");
+      zeigeFall(f);
+      window.scrollTo({ top: 0, behavior: bewegungAus ? "auto" : "smooth" });
+    });
+    li.append(btn);
+    return li;
+  }));
+  if (!folgen.length) liste.innerHTML = '<li class="leer">Gerade keine Bewertungen verfügbar.</li>';
+}
+for (const art of ["haupt", "special"]) {
+  $("rang-" + art).addEventListener("change", () => { rangArt = art; ranglisteZeichnen(); });
+}
+$("rang-sort").addEventListener("click", () => {
+  rangSchlechteste = !rangSchlechteste;
+  $("rang-sort").setAttribute("aria-pressed", String(rangSchlechteste));
+  $("rang-sort-text").textContent = rangSchlechteste ? "Schlechteste zuerst" : "Beste zuerst";
+  ranglisteZeichnen();
+});
 
 // Neue Version holen, sobald die App wieder in den Vordergrund kommt
 const VERSION = "__VERSION__";
@@ -855,10 +947,11 @@ function neuFiltern() {
   if (aktuell && !imPool().includes(aktuell)) { aktuell = null; frueher = []; }
   if (aktuell) anzeigen(); else ziehen();
   verlaufZeichnen();
+  ranglisteZeichnen();
 }
 function dr3iSichtbar() {
-  $("tabs").hidden = !dr3iAn;
-  if (!dr3iAn) bereich("ddf");
+  $("tab-dr3i").hidden = !dr3iAn;
+  if (!dr3iAn && !$("bereich-dr3i").hidden) bereich("ddf");
 }
 $("dienst-" + dienstId).checked = true;
 $("dr3i-an").checked = dr3iAn;
@@ -882,7 +975,8 @@ verlaufZeichnen();
 dr3iListe();
 dr3iZeigen(DR3I[Math.floor(Math.random() * DR3I.length)], false);
 dienstInfo();
-bereich(location.hash === "#dr3i" ? "dr3i" : location.hash === "#ddf" ? "ddf" : lese("ddf.bereich", "ddf"));
+ranglisteZeichnen();
+bereich(BEREICHE.includes(location.hash.slice(1)) ? location.hash.slice(1) : lese("ddf.bereich", "ddf"));
 dr3iSichtbar();
 </script>
 </body>
