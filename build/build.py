@@ -10,7 +10,7 @@ import re
 import shutil
 import time
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -90,6 +90,42 @@ def bewertungen(serie):
     return ergebnis
 
 
+def apple_neu(eps):
+    """Alben von „Die drei ???“ bei Apple Music, die nach dem neuesten bekannten Album erschienen sind.
+
+    Hauptfolgen werden an „Folge N:“ erkannt, alles andere zählt als Special. Vorbestellbare Alben
+    (Erscheinungsdatum in der Zukunft) und Boxen, Videos oder Soundtracks werden übersprungen.
+    """
+    vorhanden = {e["id"] for e in eps}
+    nummern = {e["n"] for e in eps if e["n"] is not None}
+    neuestes = max((e["d"] for e in eps if e.get("d")), default="0000")
+    heute = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    try:
+        alben = hole("https://itunes.apple.com/lookup?id=201306317&entity=album&country=de&limit=200&sort=recent")["results"]
+    except Exception as fehler:
+        print("Apple Music nicht erreichbar, keine Ergänzung:", fehler)
+        return []
+    neu = []
+    for a in alben:
+        if a.get("wrapperType") != "collection" or a.get("artistId") != 201306317:
+            continue
+        datum, name, album_id = a.get("releaseDate", "")[:10], a["collectionName"].strip(), str(a["collectionId"])
+        if album_id in vorhanden or not (neuestes < datum <= heute):
+            continue
+        if re.search(r"Box|Video|Soundtrack", name, re.I):
+            continue
+        m = re.match(r"Folge\s*(\d+)\s*:\s*(.+)", name)
+        if m and int(m.group(1)) in nummern:
+            continue
+        titel = m.group(2).strip() if m else name
+        k = ["haupt"] if m else ["special"] + (["advent"] if re.search(ADVENT, name) else [])
+        k.append(dekade(datum[:4]))
+        k += [thema for thema, muster in THEMEN.items() if re.search(muster, titel.lower())]
+        neu.append({"n": int(m.group(1)) if m else None, "t": titel, "id": album_id, "j": datum[:4], "d": datum, "b": "", "k": k})
+        vorhanden.add(album_id)
+    return neu
+
+
 def einfach(text):
     return re.sub(r"[^a-z0-9äöüß]", "", text.lower().replace("und ", "").replace("die drei ???", ""))
 
@@ -118,6 +154,11 @@ def main():
             if w.get("d"):
                 eintrag["d"] = w["d"]
             eps.append(eintrag)
+
+    # Neue Alben direkt bei Apple Music, die dreimetadaten.de noch nicht kennt
+    for e in apple_neu(eps):
+        eps.append(e)
+        print("Von Apple Music ergänzt:", (f"Folge {e['n']}: " if e["n"] else "") + e["t"], e["d"])
 
     # Bewertungen von rocky-beach.com (Hauptfolgen über die Nummer, Specials über den Titel)
     try:

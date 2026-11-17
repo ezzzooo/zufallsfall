@@ -9,6 +9,7 @@ Seite: https://ezzzooo.github.io/zufallsfall/
 
 Die GitHub Action `Seite bauen` läuft jeden Montag früh und bei jedem Push.
 Sie holt die Folgendaten von [dreimetadaten.de](https://dreimetadaten.de/), berechnet die Kategorien und veröffentlicht die Seite.
+Alben, die bei Apple Music schon erschienen sind, aber bei dreimetadaten.de noch fehlen (neue Folgen, Adventskalender), ergänzt sie direkt aus Apple Music – zunächst ohne Klappentext und Spotify-Link.
 Von Hand starten: Actions → Seite bauen → Run workflow.
 
 ## Dateien
