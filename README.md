@@ -12,6 +12,12 @@ Sie holt die Folgendaten von [dreimetadaten.de](https://dreimetadaten.de/), bere
 Alben, die bei Apple Music schon erschienen sind, aber bei dreimetadaten.de noch fehlen (neue Folgen, Adventskalender), ergänzt sie direkt aus Apple Music – zunächst ohne Klappentext und Spotify-Link.
 Von Hand starten: Actions → Seite bauen → Run workflow.
 
+## Funktionen (Auswahl)
+
+- **Gehört-Sammlung:** Geöffnete Folgen werden automatisch abgehakt, in der Akte von Hand umschaltbar. Fortschritt im Reiter Rangliste, Filter „Nur noch nicht gehörte“ in den Kategorien.
+- **Siri-Link:** `?los=<kategorie>` (z. B. `?los=grusel`) zieht sofort einen Fall und öffnet die Musik-App. Den Link gibt es in den Einstellungen unter „Siri & Kurzbefehl“.
+- **Countdown:** zeigt die nächste angekündigte Folge (Datum von Apple Music, sonst dreimetadaten.de).
+
 ## Dateien
 
 - `build/build.py` baut `_site/` (nur Python-Standardbibliothek): `python3 build/build.py`

@@ -251,6 +251,56 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
 .leer { color: var(--muted); font-size: 13px; margin: 0; }
 .reihe-kopf { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
 .reihe-kopf .klein-titel { margin: 0; }
+/* Countdown */
+.countdown {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 12px; align-items: center; padding: 10px 14px;
+  border-radius: 12px; border: 1px solid var(--line); background: linear-gradient(90deg, rgba(50,116,230,.16), transparent 70%), var(--surface);
+}
+.countdown .tage { grid-row: span 2; font-weight: 900; font-stretch: 72%; font-size: 30px; line-height: 1; color: var(--blau); font-variant-numeric: tabular-nums; text-align: center; min-width: 44px; }
+.countdown .tage small { display: block; font-family: var(--font-type); font-size: 11px; color: var(--muted); font-weight: 400; letter-spacing: .04em; }
+.countdown .was { font-size: 14.5px; font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.countdown .wann { font-family: var(--font-type); font-size: 12px; color: var(--muted); letter-spacing: .03em; }
+
+/* Gehört-Sammlung */
+.akte-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.abhaken {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: 16px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface); color: var(--muted); font-size: 13.5px; font-weight: 700;
+}
+.abhaken svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.abhaken[aria-pressed="true"] { background: rgba(76,208,125,.14); border-color: rgba(76,208,125,.5); color: #4cd07d; }
+.fortschritt { display: grid; gap: 6px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); }
+.fortschritt .zeile { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
+.fortschritt .zeile b { font-variant-numeric: tabular-nums; }
+.fortschritt .balken { height: 7px; }
+.fortschritt .balken i { background: #4cd07d; }
+.rang-zeile.gehoert .titel b::after { content: " ✓"; color: #4cd07d; }
+.schalter.klein span { font-size: 14.5px; }
+
+/* Siri-Link */
+.siri { display: grid; gap: 10px; }
+.siri select {
+  width: 100%; min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--bg); color: var(--ink); font: inherit; font-size: 15px;
+}
+.siri-link { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.siri-link code {
+  font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; padding: 10px; border-radius: 9px; background: var(--bg);
+  border: 1px solid var(--line); overflow-x: auto; white-space: nowrap; user-select: all; -webkit-user-select: all;
+}
+.siri-link button, .sammlung-reset {
+  min-height: 40px; padding: 0 14px; border-radius: 20px; border: 1px solid var(--line); background: var(--bg); cursor: pointer; font-weight: 700; font-size: 14px;
+}
+.sammlung-reset.sicher { background: var(--rot); border-color: var(--rot); color: #fff; }
+.schritte { margin: 0; padding-left: 20px; color: var(--muted); font-size: 13.5px; display: grid; gap: 2px; }
+.sammlung-zeile { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 14.5px; }
+
+/* Direktstart per Link (?los=…) */
+.los { display: grid; gap: 14px; text-align: center; padding-top: 8px; }
+.los img { width: min(70vw, 300px); margin: 0 auto; aspect-ratio: 1; object-fit: cover; border-radius: 10px; box-shadow: 0 0 0 1px var(--line); }
+.los .knopf { max-width: 340px; width: 100%; margin: 0 auto; }
+.los .zur-app { background: none; border: 0; color: var(--blau); font-weight: 650; cursor: pointer; font-size: 14.5px; }
+
 .zuruecksetzen {
   flex: none; min-height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid var(--line); background: var(--surface);
   color: var(--muted); font-size: 13px; font-weight: 650; cursor: pointer;
@@ -316,6 +366,27 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
       <span><b>DiE DR3i anzeigen</b><small>Eigener Bereich, spielt über den Kurzbefehl „DR3i“ aus deiner Apple-Music-Mediathek.</small></span>
       <input type="checkbox" id="dr3i-an" role="switch">
     </label>
+    <div class="sammlung-zeile">
+      <span><b>Gehört-Sammlung</b><br><small class="info" id="sammlung-info"></small></span>
+      <button class="sammlung-reset" id="sammlung-reset" type="button">Zurücksetzen</button>
+    </div>
+    <div class="siri">
+      <div class="klein-titel">Siri &amp; Kurzbefehl</div>
+      <p class="info">Dieser Link zieht sofort einen Fall aus der gewählten Kategorie und öffnet ihn in deinem Musikdienst, ohne die App-Oberfläche.</p>
+      <label class="info" for="siri-kat">Kategorie</label>
+      <select id="siri-kat"></select>
+      <div class="siri-link">
+        <code id="siri-url"></code>
+        <button id="siri-kopieren" type="button">Kopieren</button>
+      </div>
+      <ol class="schritte">
+        <li>Kurzbefehle-App → <b>+</b> → Aktion <b>„URLs öffnen“</b></li>
+        <li>Den kopierten Link als URL einfügen</li>
+        <li>Oben einen Namen geben, z. B. <b>„<span id="siri-name">Drei Fragezeichen</span>“</b></li>
+        <li>Dann „Hey Siri, <span id="siri-name2">Drei Fragezeichen</span>“ sagen oder den Kurzbefehl auf den Home-Bildschirm legen</li>
+      </ol>
+      <p class="info">Der Link läuft in Safari. Verlauf und Gehört-Sammlung dort sind getrennt von der Home-Bildschirm-App.</p>
+    </div>
     <div class="links">
       <div class="klein-titel">Mehr zu den drei ???</div>
       <a href="https://www.rocky-beach.com/hoerspiel/hoerueber.html" target="_blank" rel="noopener">rocky-beach.com – alle Hörspiele mit Inhalt und Kommentaren</a>
@@ -337,7 +408,16 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
     <button role="tab" id="tab-dr3i" aria-controls="bereich-dr3i" aria-selected="false" type="button" hidden>DiE DR3i</button>
   </nav>
 
+  <section class="los" id="los" hidden aria-live="polite">
+    <img id="los-cover" alt="">
+    <div class="meta"><div class="fallnr" id="los-nr"></div><h1 id="los-titel"></h1></div>
+    <a class="knopf play" id="los-play" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z"/></svg><span id="los-play-text">Abspielen</span></a>
+    <p class="hinweis" id="los-hinweis">Öffnet sich gleich. Falls nicht, auf den Knopf tippen.</p>
+    <button class="zur-app" id="los-zur-app" type="button">Zur App</button>
+  </section>
+
   <div class="bereich" id="bereich-ddf" role="tabpanel" aria-labelledby="tab-ddf">
+    <div class="countdown" id="countdown" hidden></div>
     <button class="katleiste" id="katleiste" type="button" aria-expanded="false" aria-controls="kategorien">
       <span><span class="label">Kategorie</span><b id="kat-name"></b><small id="kat-anzahl"></small></span>
       <span class="kat-rechts"><small id="kat-zahl"></small><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span>
@@ -345,6 +425,10 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
     <fieldset class="gruppen" id="kategorien" hidden>
       <legend>Kategorie</legend>
       <p class="info">Eine Art wählen, dazu optional ein Thema und eine Zeit. Nochmal tippen hebt die Auswahl auf.</p>
+      <label class="schalter klein">
+        <span><b>Nur noch nicht gehörte</b><small id="ungehoert-info"></small></span>
+        <input type="checkbox" id="nur-ungehoert" role="switch">
+      </label>
     </fieldset>
 
     <article class="fall-karte" id="akte" aria-live="polite">
@@ -358,7 +442,12 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
       <div class="meta">
         <div class="fallnr" id="fallnr"></div>
         <h1 id="titel"></h1>
-        <div class="note-zeile" id="note"></div>
+        <div class="akte-zeile">
+          <div class="note-zeile" id="note"></div>
+          <button class="abhaken" id="abhaken" type="button" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg><span id="abhaken-text">Als gehört markieren</span>
+          </button>
+        </div>
       </div>
       <p class="text" id="text"></p>
       <button class="mehr" id="mehr" type="button" hidden>Mehr lesen</button>
@@ -397,6 +486,7 @@ h1 { font-weight: 850; font-stretch: 78%; font-size: 30px; line-height: 1.05; ma
       </button>
     </div>
     <p class="info">Bewertungen der Community von <a href="https://www.rocky-beach.com/php/project/f_ausgabe.html" target="_blank" rel="noopener">rocky-beach.com</a> · 1 = wunderbar, 6 = vergessen wir's · Antippen zeigt die Folge.</p>
+    <div class="fortschritt" id="fortschritt"></div>
     <ol class="rangliste" id="rangliste"></ol>
   </div>
 
@@ -529,7 +619,21 @@ const bewegungAus = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Testet eine Folge gegen eine Auswahl
 const passt = (f, a) => GRUPPEN.every(g => !a[g.id] || katVon(a[g.id]).test(f));
-const imPool = () => verfuegbar().filter(f => passt(f, auswahl));
+// Gehört-Sammlung: alle jemals geöffneten oder abgehakten Folgen (unabhängig vom 5er-Verlauf)
+let sammlung = new Set(lese("ddf.sammlung", []));
+let nurUngehoert = lese("ddf.nurUngehoert", false) === true;
+const sammlungSpeichern = () => schreibe("ddf.sammlung", [...sammlung]);
+// Ziehbare Folgen: ohne gehörte, falls gewünscht – aber nie eine leere Liste
+function kandidaten() {
+  const alle = verfuegbar();
+  if (!nurUngehoert) return alle;
+  const offen = alle.filter(f => !sammlung.has(f.id));
+  return offen.length ? offen : alle;
+}
+const imPool = () => {
+  const pool = kandidaten().filter(f => passt(f, auswahl));
+  return pool.length ? pool : verfuegbar().filter(f => passt(f, auswahl));
+};
 
 // Cover mit Platzhalter (große Fallnummer), bis das Bild geladen ist
 function coverSetzen(img, karte, src, nr, alt) {
@@ -546,7 +650,7 @@ function coverSetzen(img, karte, src, nr, alt) {
 function kategorienZeichnen() {
   const box = $("kategorien");
   box.querySelectorAll(".gruppe").forEach(g => g.remove());
-  const pool = verfuegbar();
+  const pool = kandidaten();
   if (!pool.some(f => passt(f, auswahl))) auswahl = { art: "alle", thema: null, zeit: null };
   for (const g of GRUPPEN) {
     const gruppe = document.createElement("div");
@@ -630,6 +734,7 @@ function anzeigen() {
     ? `${frei} von ${alle.length} Fällen zur Auswahl · in ${dienst().name} ▶︎ tippen`
     : `Einzeln ausgewählt · in ${dienst().name} ▶︎ tippen`;
   $("zurueck").hidden = !frueher.length;
+  abhakenZeichnen();
   const akte = $("akte");
   akte.classList.remove("zieht"); void akte.offsetWidth; akte.classList.add("zieht");
 }
@@ -637,8 +742,69 @@ function anzeigen() {
 function gehoert(f) {
   verlauf = [f.id, ...verlauf.filter(id => id !== f.id)].slice(0, MERKEN);
   schreibe("ddf.verlauf", verlauf);
+  sammlung.add(f.id);
+  sammlungSpeichern();
   verlaufZeichnen();
+  sammlungZeichnen();
 }
+function abhakenZeichnen() {
+  const drin = Boolean(aktuell && sammlung.has(aktuell.id));
+  $("abhaken").setAttribute("aria-pressed", String(drin));
+  $("abhaken-text").textContent = drin ? "Gehört" : "Als gehört markieren";
+}
+$("abhaken").addEventListener("click", () => {
+  if (sammlung.has(aktuell.id)) sammlung.delete(aktuell.id); else sammlung.add(aktuell.id);
+  sammlungSpeichern();
+  sammlungZeichnen();
+});
+// Alles, was von der Sammlung abhängt, neu zeichnen
+function sammlungZeichnen() {
+  abhakenZeichnen();
+  const haupt = FOLGEN.filter(f => f.n !== null);
+  const hauptGehoert = haupt.filter(f => sammlung.has(f.id)).length;
+  const specials = FOLGEN.filter(f => f.n === null);
+  const specialsGehoert = specials.filter(f => sammlung.has(f.id)).length;
+  $("fortschritt").innerHTML = "";
+  const zeile = document.createElement("div"); zeile.className = "zeile";
+  const links = document.createElement("span"); links.textContent = "Hauptfolgen gehört";
+  const rechts = document.createElement("b"); rechts.textContent = `${hauptGehoert} von ${haupt.length}`;
+  zeile.append(links, rechts);
+  const balken = document.createElement("span"); balken.className = "balken";
+  const i = document.createElement("i"); i.style.width = (hauptGehoert / haupt.length * 100) + "%"; balken.append(i);
+  const klein = document.createElement("small"); klein.className = "info";
+  klein.textContent = `Specials: ${specialsGehoert} von ${specials.length} · Abhaken in der Akte`;
+  $("fortschritt").append(zeile, balken, klein);
+  $("sammlung-info").textContent = `${sammlung.size} ${sammlung.size === 1 ? "Folge" : "Folgen"} abgehakt (${hauptGehoert} von ${haupt.length} Hauptfolgen)`;
+  const offen = verfuegbar().filter(f => !sammlung.has(f.id)).length;
+  $("ungehoert-info").textContent = `${offen} Folgen noch nicht gehört. Geöffnete Folgen werden automatisch abgehakt.`;
+  if (nurUngehoert) kategorienZeichnen();
+  ranglisteZeichnen();
+}
+$("nur-ungehoert").checked = nurUngehoert;
+$("nur-ungehoert").addEventListener("change", e => {
+  nurUngehoert = e.target.checked;
+  schreibe("ddf.nurUngehoert", nurUngehoert);
+  kategorienZeichnen();
+  if (aktuell && !imPool().includes(aktuell)) ziehen(); else anzeigen();
+  sammlungZeichnen();
+});
+// Sammlung zurücksetzen: erster Tipp fragt nach, zweiter löscht
+let sammlungTimer = null;
+$("sammlung-reset").addEventListener("click", () => {
+  const knopf = $("sammlung-reset");
+  if (!knopf.classList.contains("sicher")) {
+    knopf.classList.add("sicher"); knopf.textContent = "Wirklich löschen?";
+    clearTimeout(sammlungTimer);
+    sammlungTimer = setTimeout(() => { knopf.classList.remove("sicher"); knopf.textContent = "Zurücksetzen"; }, 4000);
+    return;
+  }
+  clearTimeout(sammlungTimer);
+  knopf.classList.remove("sicher"); knopf.textContent = "Zurücksetzen";
+  sammlung = new Set();
+  sammlungSpeichern();
+  sammlungZeichnen();
+  kategorienZeichnen();
+});
 
 function verlaufZeichnen() {
   const liste = $("liste");
@@ -879,7 +1045,7 @@ function ranglisteZeichnen() {
   liste.replaceChildren(...folgen.map((f, nr) => {
     const li = document.createElement("li");
     const btn = document.createElement("button");
-    btn.type = "button"; btn.className = "rang-zeile";
+    btn.type = "button"; btn.className = "rang-zeile" + (sammlung.has(f.id) ? " gehoert" : "");
     btn.setAttribute("aria-label", `Platz ${f.p[0]}: ${f.t}, Note ${komma(f.r[0], 2)}, ${f.r[2]} Stimmen`);
     const rang = document.createElement("span"); rang.className = "rang"; rang.textContent = f.p[0];
     const img = document.createElement("img"); img.alt = ""; if (nr > 15) img.loading = "lazy"; if (covers[f.id]) img.src = covers[f.id];
@@ -969,6 +1135,93 @@ function einstellungen(offen) {
 $("zahnrad").addEventListener("click", () => einstellungen($("einstellungen").hidden));
 $("fertig").addEventListener("click", () => { einstellungen(false); $("zahnrad").focus(); });
 
+// Countdown bis zur nächsten angekündigten Folge
+const NAECHSTE = __NAECHSTE__;
+function countdownZeichnen() {
+  const heute = new Date(); heute.setHours(0, 0, 0, 0);
+  const tageBis = d => Math.round((new Date(d + "T00:00:00") - heute) / 864e5);
+  const f = NAECHSTE.find(x => !FOLGEN.some(e => e.n === x.n) && tageBis(x.d) >= -14);
+  const box = $("countdown");
+  if (!f) { box.hidden = true; return; }
+  const tage = tageBis(f.d);
+  const datumText = new Date(f.d + "T12:00:00").toLocaleDateString("de-DE", { weekday: "short", day: "numeric", month: "long" });
+  box.innerHTML = "";
+  const zahl = document.createElement("div"); zahl.className = "tage";
+  const was = document.createElement("div"); was.className = "was";
+  const wann = document.createElement("div"); wann.className = "wann";
+  was.textContent = `Folge ${f.n}: ${f.t}`;
+  if (tage > 0) {
+    zahl.append(String(tage)); const s = document.createElement("small"); s.textContent = tage === 1 ? "Tag" : "Tage"; zahl.append(s);
+    wann.textContent = (tage === 1 ? "Morgen" : "Nächster Fall") + " · " + datumText;
+  } else {
+    zahl.textContent = "NEU";
+    wann.textContent = (tage === 0 ? "Erscheint heute" : "Erschienen am " + datumText) + " · kommt mit dem nächsten Update";
+  }
+  box.append(zahl, was, wann);
+  box.hidden = false;
+}
+
+// Siri-Link: zieht sofort einen Fall aus einer Kategorie und öffnet ihn im Musikdienst
+const siriAdresse = id => location.origin + location.pathname + "?los=" + id;
+function siriZeichnen() {
+  const auswahlFeld = $("siri-kat");
+  if (!auswahlFeld.options.length) {
+    for (const g of GRUPPEN) {
+      const gruppe = document.createElement("optgroup"); gruppe.label = g.name;
+      for (const k of g.kategorien) { const o = document.createElement("option"); o.value = k.id; o.textContent = k.name; gruppe.append(o); }
+      auswahlFeld.append(gruppe);
+    }
+    auswahlFeld.value = lese("ddf.siriKat", "alle");
+  }
+  const k = katVon(auswahlFeld.value) || katVon("alle");
+  $("siri-url").textContent = siriAdresse(k.id);
+  const name = k.id === "alle" ? "Drei Fragezeichen" : k.name + "-Folge";
+  $("siri-name").textContent = name;
+  $("siri-name2").textContent = name;
+}
+$("siri-kat").addEventListener("change", e => { schreibe("ddf.siriKat", e.target.value); siriZeichnen(); });
+$("siri-kopieren").addEventListener("click", async () => {
+  const text = $("siri-url").textContent;
+  try { await navigator.clipboard.writeText(text); $("siri-kopieren").textContent = "Kopiert ✓"; }
+  catch {
+    const r = document.createRange(); r.selectNodeContents($("siri-url"));
+    const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    $("siri-kopieren").textContent = "Markiert";
+  }
+  setTimeout(() => { $("siri-kopieren").textContent = "Kopieren"; }, 2500);
+});
+
+// Direktstart: ?los=<Kategorie> zieht einen Fall, merkt ihn und öffnet sofort die Musik-App
+function direktStart(id) {
+  const k = katVon(id) || katVon("alle");
+  const gruppe = GRUPPEN.find(g => g.kategorien.includes(k));
+  const probe = { art: "alle", thema: null, zeit: null, [gruppe.id]: k.id };
+  const alle = kandidaten().filter(f => passt(f, probe));
+  const pool = alle.filter(f => !verlauf.includes(f.id));
+  const liste = pool.length ? pool : alle.length ? alle : verfuegbar();
+  const f = liste[Math.floor(Math.random() * liste.length)];
+  gehoert(f);
+  for (const el of document.querySelectorAll(".bereich, #tabs")) el.hidden = true;
+  $("los").hidden = false;
+  if (covers[f.id]) $("los-cover").src = covers[f.id];
+  $("los-cover").alt = "Cover: " + f.t;
+  $("los-nr").textContent = nummer(f) + " · aus „" + k.name + "“";
+  $("los-titel").textContent = f.t;
+  $("los-play").href = link(f);
+  $("los-play").classList.toggle("spotify", dienstId === "spotify" && Boolean(f.sp));
+  $("los-play-text").textContent = "In " + (dienst().hat(f) ? dienst().name : "Apple Music") + " öffnen";
+  history.replaceState(null, "", location.pathname);
+  // Direkt in die App springen (Safari fragt beim ersten Mal nach)
+  const app = dienstId === "spotify" && f.sp ? "spotify:album:" + f.sp : "music://music.apple.com/de/album/" + f.id;
+  setTimeout(() => { location.href = app; }, 350);
+}
+$("los-zur-app").addEventListener("click", () => {
+  $("los").hidden = true;
+  $("tabs").hidden = false;
+  dr3iSichtbar();
+  bereich("ddf");
+});
+
 kategorienZeichnen();
 ziehen();
 verlaufZeichnen();
@@ -976,8 +1229,13 @@ dr3iListe();
 dr3iZeigen(DR3I[Math.floor(Math.random() * DR3I.length)], false);
 dienstInfo();
 ranglisteZeichnen();
+sammlungZeichnen();
+countdownZeichnen();
+siriZeichnen();
 bereich(BEREICHE.includes(location.hash.slice(1)) ? location.hash.slice(1) : lese("ddf.bereich", "ddf"));
 dr3iSichtbar();
+const losKategorie = new URLSearchParams(location.search).get("los");
+if (losKategorie) direktStart(losKategorie);
 </script>
 </body>
 </html>

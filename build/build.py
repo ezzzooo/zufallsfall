@@ -90,7 +90,36 @@ def bewertungen(serie):
     return ergebnis
 
 
-def apple_neu(eps):
+def apple_alben():
+    """Alle Alben von „Die drei ???“ bei Apple Music, neueste zuerst (leer, wenn Apple nicht erreichbar ist)."""
+    try:
+        alben = hole("https://itunes.apple.com/lookup?id=201306317&entity=album&country=de&limit=200&sort=recent")["results"]
+    except Exception as fehler:
+        print("Apple Music nicht erreichbar:", fehler)
+        return []
+    return [a for a in alben if a.get("wrapperType") == "collection" and a.get("artistId") == 201306317]
+
+
+def naechste(serie, alben):
+    """Angekündigte Folgen für den Countdown. Das Datum von Apple Music hat Vorrang (dort wird gestreamt)."""
+    heute = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    apple = {}
+    for a in alben:
+        m = re.match(r"Folge\s*(\d+)\s*:\s*(.+)", a["collectionName"].strip())
+        if m:
+            apple[int(m.group(1))] = (a.get("releaseDate", "")[:10], m.group(2).strip())
+    kommend = {}
+    for e in serie:
+        datum = (e.get("veröffentlichungsdatum") or "")[:10]
+        if e.get("nummer") and datum > heute and not (e.get("ids") or {}).get("appleMusic"):
+            kommend[e["nummer"]] = {"n": e["nummer"], "t": e["titel"], "d": apple.get(e["nummer"], (datum,))[0]}
+    for nr, (datum, titel) in apple.items():
+        if datum > heute and nr not in kommend:
+            kommend[nr] = {"n": nr, "t": titel, "d": datum}
+    return sorted(kommend.values(), key=lambda f: f["d"])[:3]
+
+
+def apple_neu(eps, alben):
     """Alben von „Die drei ???“ bei Apple Music, die nach dem neuesten bekannten Album erschienen sind.
 
     Hauptfolgen werden an „Folge N:“ erkannt, alles andere zählt als Special. Vorbestellbare Alben
@@ -100,15 +129,8 @@ def apple_neu(eps):
     nummern = {e["n"] for e in eps if e["n"] is not None}
     neuestes = max((e["d"] for e in eps if e.get("d")), default="0000")
     heute = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    try:
-        alben = hole("https://itunes.apple.com/lookup?id=201306317&entity=album&country=de&limit=200&sort=recent")["results"]
-    except Exception as fehler:
-        print("Apple Music nicht erreichbar, keine Ergänzung:", fehler)
-        return []
     neu = []
     for a in alben:
-        if a.get("wrapperType") != "collection" or a.get("artistId") != 201306317:
-            continue
         datum, name, album_id = a.get("releaseDate", "")[:10], a["collectionName"].strip(), str(a["collectionId"])
         if album_id in vorhanden or not (neuestes < datum <= heute):
             continue
@@ -156,7 +178,8 @@ def main():
             eps.append(eintrag)
 
     # Neue Alben direkt bei Apple Music, die dreimetadaten.de noch nicht kennt
-    for e in apple_neu(eps):
+    alben = apple_alben()
+    for e in apple_neu(eps, alben):
         eps.append(e)
         print("Von Apple Music ergänzt:", (f"Folge {e['n']}: " if e["n"] else "") + e["t"], e["d"])
 
@@ -231,6 +254,7 @@ def main():
         "__ART__": js(art),
         "__STAND__": stand,
         "__ANZAHL__": str(len(eps)),
+        "__NAECHSTE__": js(naechste(serie["serie"], alben)),
     }.items():
         assert platzhalter in seite, platzhalter
         seite = seite.replace(platzhalter, wert)
