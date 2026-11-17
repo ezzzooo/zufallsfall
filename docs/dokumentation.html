@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Zufallsfall – Dokumentation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<style>
+  :root { --ink: #1d2230; --muted: #5d6272; --line: #d8d4ca; --stamp: #c42a22; --blau: #2a5fc4; --paper: #f6f4ef; --gruen: #2e8a4e; }
+  body { max-width: 820px; margin: 0 auto !important; padding: 24px 16px 48px; box-sizing: border-box; }
+  @media print { body { padding: 0; max-width: none; } }
+  body { font-family: "Helvetica Neue", Arial, sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.55; margin: 0; }
+  h1 { font-size: 27pt; line-height: 1.08; margin: 0 0 4px; letter-spacing: -.01em; }
+  .fz { font-weight: 900; letter-spacing: -.02em; }
+  .fz .a { color: var(--ink); } .fz .b { color: var(--stamp); } .fz .c { color: var(--blau); }
+  .eyebrow { font-family: "Courier New", monospace; color: var(--stamp); font-size: 10pt; letter-spacing: .06em; }
+  .lead { color: var(--muted); font-size: 11.5pt; max-width: 62ch; margin: 8px 0 18px; }
+  h2 { page-break-after: avoid; font-size: 15.5pt; margin: 28px 0 8px; padding-top: 10px; border-top: 2px solid var(--ink); }
+  h2 .nr { font-family: "Courier New", monospace; color: var(--stamp); font-weight: 400; margin-right: 8px; }
+  h3 { page-break-after: avoid; font-size: 11.8pt; margin: 18px 0 4px; }
+  p, li { max-width: 74ch; }
+  ul, ol { padding-left: 22px; margin: 6px 0; }
+  li { margin: 3px 0; }
+  code { font-family: "SF Mono", Menlo, monospace; font-size: 9pt; background: var(--paper); padding: 1px 4px; border-radius: 3px; }
+  pre { font-family: "SF Mono", Menlo, monospace; font-size: 8.8pt; background: var(--paper); padding: 10px 12px; border-radius: 4px; white-space: pre-wrap; page-break-inside: avoid; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0 14px; font-size: 9.6pt; page-break-inside: avoid; }
+  th, td { text-align: left; vertical-align: top; padding: 5px 8px; border-bottom: 1px solid var(--line); }
+  th { font-family: "Courier New", monospace; font-weight: 400; color: var(--muted); font-size: 9pt; letter-spacing: .04em; border-bottom: 1.5px solid var(--ink); }
+  a { color: var(--blau); }
+  .kurz { border: 1px solid var(--line); border-left: 4px solid var(--blau); padding: 8px 12px; margin: 10px 0; background: #fbfaf6; page-break-inside: avoid; }
+  .kurz b:first-child { display: block; font-family: "Courier New", monospace; font-weight: 400; color: var(--blau); font-size: 9pt; letter-spacing: .05em; margin-bottom: 2px; }
+  .box { border: 1px solid var(--line); border-left: 4px solid var(--gruen); padding: 8px 12px; margin: 10px 0; background: #fbfaf6; page-break-inside: avoid; }
+  .box.warn { border-left-color: var(--stamp); }
+  .fluss { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0 14px; page-break-inside: avoid; }
+  .fluss div { border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; font-size: 9.4pt; background: #fbfaf6; }
+  .fluss b { display: block; font-size: 10pt; margin-bottom: 2px; }
+  .klein { color: var(--muted); font-size: 9.2pt; }
+  .inhalt { font-size: 10pt; margin: 6px 0 0; padding-left: 28px; }
+  .inhalt li { margin: 1px 0; }
+  kbd { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 9pt; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: #fff; }
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Wir übernehmen jeden Fall</div>
+<h1><span class="fz"><span class="a">?</span><span class="b">?</span><span class="c">?</span></span> Zufallsfall</h1>
+<p class="lead">Deine Web-App, die zufällig einen Fall der drei ??? zieht und ihn in Apple Music oder Spotify öffnet. Dazu gibt es Kategorien, eine Rangliste, eine Gehört-Sammlung, einen Siri-Kurzbefehl und einen eigenen Bereich für DiE DR3i. Dieses Dokument erklärt, was die App kann, wie sie im Hintergrund funktioniert und wo du selbst etwas ändern kannst. Stand: 17. November 2026.</p>
+
+<table>
+  <tr><th>Was</th><th>Wo</th></tr>
+  <tr><td>Die App</td><td><a href="https://ezzzooo.github.io/zufallsfall/">ezzzooo.github.io/zufallsfall</a></td></tr>
+  <tr><td>Quellcode und Daten</td><td><a href="https://github.com/ezzzooo/zufallsfall">github.com/ezzzooo/zufallsfall</a></td></tr>
+  <tr><td>Automatische Updates</td><td><a href="https://github.com/ezzzooo/zufallsfall/actions">github.com/ezzzooo/zufallsfall/actions</a> („Seite bauen“)</td></tr>
+  <tr><td>Folgendaten</td><td><a href="https://dreimetadaten.de/">dreimetadaten.de</a>, ergänzt durch Apple Music</td></tr>
+  <tr><td>Bewertungen</td><td><a href="https://www.rocky-beach.com/php/project/f_ausgabe.html">rocky-beach.com</a> (Community-Noten)</td></tr>
+  <tr><td>Kurzbefehl für DiE DR3i</td><td>iPhone, Kurzbefehle-App, Name <b>DR3i</b></td></tr>
+</table>
+
+<ol class="inhalt">
+  <li>So hängt alles zusammen</li>
+  <li>Rundgang durch die App</li>
+  <li>Die Gehört-Sammlung</li>
+  <li>Siri und der Direktstart-Link</li>
+  <li>DiE DR3i und der Kurzbefehl „DR3i“</li>
+  <li>Woher die Daten kommen</li>
+  <li>Wie die Kategorien entstehen</li>
+  <li>Das automatische Update</li>
+  <li>Updates und Offline-Betrieb auf dem iPhone</li>
+  <li>Was wo gespeichert wird</li>
+  <li>Das Repository: welche Datei was macht</li>
+  <li>Selbst etwas ändern</li>
+  <li>Sicherheit und Teilen</li>
+  <li>Wenn etwas nicht klappt</li>
+  <li>Wie das Projekt entstanden ist</li>
+  <li>Kleines Begriffslexikon</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2><span class="nr">01</span>So hängt alles zusammen</h2>
+<p>Die App ist eine ganz normale Webseite. Sie liegt kostenlos bei GitHub und hat keinen eigenen Server, keine Datenbank und kein Konto. Einmal pro Woche baut GitHub sie mit frischen Daten neu. Alles andere, also Zufall, Kategorien, Verlauf und Einstellungen, passiert direkt auf deinem iPhone im Browser.</p>
+<div class="fluss">
+  <div><b>1 · Die Quellen</b>dreimetadaten.de liefert Folgen, Klappentexte, Laufzeiten, Sprecher und die Links zu Apple Music und Spotify. Apple Music liefert Cover und ganz neue Folgen. rocky-beach.com liefert die Noten.</div>
+  <div><b>2 · Die GitHub Action</b>Ein kleines Programm bei GitHub, das jeden Montag die Quellen abholt, Kategorien und Plätze berechnet und daraus die Seite baut.</div>
+  <div><b>3 · GitHub Pages</b>Stellt die fertige Seite unter ezzzooo.github.io/zufallsfall ins Netz.</div>
+  <div><b>4 · Dein iPhone</b>Lädt die Seite, zieht den Fall und öffnet Apple Music, Spotify oder den Kurzbefehl „DR3i“.</div>
+</div>
+<div class="kurz"><b>KURZ GESAGT</b>Claude wird für den Betrieb nicht gebraucht. Die App läuft und aktualisiert sich auch ohne Claude-Abo, solange es deinen GitHub-Account gibt.</div>
+
+<!-- ============================================================ -->
+<h2><span class="nr">02</span>Rundgang durch die App</h2>
+
+<h3>Kopfzeile</h3>
+<ul>
+  <li><b>Lupe:</b> Suche nach Nummer oder Titel, zum Beispiel „42“ oder „Werwolf“. Die Treffer zeigen auch die Note. Antippen zeigt die Folge in der Akte.</li>
+  <li><b>Zahnrad:</b> die Einstellungen (siehe unten).</li>
+</ul>
+
+<h3>Reiter</h3>
+<p>Oben stehen die Reiter <b>Zufall</b> und <b>Rangliste</b>. Ist DiE DR3i in den Einstellungen eingeschaltet, kommt ein dritter Reiter dazu. Die App merkt sich, welcher Reiter zuletzt offen war.</p>
+
+<h3>Reiter „Zufall“</h3>
+<ul>
+  <li><b>Countdown:</b> Ganz oben steht die nächste angekündigte Folge mit den Tagen bis zum Erscheinen, etwa „31 Tage · Folge 242: und das weiße Auge · Fr., 18. Dezember“. Ist sie erschienen, aber noch nicht in der App, steht dort „NEU · kommt mit dem nächsten Update“.</li>
+  <li><b>Kategorie-Leiste:</b> zeigt die aktuelle Auswahl und wie viele Folgen darin sind. Antippen klappt die Kategorien auf.
+    <ul>
+      <li>Du wählst <b>eine Art</b> und kannst optional <b>ein Thema</b> und <b>eine Zeit</b> dazunehmen, zum Beispiel „Hauptfolgen · Grusel · 90er“. Nochmal tippen hebt Thema oder Zeit wieder auf.</li>
+      <li>Ausgegraute Kategorien würden mit der aktuellen Auswahl keine Folge ergeben.</li>
+      <li>Mit dem Schalter <b>„Nur noch nicht gehörte“</b> werden alle abgehakten Folgen übersprungen (siehe Abschnitt 03).</li>
+    </ul>
+  </li>
+  <li><b>Die Akte:</b> großes Cover, darunter Fallnummer, Jahr und Laufzeit, der Titel und die Note von rocky-beach.com (z. B. „★ 1,5 · Platz 1 von 241“, antippbar). Dazu der Knopf <b>„Als gehört markieren“</b> und 2 Zeilen Klappentext („Mehr lesen“ zeigt alles). Ganz neue Folgen tragen 30 Tage lang ein <b>NEU</b>-Abzeichen.</li>
+  <li><b>Wischen:</b> Cover <b>nach links</b> wischen zieht einen neuen Fall, <b>nach rechts</b> holt den vorherigen zurück. Es geht bis zu 20 Fälle zurück. Der runde Pfeil oben links auf dem Cover macht dasselbe wie nach rechts wischen.</li>
+  <li><b>Knöpfe:</b> „Anderer Fall“ zieht neu. Der farbige Knopf öffnet die Folge, rot für Apple Music, grün für Spotify. In der Musik-App musst du dann noch einmal ▶︎ tippen.</li>
+  <li><b>Zuletzt gehört:</b> die letzten 5 geöffneten Folgen als kleine Cover. Diese 5 werden beim Ziehen übersprungen, damit nicht dauernd dasselbe kommt. „Zurücksetzen“ leert die Reihe (erst nachfragen, dann löschen).</li>
+</ul>
+
+<h3>Reiter „Rangliste“</h3>
+<ul>
+  <li>Oben ein Balken mit deinem <b>Fortschritt</b>, etwa „143 von 241 Hauptfolgen gehört“.</li>
+  <li>Alle Folgen nach der Note der rocky-beach.com-Community. Pro Zeile: Platz, Cover, Titel, Folgennummer, Anzahl der Stimmen, Note und Balken (grün bis 2,0, gelb bis 2,8, sonst grau). Gehörte Folgen tragen ein grünes ✓.</li>
+  <li>Umschalten zwischen <b>Hauptfolgen</b> und <b>Specials</b> und zwischen <b>„Beste zuerst“</b> und <b>„Schlechteste zuerst“</b>.</li>
+  <li>Antippen springt zum Reiter Zufall und zeigt die Folge in der Akte.</li>
+</ul>
+
+<h3>Einstellungen (Zahnrad)</h3>
+<table>
+  <tr><th>Einstellung</th><th>Was sie bewirkt</th></tr>
+  <tr><td>Abspielen mit Apple Music / Spotify</td><td>Welcher Dienst geöffnet wird. Bei Spotify sind die 15 Film-, Live- und Kopfhörer-Alben ausgeblendet (dort gibt es keine Spotify-Links), ebenso ganz neue Folgen, bis dreimetadaten.de sie nachträgt.</td></tr>
+  <tr><td>Fußball-Folgen ausblenden</td><td>Nimmt die 7 Fußball-Folgen (63, 81, 123, 141, 153, 164, 176) aus allen Kategorien, der Rangliste und dem Zufall.</td></tr>
+  <tr><td>DiE DR3i anzeigen</td><td>Blendet den dritten Reiter ein. Standardmäßig aus.</td></tr>
+  <tr><td>Gehört-Sammlung</td><td>Zeigt, wie viele Folgen abgehakt sind, mit „Zurücksetzen“.</td></tr>
+  <tr><td>Siri &amp; Kurzbefehl</td><td>Erzeugt den Direktstart-Link für eine Kategorie (Abschnitt 04).</td></tr>
+  <tr><td>Links und Impressum</td><td>rocky-beach.com, dreifragezeichen.de, Podcast „Die Zentrale“, dazu Datenstand und Quellen.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2><span class="nr">03</span>Die Gehört-Sammlung</h2>
+<p>Zusätzlich zum kurzen 5er-Verlauf merkt sich die App dauerhaft, welche Folgen du schon gehört hast.</p>
+<ul>
+  <li><b>Automatisch:</b> Jede Folge, die du über den Abspielen-Knopf oder eine Cover-Reihe öffnest, wird abgehakt.</li>
+  <li><b>Von Hand:</b> In der Akte schaltet der Knopf „Als gehört markieren“ / „✓ Gehört“ das Häkchen um. So trägst du Folgen nach, die du früher schon gehört hast: über die Suche oder die Rangliste aufrufen und abhaken.</li>
+  <li><b>Filter:</b> In den aufgeklappten Kategorien schaltet „Nur noch nicht gehörte“ alle abgehakten Folgen aus. Sind in einer Kategorie alle gehört, zieht die App trotzdem eine Folge, statt leer zu bleiben.</li>
+  <li><b>Fortschritt:</b> im Reiter Rangliste oben. Die Rangliste zeigt außerdem ein ✓ hinter jedem gehörten Titel.</li>
+</ul>
+<div class="box warn">Die Sammlung liegt nur im Speicher des Browsers auf deinem Gerät. Löschst du in Safari die Website-Daten, ist sie weg. Die Home-Bildschirm-App und Safari haben auf dem iPhone getrennte Speicher (Abschnitt 10).</div>
+
+<!-- ============================================================ -->
+<h2><span class="nr">04</span>Siri und der Direktstart-Link</h2>
+<p>Mit einem besonderen Link überspringst du die App-Oberfläche: Er zieht sofort einen Fall aus einer Kategorie und springt direkt in die Musik-App.</p>
+<pre>https://ezzzooo.github.io/zufallsfall/?los=grusel</pre>
+<p>Hinter <code>?los=</code> steht die Kategorie, zum Beispiel <code>alle</code>, <code>haupt</code>, <code>grusel</code>, <code>top50</code>, <code>schlaf</code>, <code>dek90</code> oder <code>advent</code>. Du musst sie dir nicht merken: Die App erzeugt den passenden Link.</p>
+<h3>So richtest du es ein</h3>
+<ol>
+  <li>In der App das <b>Zahnrad</b> öffnen und zu <b>„Siri &amp; Kurzbefehl“</b> scrollen.</li>
+  <li>Eine <b>Kategorie</b> wählen. Der Link erscheint darunter. <b>Kopieren</b> tippen.</li>
+  <li>Die <b>Kurzbefehle-App</b> öffnen → <b>+</b> → Aktion <b>„URLs öffnen“</b> hinzufügen → den Link einfügen.</li>
+  <li>Oben einen Namen geben, z. B. <b>„Grusel-Folge“</b> oder <b>„Drei Fragezeichen“</b>.</li>
+  <li>Fertig. Jetzt reicht <b>„Hey Siri, Grusel-Folge“</b>. Oder du legst den Kurzbefehl über Teilen → „Zum Home-Bildschirm“ als eigenes Icon ab.</li>
+</ol>
+<p>Beim Start erscheinen kurz Cover und Titel, dann springt die Seite in Apple Music oder Spotify (je nach Einstellung). Beim allerersten Mal fragt Safari, ob es die App öffnen darf. Klappt der Sprung nicht, tippst du auf den großen Knopf. „Zur App“ bringt dich zur normalen Oberfläche. Für mehrere Kategorien legst du einfach mehrere Kurzbefehle an.</p>
+<div class="box warn">Der Link läuft in <b>Safari</b>, nicht in der Home-Bildschirm-App. Verlauf, Gehört-Sammlung und Einstellungen sind dort getrennt. Der Dienst (Apple Music oder Spotify) richtet sich also nach den Einstellungen in Safari. Wer Spotify nutzt, öffnet die Seite einmal in Safari und stellt dort im Zahnrad Spotify ein.</div>
+
+<!-- ============================================================ -->
+<h2><span class="nr">05</span>DiE DR3i und der Kurzbefehl „DR3i“</h2>
+<p>Die 9 DiE-DR3i-Fälle (2006–2007, als Justus, Peter und Bob kurz Jupiter, Peter und Bob hießen) gibt es nicht mehr bei Apple Music oder Spotify. Sie liegen als eigene Dateien in deiner Apple-Music-Mediathek. Eine Webseite kann die Mediathek nicht selbst abspielen. Deshalb ruft die App den Kurzbefehl „DR3i“ mit einem Suchbegriff auf:</p>
+<pre>shortcuts://run-shortcut?name=DR3i&amp;input=text&amp;text=&lt;Suchbegriff&gt;</pre>
+<h3>Der DR3i-Reiter</h3>
+<p>Er ist aufgebaut wie die Akte: großes Cover zum Wischen, Titel, Note, Klappentext und die Knöpfe „Anderer Fall“ und „Abspielen“. Unter „Details“ stehen Laufzeit, Erscheinungstag, Autoren, Sprecher und Kapitel. Darunter folgen alle 9 Fälle, sortiert nach ihrer Note auf rocky-beach.com: Platz 1 ist „Der Jahrhundertstein“, Schlusslicht „Tödliche Regie“.</p>
+<h3>Was der Kurzbefehl macht</h3>
+<ol>
+  <li><b>Musik suchen:</b> Album enthält Kurzbefehleingabe, Disc-Nummer ist nicht 2, sortiert nach Titelnummer (kleinste zuerst).</li>
+  <li><b>Musik abspielen:</b> Zufallswiedergabe aus, Wiederholen aus.</li>
+  <li><b>Musik suchen:</b> wie oben, aber Disc-Nummer ist 2.</li>
+  <li><b>Wenn</b> etwas gefunden wurde: <b>Zu „Nächster Titel“ hinzufügen</b>, „Später“ (hinten anhängen).</li>
+</ol>
+<p>Den zweiten Durchgang braucht es, weil „Das Seeungeheuer“ und „Hotel Luxury End“ auf zwei CDs verteilt sind und beide CDs bei Titel 1 anfangen.</p>
+<table>
+  <tr><th>Fall</th><th>Suchbegriff</th><th>Album in deiner Mediathek</th></tr>
+  <tr><td>1</td><td>Das Seeungeheuer</td><td>Folge 1: Das Seeungeheuer - Teil 1 und Teil 2</td></tr>
+  <tr><td>2</td><td>Die Pforte zum Jenseits</td><td>Folge 2: Die Pforte zum Jenseits</td></tr>
+  <tr><td>3</td><td>Verschollen in der Zeit</td><td>Folge 3: Verschollen in der Zeit</td></tr>
+  <tr><td>Special</td><td>Hotel Luxury End</td><td>Hotel Luxury End (2 CDs)</td></tr>
+  <tr><td>4</td><td>Zug um Zug</td><td>Folge 4: Zug um Zug</td></tr>
+  <tr><td>5</td><td>Das Haus der 1000 Rätsel</td><td>Folge 5: Das Haus der 1000 Rätsel</td></tr>
+  <tr><td>6</td><td>Tödliche Regie</td><td>Folge 6: Tödliche Regie</td></tr>
+  <tr><td>7</td><td>Kopflose Reiter</td><td>Folge 7: und der Kopflose Reiter</td></tr>
+  <tr><td>8</td><td>Jahrhundertstein</td><td>Die Drei ??? und Der Jahrhundertstein</td></tr>
+</table>
+<div class="box warn">Der Kurzbefehl muss genau <b>DR3i</b> heißen. Benennst du ein Album in der Mediathek um, ändere den Suchbegriff in <code>build/dr3i.json</code> (Feld <code>"s"</code>). Der DR3i-Knopf funktioniert nur über ezzzooo.github.io. Auf claude.ai wurden solche Links blockiert, das war der Grund für den Umzug zu GitHub.</div>
+
+<!-- ============================================================ -->
+<h2><span class="nr">06</span>Woher die Daten kommen</h2>
+<table>
+  <tr><th>Daten</th><th>Quelle</th><th>Aktualisierung</th></tr>
+  <tr><td>241 Hauptfolgen, 21 Specials, 4 Kurzgeschichten-Sammlungen: Titel, Klappentext, Laufzeit, Erscheinungstag, Sprecher, Links zu Apple Music und Spotify</td><td>dreimetadaten.de (<code>Serie.json</code>, <code>Spezial.json</code>, <code>Kurzgeschichten.json</code>)</td><td>automatisch, wöchentlich</td></tr>
+  <tr><td>Neue Folgen und Specials, die dreimetadaten.de noch nicht kennt</td><td>Apple Music (alles, was nach dem neuesten Eintrag von dreimetadaten.de erschienen ist)</td><td>automatisch, wöchentlich</td></tr>
+  <tr><td>Countdown-Termine</td><td>Apple Music (Vorbestellungen), sonst dreimetadaten.de</td><td>automatisch, wöchentlich</td></tr>
+  <tr><td>Cover der drei ???</td><td>Apple Music, direkt von Apples Servern geladen</td><td>automatisch</td></tr>
+  <tr><td>Noten, Stimmen, Plätze (auch DR3i)</td><td>rocky-beach.com, Community-Bewertungen (1 = wunderbar, 6 = vergessen wir's)</td><td>automatisch, wöchentlich</td></tr>
+  <tr><td>15 Film-, Live- und Kopfhörer-Alben und Handeinträge</td><td><code>build/weitere.json</code></td><td>nur von Hand</td></tr>
+  <tr><td>DiE DR3i mit Covern</td><td>dreimetadaten.de, einmalig übernommen (<code>build/dr3i.json</code>, <code>static/covers/</code>)</td><td>abgeschlossen</td></tr>
+</table>
+<h3>Wenn dreimetadaten.de hinterherhinkt</h3>
+<p>dreimetadaten.de wird von Fans gepflegt und trägt neue Folgen manchmal erst Wochen später ein. Damit du nicht warten musst, schaut das Bau-Skript zusätzlich bei Apple Music nach:</p>
+<ul>
+  <li>Alben mit „<b>Folge N:</b>“ im Namen werden als Hauptfolge mit Nummer übernommen, alles andere als Special. Adventskalender werden automatisch erkannt.</li>
+  <li>Nicht übernommen werden Vorbestellungen (Erscheinungstag in der Zukunft) sowie Boxen, Videos und Soundtracks.</li>
+  <li>Solche Folgen haben anfangs <b>keinen Klappentext</b> und <b>keinen Spotify-Link</b>. Sobald dreimetadaten.de sie einträgt, ersetzt der vollständige Eintrag den Apple-Eintrag von selbst.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2><span class="nr">07</span>Wie die Kategorien entstehen</h2>
+<p>Die Zahlen in Klammern sind der Stand vom 17.11.2026.</p>
+<table>
+  <tr><th>Kategorie</th><th>Regel</th></tr>
+  <tr><td>Hauptfolgen (241)</td><td>Alle nummerierten Folgen.</td></tr>
+  <tr><td>Specials (26)</td><td>Specials, Kurzgeschichten-Sammlungen und Adventskalender von dreimetadaten.de, plus neue Specials von Apple Music.</td></tr>
+  <tr><td>Adventskalender (7)</td><td>Titel enthält Advent, Weihnacht, Bescherung, Glocken usw.</td></tr>
+  <tr><td>Film, Live &amp; Kopfhörer (15)</td><td>Die Handeinträge aus <code>weitere.json</code> (Hörspiele zum Kinofilm, Live-Aufnahmen, Kopfhörer-Hörspiele). Nur bei Apple Music.</td></tr>
+  <tr><td>Zum Einschlafen (32)</td><td>Ruhige Folgen: 40 bis 80 Minuten, Note bis 2,6 und kein „unruhiges“ Wort im Klappentext (Grusel, Mord, Explosion, Schüsse …).</td></tr>
+  <tr><td>Top 50 (50)</td><td>Die 50 bestbewerteten Hauptfolgen auf rocky-beach.com.</td></tr>
+  <tr><td>Grusel (102)</td><td>Klappentext oder Titel enthält Geist, Spuk, Fluch, Vampir, Mumie, Dämon, Phantom …</td></tr>
+  <tr><td>Schatz &amp; Rätsel (65)</td><td>Schatz, Rätsel, Code, Geheimschrift …</td></tr>
+  <tr><td>Meer &amp; Piraten (46)</td><td>Meer, Schiff, Insel, Riff, Pirat, Tauchen, Hafen …</td></tr>
+  <tr><td>Mit Skinny Norris (17), Mit Hugenay (7)</td><td>Die Figur steht in der Sprecherliste. Das ist exakt.</td></tr>
+  <tr><td>Kurz, unter 50 Min. (46)</td><td>Laufzeit unter 50 Minuten.</td></tr>
+  <tr><td>Hitchcock-Ära (75)</td><td>Hitchcock steht in der Sprecherliste.</td></tr>
+  <tr><td>70er &amp; 80er · 90er · 2000er · 2010er · 2020er</td><td>Nach dem Erscheinungsjahr.</td></tr>
+  <tr><td>Fußball (7, nur als Filter)</td><td>Fußball, Bundesliga, Elfmeter, Torwart. Bewusst nicht dabei: 55 (Basketball), 60 (Leichtathletik), 120 (Beachvolleyball).</td></tr>
+</table>
+<p>Die Stichwort-Kategorien sind nicht perfekt. Darum gibt es Handkorrekturen in <code>build/korrekturen.json</code>. Aktuell zählen zum Beispiel „Das Bergmonster“, „Der weinende Sarg“ und „Das leere Grab“ zusätzlich als Grusel. „Pistenteufel“, „Fußball-Teufel“ und „Der Feuerteufel“ sind kein Grusel, und „Der seltsame Wecker“ ist nichts zum Einschlafen.</p>
+
+<!-- ============================================================ -->
+<h2><span class="nr">08</span>Das automatische Update</h2>
+<p>Die GitHub Action heißt <b>„Seite bauen“</b> (<code>.github/workflows/update.yml</code>). Sie startet:</p>
+<ul>
+  <li><b>jeden Montag</b>. Eingeplant ist 04:17 UTC, GitHub verschiebt solche Läufe aber oft um ein paar Stunden. Bisher liefen sie meist am Montagmittag.</li>
+  <li>bei jeder Änderung im Repository,</li>
+  <li>von Hand: <a href="https://github.com/ezzzooo/zufallsfall/actions">Actions</a> → „Seite bauen“ → <b>„Run workflow“</b>. Praktisch, wenn eine neue Folge am Freitag erscheint und du nicht bis Montag warten willst.</li>
+</ul>
+<table>
+  <tr><th>Schritt</th><th>Was passiert</th></tr>
+  <tr><td>bauen</td><td><code>build/build.py</code> holt dreimetadaten.de, Apple Music und rocky-beach.com. Es berechnet Kategorien, Plätze und den Countdown, setzt alles in <code>build/template.html</code> ein und schreibt die Seite nach <code>_site/</code>. Liefert dreimetadaten.de weniger als 241 Hauptfolgen, bricht der Schritt ab, und die alte Seite bleibt online. Sind Apple oder rocky-beach.com nicht erreichbar, baut er trotzdem, nur ohne Ergänzungen bzw. Noten.</td></tr>
+  <tr><td>veroeffentlichen</td><td>Stellt <code>_site/</code> auf GitHub Pages online.</td></tr>
+  <tr><td>wachhalten</td><td>Nur beim Montags- und beim Hand-Lauf: schreibt das Datum in <code>.github/letzter-lauf.txt</code> und speichert es als Commit „Wöchentlicher Lauf“. GitHub schaltet zeitgesteuerte Abläufe sonst nach 60 Tagen ohne Änderung ab. Dieser Schritt läuft auch, wenn das Bauen scheitert.</td></tr>
+</table>
+<div class="box">Scheitert ein Lauf, bekommst du eine E-Mail von GitHub. Meist war eine Quelle kurz nicht erreichbar. Dann einfach von Hand neu starten oder den nächsten Montag abwarten.</div>
+
+<!-- ============================================================ -->
+<h2><span class="nr">09</span>Updates und Offline-Betrieb auf dem iPhone</h2>
+<h3>Neue Versionen</h3>
+<p>Jede Version der Seite hat eine Kennung, die auch in <code>version.json</code> steht. Beim Öffnen und jedes Mal, wenn du die App wieder in den Vordergrund holst, vergleicht sie beide und lädt sich bei einer neuen Version selbst neu. Darum steht in der Adresse manchmal <code>?v=…</code>, das ist gewollt. Sieht es trotzdem einmal alt aus: App im App-Umschalter wegwischen und neu öffnen.</p>
+<h3>Offline</h3>
+<p>Ein sogenannter Service Worker (<code>static/sw.js</code>) speichert die Seite und die zuletzt angesehenen rund 100 Cover. Ohne Netz öffnet sich die App deshalb trotzdem. Zum Abspielen brauchst du natürlich Netz, oder die Folge liegt heruntergeladen in Apple Music bzw. Spotify.</p>
+<h3>Als App auf dem Home-Bildschirm</h3>
+<p>In Safari: Teilen → „Zum Home-Bildschirm“. Die App öffnet sich dann ohne Safari-Leisten, mit dem Akten-Icon und den drei Fragezeichen.</p>
+
+<!-- ============================================================ -->
+<h2><span class="nr">10</span>Was wo gespeichert wird</h2>
+<p>Alles Persönliche liegt <b>nur auf deinem Gerät</b>, im Speicher des Browsers (localStorage). Nichts davon geht an GitHub, Claude oder sonst wohin.</p>
+<table>
+  <tr><th>Gespeichert</th><th>Wofür</th></tr>
+  <tr><td>Verlauf (letzte 5)</td><td>Damit die zuletzt geöffneten Folgen übersprungen werden.</td></tr>
+  <tr><td>Gehört-Sammlung</td><td>Häkchen, Fortschritt, Filter „Nur noch nicht gehörte“.</td></tr>
+  <tr><td>Kategorie-Auswahl, Reiter</td><td>Damit die App so startet, wie du sie verlassen hast.</td></tr>
+  <tr><td>Einstellungen</td><td>Dienst, Fußball-Filter, DR3i-Reiter, gewählte Siri-Kategorie.</td></tr>
+</table>
+<div class="box warn">Auf dem iPhone haben <b>Safari</b> und die <b>Home-Bildschirm-App</b> getrennte Speicher, ebenso jedes andere Gerät. Ein Abgleich zwischen ihnen ginge nur mit Server und Konto, darauf haben wir bewusst verzichtet. Werden in Safari die Website-Daten gelöscht, sind Verlauf, Sammlung und Einstellungen dort weg.</div>
+
+<!-- ============================================================ -->
+<h2><span class="nr">11</span>Das Repository: welche Datei was macht</h2>
+<table>
+  <tr><th>Datei</th><th>Aufgabe</th></tr>
+  <tr><td><code>build/build.py</code></td><td>Das Bau-Skript (nur Python-Standardbibliothek). Hier stehen die Stichwörter der Themen (<code>THEMEN</code>), die „unruhigen“ Wörter fürs Einschlafen (<code>UNRUHIG</code>), der Apple-Abgleich, die Bewertungen und der Countdown.</td></tr>
+  <tr><td><code>build/template.html</code></td><td>Die komplette App: Aussehen (CSS), Aufbau (HTML) und Logik (JavaScript). Die Kategorien stehen in <code>GRUPPEN</code>. Platzhalter wie <code>__DATEN__</code> füllt das Bau-Skript.</td></tr>
+  <tr><td><code>build/korrekturen.json</code></td><td>Handkorrekturen: <code>grusel_plus/_minus</code>, <code>fussball_plus/_minus</code>, <code>schlaf_plus/_minus</code> (jeweils Folgentitel).</td></tr>
+  <tr><td><code>build/weitere.json</code></td><td>Alben, die dreimetadaten.de nicht führt (Film, Live, Kopfhörer) und Handeinträge wie „O Geisterbaum“.</td></tr>
+  <tr><td><code>build/dr3i.json</code></td><td>Die 9 DiE-DR3i-Fälle mit Klappentext, Sprechern, Kapiteln und Mediathek-Suchbegriff.</td></tr>
+  <tr><td><code>static/</code></td><td>Wird unverändert mitveröffentlicht: Icon, DR3i-Cover, <code>manifest.webmanifest</code> (App-Name und -Farben), <code>sw.js</code> (Offline-Speicher).</td></tr>
+  <tr><td><code>.github/workflows/update.yml</code></td><td>Die GitHub Action: Zeitplan und Schritte.</td></tr>
+  <tr><td><code>.github/letzter-lauf.txt</code></td><td>Datum des letzten Montagslaufs, nur fürs Wachhalten.</td></tr>
+  <tr><td><code>README.md</code></td><td>Kurzbeschreibung auf der GitHub-Startseite des Repositorys.</td></tr>
+</table>
+<p class="klein">Die fertige Seite (<code>index.html</code>, <code>version.json</code>) liegt nicht im Repository. Sie entsteht bei jedem Lauf neu im Ordner <code>_site/</code>.</p>
+
+<!-- ============================================================ -->
+<h2><span class="nr">12</span>Selbst etwas ändern</h2>
+<p>Am einfachsten direkt auf github.com: Datei öffnen → Stift-Symbol (Edit) → ändern → <b>„Commit changes“</b>. Die Action startet dann von selbst, und nach etwa einer Minute ist die Seite aktualisiert. Geht etwas schief, bleibt die alte Seite online.</p>
+
+<h3>Eine Folge falsch einsortiert</h3>
+<p>In <code>build/korrekturen.json</code> den Titel genau so eintragen, wie er in der App steht, ohne „Folge 12:“ davor:</p>
+<pre>"fussball_plus": ["Fußball-Skandal"],
+"schlaf_minus": ["und der seltsame Wecker"]</pre>
+
+<h3>Ein Album von Hand ergänzen</h3>
+<p>In Apple Music das Album teilen → Link kopieren. Die lange Zahl am Ende ist die ID. Dann in <code>build/weitere.json</code> einen Eintrag ergänzen. Ohne <code>"k"</code> landet er unter „Film, Live &amp; Kopfhörer“, mit <code>"k"</code> bestimmst du die Kategorien selbst:</p>
+<pre>{ "t": "Adventskalender - O Geisterbaum", "id": "6816080246",
+  "j": "2026", "d": "2026-11-13", "k": ["special", "advent"] }</pre>
+<p class="klein">Neue Folgen und Specials kommen dank des Apple-Abgleichs normalerweise von selbst, das ist nur noch für Sonderfälle nötig.</p>
+
+<h3>Ein neues Thema als Kategorie</h3>
+<ol>
+  <li>In <code>build/build.py</code> bei <code>THEMEN</code> einen Eintrag mit Stichwörtern ergänzen, z. B.<br><code>"zirkus": r"zirkus\w*|artist\w*|clown\w*"</code></li>
+  <li>In <code>build/template.html</code> in <code>GRUPPEN</code> unter „Thema“ einen Chip ergänzen:<br><code>{ id: "zirkus", name: "Zirkus", test: tag("zirkus") }</code></li>
+</ol>
+<p>Die neue Kategorie taucht automatisch auch in der Siri-Auswahl auf.</p>
+
+<h3>Lokal am Mac ausprobieren (optional)</h3>
+<pre>git clone https://github.com/ezzzooo/zufallsfall.git
+cd zufallsfall
+python3 build/build.py
+python3 -m http.server 8000 --directory _site</pre>
+<p>Dann im Browser <code>http://localhost:8000</code> öffnen.</p>
+
+<!-- ============================================================ -->
+<h2><span class="nr">13</span>Sicherheit und Teilen</h2>
+<ul>
+  <li><b>Nichts Geheimes:</b> reine Webseite ohne Server, Login, Passwörter oder Schlüssel.</li>
+  <li><b>Daten bleiben beim Nutzer:</b> Verlauf, Sammlung und Einstellungen liegen nur im jeweiligen Browser.</li>
+  <li><b>Öffentlich sichtbar</b> sind der GitHub-Name ezzzooo und die Commits. Diese laufen über die anonyme Adresse <code>ezzzooo@users.noreply.github.com</code>, deine echte E-Mail steht nirgends.</li>
+  <li><b>Schutz:</b> Nur dein GitHub-Account kann die Seite ändern. Am wichtigsten ist die Zwei-Faktor-Anmeldung bei GitHub (Settings → Password and authentication).</li>
+  <li><b>GitHub-Zugang am Mac:</b> Die GitHub-Kommandozeile <code>gh</code> ist im macOS-Schlüsselbund angemeldet. Abmelden mit <code>gh auth logout</code>.</li>
+  <li><b>Teilen:</b> Den Link darfst du an beliebig viele Leute geben. Jeder braucht Apple Music oder Spotify und stellt den Dienst im Zahnrad selbst ein. Suchmaschinen nehmen die Seite nicht auf (<code>noindex</code>). DiE DR3i ist für andere standardmäßig aus und funktioniert nur mit eigenen Dateien plus Kurzbefehl.</li>
+</ul>
+<div class="box warn">Klappentexte und DR3i-Cover stammen von dreimetadaten.de, die Noten von rocky-beach.com, die Rechte an Texten und Covern liegen bei Kosmos und Europa. Für eine private Fan-App im Freundeskreis ist das unkritisch. Die Quellen sind genannt, und die App weist sich als inoffizielles Fan-Projekt aus. Bei großer öffentlicher Verbreitung (soziale Netzwerke, Foren) besser die Klappentexte kürzen und die DR3i-Cover herausnehmen.</div>
+
+<!-- ============================================================ -->
+<h2><span class="nr">14</span>Wenn etwas nicht klappt</h2>
+<table>
+  <tr><th>Problem</th><th>Lösung</th></tr>
+  <tr><td>Neue Folge fehlt</td><td>Ist sie bei Apple Music schon erschienen? Dann kommt sie mit dem nächsten Montagslauf. Schneller: Actions → „Seite bauen“ → „Run workflow“. Bei Spotify erscheint sie erst, wenn dreimetadaten.de sie eingetragen hat.</td></tr>
+  <tr><td>Neue Funktion fehlt auf dem iPhone</td><td>App wegwischen und neu öffnen. Unter Actions prüfen, ob der letzte Lauf grün ist.</td></tr>
+  <tr><td>E-Mail: Lauf gescheitert</td><td>Actions → Lauf öffnen → Schritt „bauen“ ansehen. Meist war eine Quelle kurz weg. Von Hand neu starten.</td></tr>
+  <tr><td>E-Mail: Workflow wegen Inaktivität deaktiviert</td><td>Sollte dank „wachhalten“ nicht passieren. Falls doch: Actions → „Seite bauen“ → „Enable workflow“.</td></tr>
+  <tr><td>Noten fehlen</td><td>rocky-beach.com war beim letzten Lauf nicht erreichbar. Beim nächsten Lauf sind sie wieder da.</td></tr>
+  <tr><td>Siri-Kurzbefehl öffnet nur die Seite</td><td>Beim ersten Mal muss Safari den Sprung in die Musik-App erlauben. Sonst auf den großen Knopf tippen. Für Spotify in Safari (nicht in der Home-Bildschirm-App) im Zahnrad Spotify einstellen.</td></tr>
+  <tr><td>Gehört-Häkchen sind „weg“</td><td>Safari und Home-Bildschirm-App haben getrennte Speicher. Prüfen, wo du gerade bist. Gelöschte Website-Daten lassen sich nicht wiederherstellen.</td></tr>
+  <tr><td>DR3i-Knopf tut nichts</td><td>Kurzbefehl heißt genau „DR3i“? App über ezzzooo.github.io genutzt?</td></tr>
+  <tr><td>DR3i-Kurzbefehl startet, spielt aber nichts</td><td>Album-Namen mit der Tabelle in Abschnitt 05 vergleichen. In der Kurzbefehle-App den Zugriff auf Apple Music erlauben.</td></tr>
+  <tr><td>Spotify-Knopf öffnet nur die Webseite</td><td>Spotify-App installieren bzw. dort anmelden.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2><span class="nr">15</span>Wie das Projekt entstanden ist</h2>
+<table>
+  <tr><th>Datum</th><th>Schritt</th></tr>
+  <tr><td>26.10.2026</td><td><b>Erster Versuch mit Kurzbefehlen</b> (Menü und Zufall, Folgenliste im iCloud Drive). Lief auf dem iPhone nicht zuverlässig und wurde verworfen.</td></tr>
+  <tr><td>26.10.</td><td><b>Web-App auf claude.ai</b> mit Kategorien, Mischen und Verlauf, dazu der DR3i-Bereich. Problem: claude.ai blockiert Kurzbefehl-Links und braucht einen Login.</td></tr>
+  <tr><td>26.10.</td><td><b>Umzug auf GitHub Pages</b> (ezzzooo/zufallsfall). Seitdem funktioniert der DR3i-Kurzbefehl, und man braucht keinen Login. Die claude.ai-Version wurde später gelöscht.</td></tr>
+  <tr><td>26.10.</td><td><b>Automatische Updates</b> per GitHub Action, wöchentlich aus dreimetadaten.de, mit Wachhalten gegen die 60-Tage-Abschaltung.</td></tr>
+  <tr><td>26.10.</td><td><b>Einstellungen:</b> Apple Music oder Spotify, Fußball ausblenden, DR3i ein- und ausblenden, automatisches Neuladen bei neuen Versionen.</td></tr>
+  <tr><td>26.10.</td><td><b>Neue Oberfläche</b> im dunklen ???-Look mit großem Cover zum Wischen. Dazu, aus einer weiteren Session, Suche, Zurück, kombinierbare Kategorien, Laufzeit, NEU-Abzeichen, Offline-Betrieb, Noten von rocky-beach.com und „Zum Einschlafen“.</td></tr>
+  <tr><td>28.10.</td><td><b>Reiter Rangliste</b>, „Platz X von Y“ in der Akte, Kategorie Top 50, DR3i nach Note sortiert.</td></tr>
+  <tr><td>17.11.</td><td>Adventskalender „O Geisterbaum“ ergänzt, <b>Apple-Abgleich</b> für neue Folgen, <b>Gehört-Sammlung</b>, <b>Siri-Direktstart</b> und <b>Countdown</b>.</td></tr>
+</table>
+<p class="klein">Überbleibsel, die du löschen kannst: der Ordner <code>Kurzbefehle/DreiFragezeichen</code> im iCloud Drive (alte <code>folgen.json</code> vom ersten Versuch) und die Datei <code>DR3i.shortcut</code> im iCloud Drive, sobald der Kurzbefehl importiert ist.</p>
+
+<!-- ============================================================ -->
+<h2><span class="nr">16</span>Kleines Begriffslexikon</h2>
+<table>
+  <tr><th>Begriff</th><th>Bedeutung</th></tr>
+  <tr><td>Repository</td><td>Der Projektordner bei GitHub mit allen Dateien und ihrer Änderungsgeschichte.</td></tr>
+  <tr><td>Commit</td><td>Eine gespeicherte Änderung im Repository, mit kurzer Beschreibung.</td></tr>
+  <tr><td>GitHub Action</td><td>Ein Ablauf, den GitHub automatisch ausführt, hier zum Bauen und Veröffentlichen der Seite.</td></tr>
+  <tr><td>GitHub Pages</td><td>Der kostenlose Dienst von GitHub, der die Seite im Internet bereitstellt.</td></tr>
+  <tr><td>localStorage</td><td>Ein kleiner Speicher im Browser, in dem die App deine Einstellungen und Häkchen ablegt.</td></tr>
+  <tr><td>Service Worker</td><td>Ein Hintergrundskript im Browser, das Seite und Cover für den Offline-Betrieb zwischenspeichert.</td></tr>
+  <tr><td>Kurzbefehl</td><td>Ein Ablauf in Apples Kurzbefehle-App, hier „DR3i“ (Mediathek abspielen) und dein Siri-Direktstart.</td></tr>
+</table>
+
+</body>
+</html>

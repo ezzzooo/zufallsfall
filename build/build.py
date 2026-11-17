@@ -266,6 +266,10 @@ def main():
     if OUT.exists():
         shutil.rmtree(OUT)
     shutil.copytree(ROOT / "static", OUT)
+    # Dokumentation mitveröffentlichen: …/zufallsfall/dokumentation.html und das PDF
+    for datei in ("dokumentation.html", "Zufallsfall-Dokumentation.pdf"):
+        if (ROOT / "docs" / datei).exists():
+            shutil.copy(ROOT / "docs" / datei, OUT / datei)
     (OUT / "index.html").write_text(seite)
     (OUT / "version.json").write_text(json.dumps({"v": version}))
     print(f"{len(eps)} Alben ({haupt} Hauptfolgen), {len(art)} Cover, Stand {stand}")

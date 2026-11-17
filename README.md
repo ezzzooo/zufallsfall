@@ -26,3 +26,13 @@ Von Hand starten: Actions → Seite bauen → Run workflow.
 - `build/korrekturen.json` Handkorrekturen der Kategorie Grusel
 - `build/dr3i.json` DiE-DR3i-Folgen mit Suchbegriffen für die Mediathek
 - `static/` Icon und DR3i-Cover
+
+## Dokumentation
+
+Ausführliches Handbuch: [docs/dokumentation.html](docs/dokumentation.html), online unter https://ezzzooo.github.io/zufallsfall/dokumentation.html, als PDF unter [docs/Zufallsfall-Dokumentation.pdf](docs/Zufallsfall-Dokumentation.pdf).
+
+PDF neu erzeugen (am Mac, nach Änderungen an `docs/dokumentation.html`):
+
+```
+swift docs/html2pdf.swift "$PWD/docs/dokumentation.html" "$PWD/docs/Zufallsfall-Dokumentation.pdf"
+```
