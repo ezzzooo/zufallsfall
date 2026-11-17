@@ -111,9 +111,13 @@ def main():
     vorhanden = {e["id"] for e in eps}
     for w in json.loads((BUILD / "weitere.json").read_text()):
         if w["id"] not in vorhanden:
-            k = ["weitere"] + ([dekade(w["j"])] if w["j"] else [])
+            # "k" setzt eigene Kategorien, z. B. für Specials, die dreimetadaten.de noch nicht kennt
+            k = list(w.get("k", ["weitere"])) + ([dekade(w["j"])] if w["j"] else [])
             k += [name for name, muster in THEMEN.items() if re.search(muster, w["t"].lower())]
-            eps.append({"n": None, "t": w["t"], "id": w["id"], "j": w["j"], "b": "", "k": k})
+            eintrag = {"n": None, "t": w["t"], "id": w["id"], "j": w["j"], "b": w.get("b", ""), "k": k}
+            if w.get("d"):
+                eintrag["d"] = w["d"]
+            eps.append(eintrag)
 
     # Bewertungen von rocky-beach.com (Hauptfolgen über die Nummer, Specials über den Titel)
     try:
