@@ -29,6 +29,7 @@ ADVENT = r"Advent|Nacht, düstere|finstere|Bescherung|Glocken|Weihnacht"
 # Für „Zum Einschlafen“: Folgen mit diesen Wörtern in Titel oder Klappentext gelten als zu aufregend
 UNRUHIG = r"grusel|geist|gespenst|spuk|vampir|fluch|monster|dämon|mumie|totenkopf|untot|werwolf|horror|zombie|phantom|jenseits|unheimlich|mord|leiche|\btot|tödlich|panik|angst|schrecken|grauen|blut|entführ|bombe|explosion|schüsse|waffe|gefangen|gift|teufel|unterwelt|grab\b|wolf"
 RB = "https://www.rocky-beach.com"
+SEITE = "https://ezzzooo.github.io/zufallsfall/"
 
 
 def hole(url):
@@ -75,12 +76,23 @@ def folge(e, n, titel, tags):
     return eintrag
 
 
-def bewertungen(serie):
-    """Hörspiel-Bewertungen von rocky-beach.com: {Nummer: (Note, Rang, Stimmen, Titel)}."""
+def bewertungen(serie, versuche=3):
+    """Hörspiel-Bewertungen von rocky-beach.com: {Nummer: (Note, Rang, Stimmen, Titel)}.
+
+    rocky-beach.com antwortet manchmal sehr langsam, deshalb mehrere Versuche mit Pause.
+    """
     req = urllib.request.Request(RB + "/php/project/f_ausgabe.html", data=f"serie={serie}&ansicht=1".encode(),
                                  headers={"User-Agent": "zufallsfall-build (github.com/ezzzooo/zufallsfall)"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        seite = r.read().decode("utf-8", "replace")
+    for versuch in range(1, versuche + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                seite = r.read().decode("utf-8", "replace")
+            break
+        except Exception as fehler:
+            print(f"rocky-beach.com Serie {serie}, Versuch {versuch}/{versuche} fehlgeschlagen:", fehler)
+            if versuch == versuche:
+                raise
+            time.sleep(30 * versuch)
     ergebnis = {}
     for zeile in re.findall(r'<tr><td height="30">(.*?)</tr>', seite, re.S):
         text = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "|", zeile)))
@@ -184,11 +196,22 @@ def main():
         print("Von Apple Music ergänzt:", (f"Folge {e['n']}: " if e["n"] else "") + e["t"], e["d"])
 
     # Bewertungen von rocky-beach.com (Hauptfolgen über die Nummer, Specials über den Titel)
+    bew_stand = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     try:
         noten, noten_dr3i = bewertungen(2), bewertungen(3)
+        if len(noten) < 200:
+            raise ValueError(f"nur {len(noten)} Bewertungen gelesen, Seitenaufbau geändert?")
     except Exception as fehler:
-        print("rocky-beach.com nicht erreichbar, Bewertungen fehlen:", fehler)
-        noten, noten_dr3i = {}, {}
+        # Ersatz: die Bewertungen des letzten erfolgreichen Laufs, die mit der Seite veröffentlicht wurden
+        print("rocky-beach.com nicht nutzbar:", fehler)
+        try:
+            alt = hole(SEITE + "bewertungen.json")
+            noten = {int(k): tuple(v) for k, v in alt["haupt"].items()}
+            noten_dr3i = {int(k): tuple(v) for k, v in alt["dr3i"].items()}
+            bew_stand = alt.get("stand", "?")
+            print(f"Bewertungen vom letzten Lauf übernommen (Stand {bew_stand})")
+        except Exception as fehler2:
+            raise SystemExit(f"Keine Bewertungen verfügbar ({fehler2}), Abbruch – die alte Seite bleibt online.")
     sondertitel = {einfach(t).replace("live", ""): (note, rang, stimmen) for nr, (note, rang, stimmen, t) in noten.items() if nr >= 900}
     def sonder(titel):
         if "(Kopfhörer" in titel or "Kinofilm" in titel or "Taipan" in titel:
@@ -272,6 +295,9 @@ def main():
             shutil.copy(ROOT / "docs" / datei, OUT / datei)
     (OUT / "index.html").write_text(seite)
     (OUT / "version.json").write_text(json.dumps({"v": version}))
+    # Sicherungskopie für den nächsten Lauf, falls rocky-beach.com dann nicht antwortet
+    (OUT / "bewertungen.json").write_text(json.dumps(
+        {"stand": bew_stand, "haupt": noten, "dr3i": noten_dr3i}, ensure_ascii=False))
     print(f"{len(eps)} Alben ({haupt} Hauptfolgen), {len(art)} Cover, Stand {stand}")
 
 
