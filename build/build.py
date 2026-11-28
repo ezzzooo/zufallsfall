@@ -81,9 +81,15 @@ def bewertungen(serie, versuche=3):
 
     rocky-beach.com antwortet manchmal sehr langsam, deshalb mehrere Versuche mit Pause.
     """
-    req = urllib.request.Request(RB + "/php/project/f_ausgabe.html", data=f"serie={serie}&ansicht=1".encode(),
-                                 headers={"User-Agent": "zufallsfall-build (github.com/ezzzooo/zufallsfall)"})
+    kopf = {"User-Agent": "zufallsfall-build (github.com/ezzzooo/zufallsfall)"}
+    url = RB + "/php/project/f_ausgabe.html"
     for versuch in range(1, versuche + 1):
+        # Serie 2 (Hauptfolgen) ist die Standardansicht: als einfacher Aufruf ohne Formular klappt sie
+        # auch dann, wenn die Formularabfrage mit Fehler 500 scheitert. Danach das Formular als Ersatz.
+        if serie == 2 and versuch % 2 == 1:
+            req = urllib.request.Request(url, headers=kopf)
+        else:
+            req = urllib.request.Request(url, data=f"serie={serie}&ansicht=1".encode(), headers=kopf)
         try:
             with urllib.request.urlopen(req, timeout=120) as r:
                 seite = r.read().decode("utf-8", "replace")
@@ -198,7 +204,13 @@ def main():
     # Bewertungen von rocky-beach.com (Hauptfolgen über die Nummer, Specials über den Titel)
     bew_stand = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     try:
-        noten, noten_dr3i = bewertungen(2), bewertungen(3)
+        noten = bewertungen(2)
+        try:
+            noten_dr3i = bewertungen(3)
+        except Exception as fehler3:
+            # DiE DR3i sind nur ein paar Folgen: deren Bewertungen dürfen fehlen
+            print("DR3i-Bewertungen fehlen:", fehler3)
+            noten_dr3i = {}
         if len(noten) < 200:
             raise ValueError(f"nur {len(noten)} Bewertungen gelesen, Seitenaufbau geändert?")
     except Exception as fehler:
